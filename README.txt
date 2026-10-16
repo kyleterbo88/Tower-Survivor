@@ -49,3 +49,9 @@ Layout and tower rarity balance update (v8):
 - Removed the Repair button. The bottom controls are Speed, Clear, and Pause, with Clear centered and Pause beside the speed control.
 - Tower base hit damage scales by rarity: Common 1.0×, Uncommon 1.5×, Rare 2.25×, Epic 3.375× (each rarity tier is 50% higher than the previous tier for a comparable tower). The displayed damage reflects the rarity multiplier.
 - Service worker cache incremented to v8.
+
+Latest visual update:
+- Supply Armory no longer shows a title or explanatory subtitle. Its compact top strip contains only the refresh countdown/bar and separate tower/support reroll buttons; the two four-card rows fill the remaining armory height.
+- Creeps now render as small illustrated canvas sprites rather than simple colored geometric markers: footmen, scouts, rangers, warlocks, shieldbearers, ogre brutes, and a distinct boss. Armor outlines, health bars, and elemental status rings remain visible.
+- Purchase notifications now appear over the playfield just above the central keep instead of at the top edge of the screen.
+- Service-worker cache version bumped to v9.
