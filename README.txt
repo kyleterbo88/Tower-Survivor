@@ -55,3 +55,6 @@ Latest visual update:
 - Creeps now render as small illustrated canvas sprites rather than simple colored geometric markers: footmen, scouts, rangers, warlocks, shieldbearers, ogre brutes, and a distinct boss. Armor outlines, health bars, and elemental status rings remain visible.
 - Purchase notifications now appear over the playfield just above the central keep instead of at the top edge of the screen.
 - Service-worker cache version bumped to v9.
+
+2026-10-16 SHOP + SUPPORT UPDATE
+Tap anywhere on a tower/support card to purchase; no Buy button or rarity text. Thick rarity borders; Tower and Support reroll labels. Seven new supports: Vitality Growth (+1000 HP and +10 max HP/s), Growing Treasury (+10 gold/s and +1 gold/s every 10s), Royal Bounty (+200% bounty and +100% current passive income), Prosperity Pact (+100% bounty and +50% current passive income), Arcane Reservoir (+2000 shield and +10 max shield/s), Aegis Barrier (+2000 shield and 25% multiplicative incoming damage reduction), Titanic Vitality (+2000 HP and +50 max HP/s). Passive income starts at 50 gold/s. Damage counter = sum of owned tower hit damage x (1+damage bonus) x (1+critical chance), divided by 1000. Income counter = (passive gold/s + lifetime kill gold / elapsed seconds) divided by 100.
