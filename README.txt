@@ -42,3 +42,10 @@ Creep rewards and variety update (v7):
 - Every round has a rotating three-unit roster: a light unit, a medium-armored unit, and a heavy-armored unit. Spawn mix is about 70% light, 22% medium, and 8% heavy, creating many small creeps with occasional tougher enemies.
 - Creep archetypes have different health, movement speed, attack damage, bounty, silhouette, and armor type. Piercing, Siege, Magic, Spikes, and Chaos attacks interact differently with armor.
 - Income tracker now includes actual average gold earned from kills and the boss reward.
+
+
+Layout and tower rarity balance update (v8):
+- Supply Armory is constrained to about one-third of the screen, giving the island/creep play area more room.
+- Removed the Repair button. The bottom controls are Speed, Clear, and Pause, with Clear centered and Pause beside the speed control.
+- Tower base hit damage scales by rarity: Common 1.0×, Uncommon 1.5×, Rare 2.25×, Epic 3.375× (each rarity tier is 50% higher than the previous tier for a comparable tower). The displayed damage reflects the rarity multiplier.
+- Service worker cache incremented to v8.
