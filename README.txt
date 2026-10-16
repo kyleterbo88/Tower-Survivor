@@ -90,3 +90,5 @@ WALLS, RANGED CREEPS & RESERVED SHIELD SLOT (v14)
 - Enemies stop outside the keep walls (49 canvas units plus unit radius) and remain there attacking until killed or the game ends.
 - Rangers attack from 100-200 world range; Warlocks from 200-300 world range. Other units and the boss are melee.
 - Enemies are rendered in front of the keep, with attack glints and ranged projectile streaks, plus extra stone and armor detailing.
+
+Visual combat update: fixed castle-mounted color-coded turrets replace orbiting attachments; splash/area rings, bounce chains, elemental creep glows/particles, and floating gold rewards for kills (including manual Clear).
