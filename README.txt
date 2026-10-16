@@ -74,3 +74,13 @@ RANGE / TOWER BALANCE UPDATE
 - Close range receives higher damage AND attack speed: 300 = 2.30x base hit and 1.65x base speed; 600 = 1.65x hit and 1.30x speed; 900 = 1.22x hit and 1.12x speed; 1200 = 1.00x hit and speed. Existing rarity multipliers (1x, 1.5x, 2.25x, 3.375x) still stack.
 - Range-300 Area towers hit all nearby enemies around the keep. Range-300 Single Target, Splash, and Bounce towers additionally fire a 0.8x-damage spell at a distant enemy within range 900 every 3 seconds.
 - Tower cards get 4/7 of shop height; support cards get 3/7. Shortened tower stat labels.
+
+
+BALANCE UPDATE:
+- Damage and Income counters share one stats block, including when mana shield appears.
+- Creeps stop at the keep and attack repeatedly until killed or game ends.
+- Common Mana Shield provides +1,000 maximum and current shield.
+- Support Rare weights reduced to 1.45 from up to 2.6; economy support weights multiplied by 0.48.
+- New damage supports: Common +5% all, Common +10% each primary type, Uncommon +10% all, Rare +25% each primary type, Epic +50% all. Type-specific and universal damage bonuses combine multiplicatively.
+
+UI update: Damage and Income labels and values are centered within their respective halves of the combined stats block.
