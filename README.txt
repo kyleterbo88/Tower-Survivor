@@ -58,3 +58,19 @@ Latest visual update:
 
 2026-10-16 SHOP + SUPPORT UPDATE
 Tap anywhere on a tower/support card to purchase; no Buy button or rarity text. Thick rarity borders; Tower and Support reroll labels. Seven new supports: Vitality Growth (+1000 HP and +10 max HP/s), Growing Treasury (+10 gold/s and +1 gold/s every 10s), Royal Bounty (+200% bounty and +100% current passive income), Prosperity Pact (+100% bounty and +50% current passive income), Arcane Reservoir (+2000 shield and +10 max shield/s), Aegis Barrier (+2000 shield and 25% multiplicative incoming damage reduction), Titanic Vitality (+2000 HP and +50 max HP/s). Passive income starts at 50 gold/s. Damage counter = sum of owned tower hit damage x (1+damage bonus) x (1+critical chance), divided by 1000. Income counter = (passive gold/s + lifetime kill gold / elapsed seconds) divided by 100.
+
+Mana shield update:
+- Shield meter is hidden until max shield becomes positive; then stays visible even at zero.
+- Shield regenerates at 5% of maximum capacity per second, plus flat regeneration bonuses.
+- Aegis Barrier grants 25% damage reduction only when shield is positive at the moment of an attack; this reduction ends at zero shield.
+- Arcane Renewal (Uncommon): +2,000 maximum/current shield and +50 shield regeneration per second.
+- Arcane Siphon Barrage (Uncommon Magic): +10 maximum shield per enemy struck by its barrage. This increases capacity, not current shield; passive regeneration fills it.
+
+Max HP and mana shield capacity increases now grant the same amount of current HP or shield, including ongoing per-second growth and Arcane Siphon Barrage hits. This preserves the absolute deficit rather than introducing a percentage loss due to capacity growth.
+
+
+RANGE / TOWER BALANCE UPDATE
+- Tower range tiers: 300, 600, 900, and 1200. Range 1200 maps to roughly 260 canvas pixels, approximately the grassy island edge from the central keep.
+- Close range receives higher damage AND attack speed: 300 = 2.30x base hit and 1.65x base speed; 600 = 1.65x hit and 1.30x speed; 900 = 1.22x hit and 1.12x speed; 1200 = 1.00x hit and speed. Existing rarity multipliers (1x, 1.5x, 2.25x, 3.375x) still stack.
+- Range-300 Area towers hit all nearby enemies around the keep. Range-300 Single Target, Splash, and Bounce towers additionally fire a 0.8x-damage spell at a distant enemy within range 900 every 3 seconds.
+- Tower cards get 4/7 of shop height; support cards get 3/7. Shortened tower stat labels.
