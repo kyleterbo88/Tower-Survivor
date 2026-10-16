@@ -84,3 +84,9 @@ BALANCE UPDATE:
 - New damage supports: Common +5% all, Common +10% each primary type, Uncommon +10% all, Rare +25% each primary type, Epic +50% all. Type-specific and universal damage bonuses combine multiplicatively.
 
 UI update: Damage and Income labels and values are centered within their respective halves of the combined stats block.
+
+WALLS, RANGED CREEPS & RESERVED SHIELD SLOT (v14)
+- Mana Shield stat slot is always reserved but invisible until shield capacity is acquired; the other stats do not move.
+- Enemies stop outside the keep walls (49 canvas units plus unit radius) and remain there attacking until killed or the game ends.
+- Rangers attack from 100-200 world range; Warlocks from 200-300 world range. Other units and the boss are melee.
+- Enemies are rendered in front of the keep, with attack glints and ranged projectile streaks, plus extra stone and armor detailing.
