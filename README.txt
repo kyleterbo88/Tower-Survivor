@@ -33,3 +33,12 @@ Latest small-layout and reroll update:
 
 
 Damage and Income trackers (v6): Damage is the sum of owned towers' damage per hit, with global damage and expected critical bonuses, divided by 1,000. Income is passive gold per second (base + income upgrades + compounding income), plus average extra bounty gold earned per second, divided by 100. The trackers are normalized scores intended to compare investment direction, not DPS or total lifetime earnings.
+
+
+Creep rewards and variety update (v7):
+- Fixed kill gold so normal creeps continue paying after the one-time Clear is used.
+- Regular creeps award at least 100 gold at round 1; reward scales by round, creep type, and bounty percentage.
+- Manual Clear awards the same kill rewards; emergency Clear removes creeps without rewards, but future kills still pay normally.
+- Every round has a rotating three-unit roster: a light unit, a medium-armored unit, and a heavy-armored unit. Spawn mix is about 70% light, 22% medium, and 8% heavy, creating many small creeps with occasional tougher enemies.
+- Creep archetypes have different health, movement speed, attack damage, bounty, silhouette, and armor type. Piercing, Siege, Magic, Spikes, and Chaos attacks interact differently with armor.
+- Income tracker now includes actual average gold earned from kills and the boss reward.
