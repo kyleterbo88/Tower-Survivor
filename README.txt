@@ -1,14 +1,25 @@
-TOWER SURVIVOR — UPDATED MOBILE BUILD
+TOWER SURVIVOR — MOBILE ARMORY UPDATE
 
-Upload index.html, manifest.json, and sw.js to the ROOT of your GitHub repository, then publish via Settings > Pages > Deploy from a branch > main > /(root).
+Upload index.html, manifest.json, and sw.js to the ROOT of your GitHub repository, replacing the previous versions, then publish via Settings > Pages > Deploy from a branch > main > /(root).
 
-Updated rules:
-- Start with 5,000 gold and earn 50 gold per second base income.
-- Towers and support upgrades cost gold according to rarity: Common 500, Uncommon 2,000, Rare 5,000, Epic 10,000.
-- Rarity is shown with white, green, blue, and purple borders.
-- Epic towers are unavailable before level 6 (after round 5) and no more than one can appear in a tower offer refresh.
-- All available tower and support offers refresh on the refresh timer; manual rerolls update the timer to at least 15 seconds or the time remaining to the next scheduled refresh, whichever is greater.
-- Removed range-increase support. Duplicate tower upgrades no longer increase range.
-- Map is 30% taller and features a grassy island surrounded by water, plus a medieval stone keep at the center.
+Latest changes:
+- Compact app-style layout designed to fit on a phone screen without page scrolling.
+- Four tower cards arranged left-to-right; four support cards directly below, also left-to-right.
+- Tower and support purchase cards share consistent sizing. Purchased offer tiles become empty until the next reroll or refresh.
+- Unique styled tower emblems; icon colors correspond to the primary damage type, with elemental accent colors.
+- Tower cards display Damage, Damage Type, Attack Type, Range, and Ability.
+- Rare support upgrades are weighted less frequently, especially during the first five rounds until income has increased.
+- Base income remains 50 gold per second, paid in 2-second increments.
+- Purchase costs are deducted from gold; purchases trigger a small gold-colored “$ Upgrade Name $” toast.
+- A progress bar and countdown show the next shop refresh.
+- Removed the reroll-discount support upgrade.
 
-If the game was previously installed on the iPhone home screen, close it completely and reload the website after publishing so the service worker can update.
+Existing rules retained:
+- Start with 5,000 gold.
+- Rarity costs: Common 500, Uncommon 2,000, Rare 5,000, Epic 10,000 gold.
+- Epic towers are unavailable before level 6 (after round 5) and at most one Epic tower can appear per tower offer refresh.
+- Manual rerolls cost gold after free rerolls are used; their timer is at least 15 seconds or the time remaining to the scheduled refresh, whichever is greater.
+- No range-increase upgrades.
+- Island map and medieval stone keep remain.
+
+To update an existing iPhone home-screen install, upload/commit all three files, wait for GitHub Pages to deploy, then close and reopen the game. The service worker cache version was incremented to encourage the new build to load.
