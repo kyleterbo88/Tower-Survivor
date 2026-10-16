@@ -1,23 +1,14 @@
-TOWER SURVIVOR MOBILE — PLAYABLE BROWSER PROTOTYPE
+TOWER SURVIVOR — UPDATED MOBILE BUILD
 
-FILES TO UPLOAD
-Upload all four files to the ROOT of your GitHub repository:
-- index.html
-- manifest.json
-- sw.js
-- README.txt (optional, for your reference)
+Upload index.html, manifest.json, and sw.js to the ROOT of your GitHub repository, then publish via Settings > Pages > Deploy from a branch > main > /(root).
 
-PUBLISH ON GITHUB PAGES
-1. Open your repository on GitHub.
-2. Choose Add file > Upload files and upload the files above. Commit the changes.
-3. Open Settings > Pages.
-4. Under Build and deployment, choose Deploy from a branch; select main and /(root), then Save.
-5. Wait a minute or two, then open the Pages URL shown on that screen.
+Updated rules:
+- Start with 5,000 gold and earn 50 gold per second base income.
+- Towers and support upgrades cost gold according to rarity: Common 500, Uncommon 2,000, Rare 5,000, Epic 10,000.
+- Rarity is shown with white, green, blue, and purple borders.
+- Epic towers are unavailable before level 6 (after round 5) and no more than one can appear in a tower offer refresh.
+- All available tower and support offers refresh on the refresh timer; manual rerolls update the timer to at least 15 seconds or the time remaining to the next scheduled refresh, whichever is greater.
+- Removed range-increase support. Duplicate tower upgrades no longer increase range.
+- Map is 30% taller and features a grassy island surrounded by water, plus a medieval stone keep at the center.
 
-PLAY ON IPHONE
-Open the published URL in Safari. Tap Share > Add to Home Screen. Launch it from the new icon. The game is a web app, not an App Store app. After it has loaded online once, its basic files are cached for offline play.
-
-GAME NOTES
-Choose one tower and one support from each supply drop. There are tower types/patterns and Fire, Frost, and Poison effects, support upgrades, rerolls, repair, speed controls, and a one-time Clear ability. If tower HP reaches 1% before Clear is used, Emergency Clear automatically removes enemies without kill gold or healing. Survive to 15:00 and defeat the boss.
-
-This is an early playable prototype; balance and game mechanics may still need tuning.
+If the game was previously installed on the iPhone home screen, close it completely and reload the website after publishing so the service worker can update.

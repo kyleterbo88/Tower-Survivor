@@ -1,9 +1,10 @@
 {
-  "name": "Tower Survivor Mobile",
+  "name": "Tower Survivor",
   "short_name": "Tower Survivor",
   "start_url": "./index.html",
-  "scope": "./",
   "display": "standalone",
   "background_color": "#101820",
-  "theme_color": "#101820"
+  "theme_color": "#101820",
+  "orientation": "portrait",
+  "icons": []
 }
