@@ -23,3 +23,13 @@ Existing rules retained:
 - Island map and medieval stone keep remain.
 
 To update an existing iPhone home-screen install, upload/commit all three files, wait for GitHub Pages to deploy, then close and reopen the game. The service worker cache version was incremented to encourage the new build to load.
+
+Latest small-layout and reroll update:
+- Reduced card padding, icon size, and text size for more compact tower/support tiles.
+- Removed the 'Tower options' and 'Support options' labels while keeping each reroll button.
+- Free rerolls are available only before the first purchase. Any unspent free rerolls expire when the first tower or support is bought.
+- After the first purchase, each reroll costs gold and increases by 100 gold per paid reroll (100g, 200g, 300g, etc.), capped at 1,000g.
+- Service worker cache version incremented to v5 to help refresh the installed game.
+
+
+Damage and Income trackers (v6): Damage is the sum of owned towers' damage per hit, with global damage and expected critical bonuses, divided by 1,000. Income is passive gold per second (base + income upgrades + compounding income), plus average extra bounty gold earned per second, divided by 100. The trackers are normalized scores intended to compare investment direction, not DPS or total lifetime earnings.
