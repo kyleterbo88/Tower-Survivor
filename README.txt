@@ -94,3 +94,5 @@ WALLS, RANGED CREEPS & RESERVED SHIELD SLOT (v14)
 Visual combat update: fixed castle-mounted color-coded turrets replace orbiting attachments; splash/area rings, bounce chains, elemental creep glows/particles, and floating gold rewards for kills (including manual Clear).
 
 Bounty balance update: All creep kill payouts, including manual Clear rewards, are reduced by 50% via creepGold(). The fixed 1,500 gold boss victory bonus remains unchanged. Passive gold income and shop prices are unchanged.
+
+WC3-INSPIRED VISUAL UPDATE (v17): Richer grass/stone terrain, blue-roofed castle, corner towers, heraldic banner, torches, varied mounted weapon silhouettes and improved creep armor/weapon details. Procedural original browser art inspired by the genre, not extracted Warcraft III copyrighted assets. Purchase notification moved higher in playfield (27.5% from top). Creep bounty reduced by a further 25% from prior 50%-reduced level (now 37.5% of original); passive income and fixed boss bonus unchanged.
