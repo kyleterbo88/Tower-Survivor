@@ -96,3 +96,26 @@ Visual combat update: fixed castle-mounted color-coded turrets replace orbiting 
 Bounty balance update: All creep kill payouts, including manual Clear rewards, are reduced by 50% via creepGold(). The fixed 1,500 gold boss victory bonus remains unchanged. Passive gold income and shop prices are unchanged.
 
 WC3-INSPIRED VISUAL UPDATE (v17): Richer grass/stone terrain, blue-roofed castle, corner towers, heraldic banner, torches, varied mounted weapon silhouettes and improved creep armor/weapon details. Procedural original browser art inspired by the genre, not extracted Warcraft III copyrighted assets. Purchase notification moved higher in playfield (27.5% from top). Creep bounty reduced by a further 25% from prior 50%-reduced level (now 37.5% of original); passive income and fixed boss bonus unchanged.
+
+
+OWNED TOWER INVENTORY / CREEP HP (v18)
+- All regular creep and boss starting/max HP values are increased by 25%. Damage, armor, speed and gold rewards are unchanged.
+- A translucent castle icon at the top-right of the battlefield displays the number of distinct owned tower types.
+- Tap the icon to toggle a pinned list; touch and hold for 350 ms to show it temporarily, releasing to close.
+- List updates after each tower purchase or level upgrade. Towers are grouped by range (1200, 900, 600, 300).
+- Each entry shows its icon, name, level, damage type, attack pattern, damage and special ability.
+- The inventory is a scrollable overlay over the battlefield and does not resize or move the gameplay/shop layout.
+
+
+Rarity/range and Spikes rework (v19):
+- Common towers: only single-target, 600 or 900 range, lowest damage scaling.
+- Uncommon, Rare and Epic non-Spikes towers: 300/600/900/1200 range; close-range gains modest DPS advantage.
+- Spikes towers: no range or projectile. Each owned Spikes tower reflects damage to a creep whenever its attack causes HP loss; a shield-only hit does not trigger retaliation. Shield-breaking overflow that damages HP does trigger retaliation. Normal damage bonuses and Spikes-specific damage bonuses apply.
+- Vital Siphon Barrage: Uncommon Magic Barrage, 600 range, 114 base damage, 3.12 attacks/s, +10 maximum and current HP per enemy hit, including lethal hits.
+- Arcane Siphon Barrage retains the same stats and grants +10 maximum and current shield per hit, including lethal hits.
+
+SIPHON & LEECH UPDATE (v20)
+- Arcane Siphon Barrage and Vital Siphon Barrage now have 900 range; other combat stats unchanged.
+- Arcane Leech: Rare Magic, 1200 range, single-target, 300 base damage, 0.8 attacks/sec. Restores mana shield by 30% of actual enemy HP damage dealt, capped at max shield. Does nothing to shield before a shield upgrade unlocks capacity.
+- Chaos Leech: Rare Chaos, 1200 range, single-target, 300 base damage, 0.8 attacks/sec. Restores tower HP by 30% of actual enemy HP damage dealt, capped at max HP.
+- Leech restores current HP/shield only; it does not increase max capacity. Damage includes armor interactions and purchased damage upgrades; overkill is excluded.
