@@ -6,3 +6,7 @@ Creep attack damage reduced by 25% compared with v27. Creep HP unchanged.
 V29: Lower Prosperity/Royal income multipliers; Rare +10% and Epic +20% crit; normalized tower firing cadence with matched baseline DPS; Uncommon +10% and Rare +20% attack speed support upgrades.
 
 V30: Owned towers grouped by primary damage type and descending range, with subtle rarity dots. Crown Challenges: 9 optional restrictions, selectable before first purchase; one per run. Victory awards 100 Crown Points and an earned skin record per challenge, saved in browser localStorage. Cosmetic skin application and account sync are future features.
+
+V31: Damage-type bonus percentages in owned tower headers; reroll label shortened; +10% early creep HP, rising to +18% late; +18% boss HP; late gold payout multiplier declines to 40% by level 20 and 30% by level 30.
+
+V32: Tower Status damage-type labels include universal damage bonuses, using the same multiplicative calculation as combat.
