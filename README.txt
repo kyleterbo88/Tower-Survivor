@@ -147,3 +147,13 @@ DPS BALANCE PASS (v24, October 17, 2026)
 - Real balance depends on spawn density, crowding at the keep, survivability, and actual hit counts; values should be playtested.
 
 Starting castle health: 2,500 / 2,500 HP (changed from 10,000).
+
+
+V26: CHAOS / MAGIC SIPHON, UI AND DIFFICULTY
+- Vital Siphon Barrage is now Chaos type (HP growth); Mana Siphon Barrage stays Magic (mana shield growth). Chaos Leech remains Chaos.
+- Gold purchase notification has no box or border; translucent coin-gold letters float upward and fade within 0.85 seconds.
+- Damage and Income tracker display values are multiplied by 10. Underlying damage and gold income are NOT changed by the tracker display adjustment.
+- New wave scaling: base HP before creep-type multiplier and existing 1.25 HP factor is 175 at level 1, 250 at level 2, 295 at level 3, and 295*1.12^(level-3) afterward. Boss HP unchanged.
+- Spawn interval: max(0.48, 1.28-0.085*(level-1)) seconds. Creep roles/armor/multipliers, rewards, and creep attack damage unchanged.
+- Intended early wave balance: a single Uncommon will leak, Uncommon+Common or ~3 Commons can control level 1; 2 Commons+Uncommon or ~4 Commons for level 2; a single Rare is powerful but begins leaking near level 3. These are targets, not proven guarantees: target availability, range, damage type and luck vary.
+- Levels 4-30 increase both spawn density and HP. Area/Bounce/Splash effectiveness grows with crowding, while single target remains useful against heavier creeps.
