@@ -1,10 +1,1 @@
-{
-  "name": "Tower Survivor",
-  "short_name": "Tower Survivor",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#101820",
-  "theme_color": "#101820",
-  "orientation": "portrait",
-  "icons": []
-}
+{"name":"Tower Survivor","short_name":"Tower Survivor","start_url":"./","display":"standalone","background_color":"#101820","theme_color":"#101820","icons":[]}
