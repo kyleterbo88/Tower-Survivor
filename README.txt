@@ -119,3 +119,31 @@ SIPHON & LEECH UPDATE (v20)
 - Arcane Leech: Rare Magic, 1200 range, single-target, 300 base damage, 0.8 attacks/sec. Restores mana shield by 30% of actual enemy HP damage dealt, capped at max shield. Does nothing to shield before a shield upgrade unlocks capacity.
 - Chaos Leech: Rare Chaos, 1200 range, single-target, 300 base damage, 0.8 attacks/sec. Restores tower HP by 30% of actual enemy HP damage dealt, capped at max HP.
 - Leech restores current HP/shield only; it does not increase max capacity. Damage includes armor interactions and purchased damage upgrades; overkill is excluded.
+
+BOUNCE & MANA SIPHON UPDATE (v21)
+- Bounce chains hit up to five unique enemies total (initial hit plus four bounces). Each successive target must be within 300 displayed range of the previous target; no map-wide jumps.
+- Arcane Siphon Barrage renamed Mana Siphon Barrage. It always deals normal attack damage, but gains maximum/current mana shield from hits only after shield capacity has been unlocked by a support purchase.
+- Existing AoE radii: Splash 48 canvas-world units (~222 displayed range); Area 55 (~254); 300-range Area towers pulse around castle in a 300 displayed-range radius.
+
+
+AoE rebalance (v22): Splash hits a 300 displayed-range-unit DIAMETER (150 radius) around the impact, dealing 70% hit damage to each target. Area attacks cover a 600 displayed-range-unit RADIUS (1200 diameter) around the impact, or around the castle for 300-range Area towers; that is approximately one-quarter the surface area of a circular island with 1200-unit radius. Area deals 25% hit damage to each affected target (before armor and modifiers). Area towers can apply Frost, Fire or Poison to every enemy hit. Magic Area and Siege Area were assigned Poison; other existing elemental Area towers retain their effects. A tower's firing range still determines whether it can initiate an attack.
+
+
+RANGE BALANCE UPDATE (v23)
+- Area towers may target at 600 or 900 displayed range only; their damage AoE stays 1200 diameter (600 radius), with 25% hit damage per affected creep.
+- Splash towers have 300/600/900 attack range only; their damage AoE stays 300 diameter (150 radius), with 70% hit damage per affected creep.
+- Commons remain single-target at 600 or 900; Spikes reflect HP-damaging attacks without a range.
+- Existing short-range DPS adjustment is applied using the actual assigned range after restrictions.
+
+
+DPS BALANCE PASS (v24, October 17, 2026)
+- Both Siphon Barrages now gain +7 max AND current HP/shield per qualifying hit (30% less than +10). Mana Siphon still deals damage without shield, but only harvests shield when unlocked.
+- Common towers: ~70 unmodified single-target raw DPS, adjusted for attack speed, with 600/900 ranges.
+- Epic towers: targeted ~420 effective DPS at 900 range, with a range bonus at 300/600 and penalty at 1200, modified for type and elemental utility.
+- For multihit damage balance, approximate expected targets per shot: Splash 1.55, Bounce 2.15 (chain cap 5), Barrage 2.15, Area 3.8. Splash damage multiplier is 70%; Barrage 62%; Area 25%; Bounce successive hits 72% of previous. These are design assumptions, not measured in-game averages.
+- Elemental slow/DoT and favorable armor matchups reduce raw damage budget modestly; DoT remains flat 11 Fire or 18 Poison HP/s in the combat engine, so its relative power changes across rounds.
+- Spikes have no range or attack speed. Per qualifying HP-damaging enemy hit: Common 14, Uncommon 24, Rare 43, Epic 80 base reflected damage before damage bonuses and armor. Reflections do not trigger when mana shield fully absorbs an attack.
+- Other rarities receive a smooth damage curve between Common and Epic; special Leech and Siphon towers retain their bespoke attack damage stats.
+- Real balance depends on spawn density, crowding at the keep, survivability, and actual hit counts; values should be playtested.
+
+Starting castle health: 2,500 / 2,500 HP (changed from 10,000).
