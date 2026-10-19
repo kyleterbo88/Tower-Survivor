@@ -20,3 +20,9 @@ V35: Reworked Spikes into six distinct retaliation towers; all challenges automa
 V36: Bulwark flat incoming damage block reduced from 85 to 70. Four unique Spikes retaliation towers added (Splinter Guard, Reprisal Coil, Iron Bastion, Wrath of Roots), for ten total Spikes tower definitions. Individual-tower shop randomization unchanged.
 
 v37: 60 towers (10/type, rarity 2/3/3/2), 33% Epic chance after level 5, stacking Warhammer/Shrapnel type vulnerability, toggleable range rings.
+
+V38: Expanded island, smaller tower/collision silhouette, varied creep sprites, -10% enemy HP, softened wave spikes at 10/20/25 and boss.
+
+Version 39: Unified damage-type colors in tower cards, inventory, and combat: Piercing yellow, Magic deeper purple, Chaos bright green, Spikes blood red.
+
+V40: Animated cosmetic Splash impacts and lingering ground decals, plus pulsing Area zones. Fire/Frost/Poison and primary damage-type palettes; capped FX count for mobile performance. No combat damage or balance changes.

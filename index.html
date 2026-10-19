@@ -45,7 +45,7 @@
 const $=id=>document.getElementById(id),c=$('game'),x=c.getContext('2d'),W=700,H=793,CX=350,CY=396.5;
 const RANGE_WORLD_SCALE=260/1200;
 let showRangeRings=false;
-const KEEP_WALL=49; // outer stone-wall collision radius; enemies stay outside the silhouette
+const KEEP_WALL=31; // outer stone-wall collision radius; enemies stay outside the silhouette
 // AoE sizes use the same displayed range units as tower range.
 // Splash diameter 300 (radius 150); Area radius 600 covers 1/4 of a 1200-radius circular island.
 const SPLASH_RADIUS=150*RANGE_WORLD_SCALE, AREA_RADIUS=600*RANGE_WORLD_SCALE;
@@ -186,7 +186,7 @@ function refreshAll(){S.level=Math.min(30,Math.floor(S.time/30)+1);offers();S.re
 function resetRefreshAfterReroll(){const scheduled=(Math.floor(S.time/30)+1)*30;S.nextRefresh=Math.max(scheduled,S.time+15)}
 function can(){return !S.over&&!S.paused&&left()>0&&((!S.started&&S.free>0)||S.gold>=Math.max(50,Math.floor(cost())))}
 function reroll(){if(!can()){toast('NOT ENOUGH GOLD / REROLLS');return}if(!S.started&&S.free>0)S.free--;else{let v=Math.max(50,Math.floor(cost()));S.gold-=v;S.paid++}S.rerollsUsed++;S.tOffers=makeTowerOffers();S.sOffers=weightedSupportOffers();resetRefreshAfterReroll();render();ui()}
-function rarityColor(type){return ({Normal:'#f3f5f7',Piercing:'#8ce86a',Magic:'#65d9ff',Chaos:'#d19aff',Spikes:'#ffb35c',Siege:'#d4c5a0'})[type]||'#f3f5f7'}
+function rarityColor(type){return ({Normal:'#f3f5f7',Piercing:'#ffd84d',Magic:'#9355dc',Chaos:'#70f04d',Spikes:'#c92636',Siege:'#d4c5a0'})[type]||'#f3f5f7'}
 function iconGlyph(t){const m={Normal:['✦','➶','☄','⌁','✺'],Piercing:['➤','➶','⟢','⌖','✧'],Magic:['✧','❄','☼','✺','✴'],Chaos:['✹','✸','⛧','✺','◈'],Spikes:['♠','✣','✥','✦','❋'],Siege:['▰','⬟','◉','✹','⬢']};let i=t.id%5;let glyph=m[t.type][i];if(t.mod==='Fire')glyph=['♨','✹','☄','✺','✴'][i];if(t.mod==='Frost')glyph=['❄','✧','❅','✥','✦'][i];if(t.mod==='Poison')glyph=['☠','♧','✤','❋','✥'][i];return glyph}
 function towerSvg(t){let col=rarityColor(t.type),g=iconGlyph(t);let secondary=t.mod==='Fire'?'#ff743d':t.mod==='Frost'?'#7ddcff':t.mod==='Poison'?'#8be66e':col;return `<svg viewBox="0 0 40 40" role="img" aria-label="${t.type} ${t.pattern} tower icon"><defs><linearGradient id="grad${t.id}" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${col}"/><stop offset="1" stop-color="${secondary}"/></linearGradient></defs><circle cx="20" cy="20" r="17" fill="#0b1720" stroke="${col}" stroke-width="1.5"/><path d="M20 4 L24 13 L35 15 L27 23 L29 34 L20 28 L11 34 L13 23 L5 15 L16 13 Z" fill="url(#grad${t.id})" opacity=".23"/><text x="20" y="26" font-size="20" text-anchor="middle" fill="url(#grad${t.id})" stroke="#09131a" stroke-width=".25" paint-order="stroke">${g}</text></svg>`}
 function ability(t){if(t.type==='Spikes')return t.desc;if(t.hpPerHit)return '+'+t.hpPerHit+' max/current HP per hit';if(t.shieldLeech)return '30% damage → shield; unlocks shield';if(t.hpLeech)return '30% damage → HP';if(t.shieldPerHit)return '+'+t.shieldPerHit+' max/current shield per hit; unlocks';if(t.range===300&&t.pattern==='Area')return '360° close-range AoE';if(t.range===300&&['Single Target','Splash','Bounce'].includes(t.pattern))return 'Long-range spell every 3s';return t.mod==='Fire'?'Fire: damage over time; weakens enemy attacks':t.mod==='Frost'?'Frost: stacking movement and attack slow':t.mod==='Poison'?'Poison: stacking damage over time and attack slow':t.pattern==='Splash'?'300 diameter splash':t.pattern==='Area'?'Wide AoE: 600 radius / 25% hit':t.pattern==='Bounce'?'Chains between targets':t.shieldPerHit?'Gain +10 maximum mana shield per enemy hit':t.pattern==='Barrage'?'Rapid multi-target volley':'Focused single-target damage'}
@@ -266,21 +266,21 @@ function waveBaseHp(lvl){return lvl===1?175:lvl===2?250:lvl===3?295:295*Math.pow
 // Challenge-oriented difficulty: major WC3-style breakpoints at rounds 10, 20, 25.
 // Durable enemies expose weak DPS/synergy; modest density increases test coverage.
 function wavePowerSpike(lvl){let factor=1;
- if(lvl>=10)factor*=1.40;
- if(lvl>=20)factor*=1.55;
- if(lvl>=25)factor*=1.55;
+ if(lvl>=10)factor*=1.22;
+ if(lvl>=20)factor*=1.32;
+ if(lvl>=25)factor*=1.32;
  return factor;
 }
 function wavePressure(lvl){
  // Smooth growth between breakpoints, then a noticeable new wave at each spike.
- return (1+Math.max(0,lvl-4)*.025)*wavePowerSpike(lvl);
+ return (1+Math.max(0,lvl-4)*.017)*wavePowerSpike(lvl);
 }
 function waveSpawnInterval(lvl){
  const base=Math.max(.48,1.28-.085*(lvl-1));
- const density=lvl>=25?.78:lvl>=20?.84:lvl>=10?.91:1;
+ const density=lvl>=25?.90:lvl>=20?.93:lvl>=10?.96:1;
  return Math.max(.34,base*density);
 }
-function spawn(boss=false){let side=Math.floor(Math.random()*4),x,y;if(side===0){x=Math.random()*W;y=-10}else if(side===1){x=W+10;y=Math.random()*H}else if(side===2){x=Math.random()*W;y=H+10}else{x=-10;y=Math.random()*H}let lvl=Math.min(30,Math.floor(S.time/30)+1);if(!boss&&S.roundTypeLevel!==lvl)setRoundCreeps(lvl);let type=null;if(!boss){let roll=Math.random();type=S.roundTypes[roll<.70?0:roll<.92?1:2]}let hp=1.25*1.15*(boss?18000*1.18*2.2:waveBaseHp(lvl)*type.hp*creepHealthFactor(lvl)*wavePressure(lvl)),speed=boss?20:(30+lvl*1.1)*type.speed,dmg=0.8625*(boss?850:(80+lvl*5)*type.dmg);S.enemies.push({id:S.nextId++,x,y,hp,maxHp:hp,speed,dmg,r:boss?20:(type.role==='heavy'?12:type.role==='medium'?9:8),attack:0,attackFlash:0,ranged:!boss&&(type.name==='Ranger'||type.name==='Warlock'),reach:!boss&&type.name==='Ranger'?100+Math.random()*100:!boss&&type.name==='Warlock'?200+Math.random()*100:0,boss,kind:type?.name||'Boss',armor:type?.armor||'Heavy',role:type?.role||'boss',goldMult:type?.gold||4,color:type?.color||'#a92c4e',shape:type?.shape||'square',fire:0,poison:0,frost:0});if(boss){S.boss=true;log('BOSS SPAWNED!')}}
+function spawn(boss=false){let side=Math.floor(Math.random()*4),x,y;if(side===0){x=Math.random()*W;y=-10}else if(side===1){x=W+10;y=Math.random()*H}else if(side===2){x=Math.random()*W;y=H+10}else{x=-10;y=Math.random()*H}let lvl=Math.min(30,Math.floor(S.time/30)+1);if(!boss&&S.roundTypeLevel!==lvl)setRoundCreeps(lvl);let type=null;if(!boss){let roll=Math.random();type=S.roundTypes[roll<.70?0:roll<.92?1:2]}let hp=1.25*1.15*.90*(boss?18000*1.18*1.75:waveBaseHp(lvl)*type.hp*creepHealthFactor(lvl)*wavePressure(lvl)),speed=boss?20:(30+lvl*1.1)*type.speed,dmg=0.8625*(boss?850:(80+lvl*5)*type.dmg);S.enemies.push({id:S.nextId++,x,y,hp,maxHp:hp,speed,dmg,r:boss?23:(type.role==='heavy'?13:type.role==='medium'?10:8)*(0.80+Math.random()*.44),attack:0,attackFlash:0,ranged:!boss&&(type.name==='Ranger'||type.name==='Warlock'),reach:!boss&&type.name==='Ranger'?100+Math.random()*100:!boss&&type.name==='Warlock'?200+Math.random()*100:0,boss,kind:type?.name||'Boss',armor:type?.armor||'Heavy',role:type?.role||'boss',goldMult:type?.gold||4,color:type?.color||'#a92c4e',shape:type?.shape||'square',visualVariant:Math.floor(Math.random()*4),visualTint:Math.random()*.22,fire:0,poison:0,frost:0});if(boss){S.boss=true;log('BOSS SPAWNED!')}}
 // Keep levels 1–4 unchanged. Reduce later wealth generation to curb huge boss-run surpluses.
 function economyFactor(){const level=S.level; if(level<=4)return 1;if(level<=20)return 1-.60*(level-4)/16;return Math.max(.30,.40-.01*(level-20))}
 // Slightly tougher opening, progressively sturdier late waves. Boss gets its own +18% HP.
@@ -295,7 +295,27 @@ function applyArmorDamage(e,d,type){let mult=1;const armor=e.armor||'Medium';if(
 function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}function fx(x,y,color,r=8){S.fx.push({x,y,color,r,life:.25})}
 function kill(e){if(e.dead)return;e.dead=true;S.kills++;const baseGold=Math.floor(Math.max(100,100+(S.level-1)*10)*(e.goldMult||1));const earnedGold=creepGold(e);S.gold+=earnedGold;S.killGoldEarned+=earnedGold;S.bountyBonusGold+=Math.max(0,earnedGold-baseGold);if(e.boss){S.gold+=Math.floor(1500*economyFactor());S.killGoldEarned+=Math.floor(1500*economyFactor());S.over=true;S.won=true;awardChallenge();modal('Victory!','You defeated the 15-minute boss.','New Run')}fx(e.x,e.y,'#ffd36b',e.boss?25:10);S.goldPops.push({x:e.x,y:e.y-14,text:'+'+fmt(earnedGold+(e.boss?Math.floor(1500*economyFactor()):0))+'g',life:1.1,max:1.1})}
 function hit(e,d,mod,type='Normal',exposeType=null){const vulnerability=1+.25*((e.typeWounds&&e.typeWounds[type])||0);e.hp-=applyArmorDamage(e,d*vulnerability,type);if(exposeType){e.typeWounds||={};e.typeWounds[exposeType]=(e.typeWounds[exposeType]||0)+1;}if(mod==='Fire')e.fire=Math.min(5,e.fire+2.5);if(mod==='Poison')e.poison=Math.min(8,e.poison+2.5);if(mod==='Frost')e.frost=Math.min(5,e.frost+1.3);fx(e.x,e.y,mod==='Fire'?'#ff8738':mod==='Frost'?'#70d8ff':mod==='Poison'?'#86e86e':'#ffe39a',4);if(e.hp<=0)kill(e)}
-function combatEffect(kind,points,color,r=40){S.combatFx.push({kind,points,color,r,life:.38,max:.38})}
+// Cosmetic-only ground spell effects; no damage is applied by lingering visuals.
+const FX_CAP=36;
+function spellPalette(t){return t.mod==='Fire'?['#ff8a35','#ffc66b']:t.mod==='Frost'?['#65cfff','#c6f4ff']:t.mod==='Poison'?['#8fe45a','#d1ff8b']:[rarityColor(t.type),t.type==='Magic'?'#d7b5ff':t.type==='Chaos'?'#c8ffb0':'#fff1cb']}
+function groundSpell(t,point,r){const area=t.pattern==='Area';const palette=spellPalette(t);S.combatFx.push({kind:area?'areaSpell':'splashSpell',points:[{x:point.x,y:point.y}],color:palette[0],accent:palette[1],element:t.mod,r,life:area?1.25:1.05,max:area?1.25:1.05,seed:Math.random()*6.28});if(S.combatFx.length>FX_CAP)S.combatFx.splice(0,S.combatFx.length-FX_CAP)}
+function combatEffect(kind,points,color,r=40){S.combatFx.push({kind,points,color,r,life:.38,max:.38});if(S.combatFx.length>FX_CAP)S.combatFx.splice(0,S.combatFx.length-FX_CAP)}
+function drawGroundSpell(v){const q=v.points[0],age=1-v.life/v.max,area=v.kind==='areaSpell',r=v.r,fade=Math.min(1,age*9)*Math.min(1,v.life/.42),wave=area?(0.88+.08*Math.sin(age*15+v.seed)):(.3+.7*Math.min(1,age*5));
+ x.save();x.translate(q.x,q.y);x.globalAlpha=fade*(area?.43:.56);
+ // Fading ground mark remains visible after the initial impact.
+ x.fillStyle=v.color;x.beginPath();x.ellipse(0,0,r*(area?.96:.88),r*(area?.96:.72),v.seed*.12,0,Math.PI*2);x.fill();
+ x.globalAlpha=fade*(area?.76:.9);x.strokeStyle=v.accent;x.lineWidth=area?2.4:3.2;x.setLineDash(area?[8,7]:[]);x.beginPath();x.arc(0,0,r*wave,0,Math.PI*2);x.stroke();x.setLineDash([]);
+ x.globalAlpha=fade*.8;x.lineWidth=1.4;
+ const count=area?9:12;
+ for(let i=0;i<count;i++){const a=v.seed+i*2.39996+age*(area?.75:1.8),distance=r*(area?.4+.42*((i*7%11)/11):.16+.7*age),px=Math.cos(a)*distance,py=Math.sin(a)*distance;
+  if(v.element==='Frost'){x.strokeStyle=v.accent;x.beginPath();x.moveTo(px-3,py-3);x.lineTo(px+3,py+3);x.moveTo(px-3,py+3);x.lineTo(px+3,py-3);x.stroke()}
+  else if(v.element==='Fire'){x.fillStyle=i%3?v.color:v.accent;x.beginPath();x.ellipse(px,py-4*age,2.2,4.5,Math.sin(a)*.4,0,Math.PI*2);x.fill()}
+  else if(v.element==='Poison'){x.strokeStyle=v.accent;x.beginPath();x.arc(px,py-3*age,2+(i%3),0,Math.PI*2);x.stroke()}
+  else {x.fillStyle=v.accent;x.beginPath();x.arc(px,py,area?1.8:2.8,0,Math.PI*2);x.fill()}
+ }
+ if(area){x.globalAlpha=fade*.7;x.strokeStyle=v.accent;x.lineWidth=1.5;for(let i=0;i<6;i++){const a=v.seed+i*Math.PI/3+age*.55;x.beginPath();x.arc(Math.cos(a)*r*.62,Math.sin(a)*r*.62,3.5,0,Math.PI*2);x.stroke()}}
+ x.restore();}
+
 // Bounce may jump to at most four additional distinct enemies, each within 300 tower-range units of the previous victim.
 function bounceTargets(first,candidates){
  const chain=[first],visited=new Set([first]);
@@ -310,7 +330,7 @@ function bounceTargets(first,candidates){
 }
 function shoot(t,dt){if(t.type==='Spikes')return;if(t.range===300&&(t.pattern==='Single Target'||t.pattern==='Splash'||t.pattern==='Bounce')){t.spellCooldown=(t.spellCooldown||0)-dt;if(t.spellCooldown<=0){const distant=S.enemies.filter(a=>!a.dead&&dist({x:CX,y:CY},a)>300*RANGE_WORLD_SCALE&&dist({x:CX,y:CY},a)<=900*RANGE_WORLD_SCALE).sort((a,b)=>dist({x:CX,y:CY},a)-dist({x:CX,y:CY},b))[0];if(distant){hit(distant,t.dmg*(1+S.damage)*(1+(S.typedDamage[t.type]||0))*.8,t.mod,t.type);S.shots.push({x:distant.x,y:distant.y,life:.18,color:'#dcaaff'});t.spellCooldown=3}}}t.cool-=dt;if(t.cool>0)return;let arr=S.enemies.filter(e=>!e.dead&&dist({x:CX,y:CY},e)<=t.range*RANGE_WORLD_SCALE).sort((a,b)=>dist({x:CX,y:CY},a)-dist({x:CX,y:CY},b));if(!arr.length)return;let e=arr[0],d=t.dmg*(1+S.damage)*(1+(S.typedDamage[t.type]||0))*(Math.random()<S.crit?2:1);t.cool=1/Math.max(.1,t.rate*(1+S.attackSpeed));const areaCenter=t.pattern==='Area'&&t.range===300?{x:CX,y:CY}:e;
 let hitlist=t.pattern==='Area'?S.enemies.filter(a=>!a.dead&&dist(a,areaCenter)<=AREA_RADIUS):t.pattern==='Splash'?S.enemies.filter(a=>!a.dead&&dist(a,e)<=SPLASH_RADIUS):t.pattern==='Bounce'?bounceTargets(e,arr):t.pattern==='Barrage'?arr.slice(0,3):[e];
-if(t.pattern==='Splash'||t.pattern==='Area')combatEffect('blast',[{x:areaCenter.x,y:areaCenter.y}],t.mod==='Fire'?'#ff8738':t.mod==='Frost'?'#70d8ff':t.mod==='Poison'?'#8ee65c':'#ffe6a2',t.pattern==='Area'?AREA_RADIUS:SPLASH_RADIUS);
+if(t.pattern==='Splash'||t.pattern==='Area')groundSpell(t,areaCenter,t.pattern==='Area'?AREA_RADIUS:SPLASH_RADIUS);
 if(t.pattern==='Bounce'&&hitlist.length>1)combatEffect('chain',hitlist.map(a=>({x:a.x,y:a.y})),t.mod==='Frost'?'#8cddff':t.mod==='Poison'?'#b0f779':'#f7db8d');
 const landedHits=hitlist.filter(a=>!a.dead).length;let damageDealt=0;hitlist.forEach((a,i)=>{const before=Math.max(0,a.hp);hit(a,d*(t.pattern==='Splash'?SPLASH_DAMAGE_FACTOR:t.pattern==='Area'?AREA_DAMAGE_FACTOR:t.pattern==='Bounce'?Math.pow(.72,i):t.pattern==='Barrage'?.62:1),t.mod,t.type,t.exposeType);damageDealt+=Math.min(before,Math.max(0,before-a.hp))});if(t.shieldLeech&&S.maxShield===0){S.maxShield=1;S.shield=1}if(t.shieldLeech&&S.maxShield>0)S.shield=Math.min(S.maxShield,S.shield+damageDealt*t.shieldLeech);if(t.hpLeech)S.hp=Math.min(S.maxHp,S.hp+damageDealt*t.hpLeech);if(t.shieldPerHit&&S.maxShield===0){S.maxShield=1;S.shield=1}if(t.shieldPerHit&&S.maxShield>0){S.maxShield+=landedHits*t.shieldPerHit;S.shield=Math.min(S.maxShield,S.shield+landedHits*t.shieldPerHit);}if(t.hpPerHit){S.maxHp+=landedHits*t.hpPerHit;S.hp=Math.min(S.maxHp,S.hp+landedHits*t.hpPerHit)}S.shots.push({x:e.x,y:e.y,life:.12,color:t.mod==='Fire'?'#ff8738':t.mod==='Frost'?'#70d8ff':t.mod==='Poison'?'#86e86e':'#f5e4a5'})}
 function modal(t,p,b){S.paused=true;$('mt').textContent=t;$('mp').textContent=p;$('mb').textContent=b;$('overlay').style.display='flex'}
@@ -369,6 +389,15 @@ function drawCreep(e){
   x.fillStyle='#f5c66e';[-r*.25,r*.25].forEach(px=>{x.beginPath();x.arc(px,-r*.48,2.1,0,Math.PI*2);x.fill()});
   x.strokeStyle='#79533a';x.lineWidth=3;x.beginPath();x.moveTo(r*.55,-r*.1);x.lineTo(r*1.08,-r*.85);x.stroke();x.fillStyle='#a18b70';x.fillRect(r*.82,-r*1.05,r*.45,r*.3);x.strokeStyle='#d7c4a4';x.lineWidth=1;x.strokeRect(r*.82,-r*1.05,r*.45,r*.3);
  }
+ // Individualized silhouettes: capes, shields, crests and glowing runes vary by creep.
+ if(!e.boss){
+  const v=e.visualVariant||0;
+  if(v===1){x.fillStyle=e.kind==='Warlock'?'#67488d':'#66504a';x.beginPath();x.moveTo(-r*.58,-r*.18);x.lineTo(-r*.95,r*.82);x.lineTo(-r*.28,r*.64);x.closePath();x.fill();}
+  if(v===2){x.strokeStyle='#d5b65c';x.lineWidth=1.7;x.beginPath();x.moveTo(-r*.54,-r*.67);x.lineTo(-r*.72,-r*1.08);x.moveTo(r*.54,-r*.67);x.lineTo(r*.72,-r*1.08);x.stroke();}
+  if(v===3){x.fillStyle='#f0d29c';x.beginPath();x.arc(-r*.22,-r*.15,r*.12,0,Math.PI*2);x.arc(r*.22,-r*.15,r*.12,0,Math.PI*2);x.fill();}
+  if(e.kind==='Scout'&&v%2===0){x.fillStyle='#8b6b4a';x.fillRect(-r*.65,r*.13,r*.25,r*.6);}
+  if(e.kind==='Ogre Brute'&&v===2){x.strokeStyle='#f0c58e';x.lineWidth=2;x.beginPath();x.moveTo(-r*.8,-r*.5);x.lineTo(-r*1.2,-r*.9);x.stroke();}
+ }
  // directional weapon and armor highlights give the miniature a readable RTS silhouette
  if(!e.boss){
   x.fillStyle='#4b382b';x.fillRect(-r*.48,r*.61,r*.33,r*.36);x.fillRect(r*.17,r*.61,r*.33,r*.36);
@@ -393,7 +422,8 @@ function draw(){
  x.fillStyle='#287f9b';x.fillRect(0,0,W,H);
  for(let i=0;i<90;i++){let px=(i*97+19)%W,py=(i*131+31)%H;x.strokeStyle='rgba(181,232,239,.18)';x.lineWidth=1;x.beginPath();x.arc(px,py,4+(i%5)*2,0,Math.PI*.9);x.stroke()}
  // island artwork scaled to fill the 30% taller playfield
- x.save();x.translate(0,15.25);x.scale(1,1.25);
+ x.save();x.translate(CX,CY);x.scale(1.31,1.40);x.translate(-350,-310);
+ // Enlarged island fills the battleground, leaving only a thin irregular shoreline of water.
  // irregular sandy island coastline
  x.beginPath();x.moveTo(112,78);x.quadraticCurveTo(185,32,255,51);x.quadraticCurveTo(320,20,385,50);x.quadraticCurveTo(480,32,555,95);x.quadraticCurveTo(627,154,611,235);x.quadraticCurveTo(665,315,612,392);x.quadraticCurveTo(648,478,565,536);x.quadraticCurveTo(502,598,425,579);x.quadraticCurveTo(342,620,264,581);x.quadraticCurveTo(171,599,103,526);x.quadraticCurveTo(43,465,76,383);x.quadraticCurveTo(30,308,75,232);x.quadraticCurveTo(45,144,112,78);x.closePath();x.fillStyle='#c8ae75';x.fill();x.strokeStyle='#e7d39b';x.lineWidth=9;x.stroke();
  x.beginPath();x.moveTo(122,86);x.quadraticCurveTo(190,50,256,66);x.quadraticCurveTo(320,39,383,65);x.quadraticCurveTo(477,48,545,105);x.quadraticCurveTo(607,160,591,235);x.quadraticCurveTo(641,315,592,389);x.quadraticCurveTo(625,468,551,522);x.quadraticCurveTo(493,578,423,559);x.quadraticCurveTo(343,598,268,560);x.quadraticCurveTo(181,578,119,514);x.quadraticCurveTo(62,456,94,383);x.quadraticCurveTo(50,308,94,235);x.quadraticCurveTo(65,151,122,86);x.closePath();x.fillStyle='#4b8a50';x.fill();
@@ -422,7 +452,7 @@ function draw(){
  // projectiles and enemies
  S.shots.forEach(s=>{x.strokeStyle=s.color;x.lineWidth=3;x.beginPath();x.moveTo(CX,CY);x.lineTo(s.x,s.y);x.stroke()});
  // medieval stone keep in the island center
- x.save();x.translate(CX,CY);
+ x.save();x.translate(CX,CY);x.scale(.61,.61);
  // tower shadow and foundation
  x.fillStyle='rgba(20,35,27,.35)';x.beginPath();x.ellipse(2,26,57,37,0,0,Math.PI*2);x.fill();
  x.fillStyle='#777f83';x.beginPath();x.moveTo(-48,21);x.lineTo(-38,-35);x.lineTo(37,-35);x.lineTo(48,21);x.closePath();x.fill();x.strokeStyle='#d1d3cd';x.lineWidth=3;x.stroke();
@@ -460,9 +490,9 @@ function draw(){
  // Purchased towers become permanent, color-coded turrets built into the keep.
  // Multiple purchases fill battlements and add tiers instead of orbiting enemies.
  const mounts=[[-37,-39],[37,-39],[-37,13],[37,13],[-18,-53],[18,-53],[-48,-13],[48,-13],[-18,16],[18,16],[-30,-22],[30,-22]];
- S.towers.forEach((t,i)=>{const m=mounts[i%mounts.length],tier=Math.floor(i/mounts.length),px=CX+m[0],py=CY+m[1]-tier*5;
-  const color=t.mod==='Fire'?'#e76b31':t.mod==='Frost'?'#4fc4fa':t.mod==='Poison'?'#6bd35a':({Magic:'#aa83ff',Chaos:'#e366cf',Piercing:'#e4bb67',Siege:'#c17b4d',Spikes:'#9bd0ad',Normal:'#d0d8e0'}[t.type]||'#d0d8e0');
-  x.save();x.translate(px,py);x.shadowColor=color;x.shadowBlur=5;
+ S.towers.forEach((t,i)=>{const m=mounts[i%mounts.length],tier=Math.floor(i/mounts.length),px=CX+m[0]*.61,py=CY+(m[1]-tier*5)*.61;
+  const color=t.mod==='Fire'?'#e76b31':t.mod==='Frost'?'#4fc4fa':t.mod==='Poison'?'#6bd35a':rarityColor(t.type);
+  x.save();x.translate(px,py);x.scale(.72,.72);x.shadowColor=color;x.shadowBlur=5;
   x.fillStyle='#40454d';x.strokeStyle='#a6a8a2';x.lineWidth=1.5;x.beginPath();x.moveTo(-10,5);x.lineTo(-9,-4);x.lineTo(0,-9);x.lineTo(9,-4);x.lineTo(10,5);x.closePath();x.fill();x.stroke();
   x.fillStyle='#2b3441';x.fillRect(-9,-2,18,7);x.fillStyle='#b2b5ac';x.fillRect(-9,4,18,3);
   if(t.type==='Siege'||t.pattern==='Splash'){
@@ -477,7 +507,8 @@ function draw(){
   x.restore();
   if(t.level>1){x.fillStyle='#ffe89a';x.beginPath();x.arc(px+6,py-9,2.3,0,Math.PI*2);x.fill()}
  });
- S.combatFx.forEach(v=>{const progress=1-v.life/v.max;x.save();x.globalAlpha=Math.max(0,v.life/v.max)*.85;x.strokeStyle=v.color;x.shadowColor=v.color;x.shadowBlur=9;
+ S.combatFx.forEach(v=>{if(v.kind==='areaSpell'||v.kind==='splashSpell')drawGroundSpell(v);});
+ S.combatFx.forEach(v=>{if(v.kind==='areaSpell'||v.kind==='splashSpell')return;const progress=1-v.life/v.max;x.save();x.globalAlpha=Math.max(0,v.life/v.max)*.85;x.strokeStyle=v.color;x.shadowColor=v.color;x.shadowBlur=9;
   if(v.kind==='blast'){const q=v.points[0];x.lineWidth=3.5;x.beginPath();x.arc(q.x,q.y,Math.max(3,v.r*(.2+.8*progress)),0,Math.PI*2);x.stroke();x.lineWidth=1;x.beginPath();x.arc(q.x,q.y,Math.max(3,v.r*(.05+.45*progress)),0,Math.PI*2);x.stroke()}
   else {x.lineWidth=3.5; x.beginPath();v.points.forEach((q,i)=>{if(i===0)x.moveTo(q.x,q.y);else x.lineTo(q.x,q.y)});x.stroke();v.points.forEach(q=>{x.beginPath();x.arc(q.x,q.y,5+progress*5,0,Math.PI*2);x.stroke()})}x.restore()});
  S.goldPops.forEach(v=>{x.save();x.globalAlpha=Math.min(1,v.life/.25);x.textAlign='center';x.font='bold 11px system-ui';x.lineWidth=2.8;x.strokeStyle='#533812';x.strokeText(v.text,v.x,v.y);x.fillStyle='#ffdf65';x.fillText(v.text,v.x,v.y);x.restore()});
