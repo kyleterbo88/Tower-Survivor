@@ -1,5 +1,5 @@
-Tower Survivor v48 — Independent tower copies and expanded splash
+Tower Survivor v58
 
-Each tower purchase creates an independent attacker with a staggered cooldown. Duplicate towers do not merge or gain levels. Targeting spreads fire across similarly dangerous creeps and favors clustered enemies for splash/area. Splash radius doubled from 150 to 300 range units (4x affected area); area attacks unchanged. Owned-tower list groups duplicate copies and shows attacks, effective damage, and overkill. Visual tower decorations capped at 36; all purchased towers still attack. Existing support upgrades and creep balance unchanged.
+Targeted Epic damage-per-hit buffs: Normal Poison Bounce +15%, Piercing Bounce +5%, Siege Fire Barrage +25%, Champion's Arsenal +20%. Previous attack speed retained. No changes to Common towers, shop odds, challenges, or tower prices.
 
-Upload index.html, README.txt, sw.js, manifest.json to GitHub Pages repo root.
+Upload index.html, sw.js, manifest.json, and README.txt to the GitHub Pages repository root.

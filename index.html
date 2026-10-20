@@ -28,8 +28,8 @@
 #crownPanel{position:absolute;right:7px;top:98px;z-index:5;width:min(350px,calc(100% - 14px));max-height:calc(100% - 108px);overflow:auto;overscroll-behavior:contain;border:1px solid #d7b45b;border-radius:10px;background:#111d2af7;box-shadow:0 7px 25px #000b;padding:9px;color:#f1f2f4;backdrop-filter:blur(5px)}#crownPanel[hidden]{display:none}.challengeSummary{font-size:10px;color:#d9cbaa;line-height:1.4;margin:6px 0}.challengeGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.challengeTile{min-height:69px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:1px solid #52616e;background:#20303d;border-radius:8px;padding:5px 2px;font-size:9px;font-weight:700;line-height:1.1;text-align:center}.challengeTile .symbol{font-size:23px}.challengeTile.selected{border-color:#f6d174;background:#504326}.challengeTile.completed{box-shadow:inset 0 0 0 1px #d5ad58}.challengeDetail{border-top:1px solid #52616e;margin-top:9px;padding-top:8px;font-size:11px;line-height:1.45}.challengeAction{margin-top:7px;background:#675022;border-color:#d7b45b;width:100%}.challengeAction:disabled{opacity:.45}.challengeClose{background:none;border:0;color:#d8e2eb;font-size:11px;padding:2px 5px}
 
 /* One-time pre-round challenge invitation; anchored beside the crown button. */
-#challengeNudge{position:absolute;right:55px;top:58px;z-index:4;max-width:min(205px,calc(100% - 112px));padding:9px 11px;border:1px solid #e7bf67;border-radius:10px;background:#1a2635ef;color:#ffdf8b;font-size:13px;font-weight:850;line-height:1.2;box-shadow:0 4px 14px #0008;pointer-events:none;animation:challengeNudgeIn .5s ease-out}
-#challengeNudge::after{content:'➜';position:absolute;right:-25px;top:5px;font-size:23px;color:#f7d67b;text-shadow:0 1px 5px #000}
+#challengeNudge{position:absolute;right:77px;top:58px;z-index:4;max-width:min(205px,calc(100% - 112px));padding:9px 11px;border:1px solid #e7bf67;border-radius:10px;background:#1a2635ef;color:#ffdf8b;font-size:13px;font-weight:850;line-height:1.2;box-shadow:0 4px 14px #0008;pointer-events:none;animation:challengeNudgeIn .5s ease-out}
+#challengeNudge::after{content:'➜';position:absolute;right:-22px;top:5px;font-size:23px;color:#f7d67b;text-shadow:0 1px 5px #000}
 #challengeNudge[hidden]{display:none}
 @keyframes challengeNudgeIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
 
@@ -94,7 +94,7 @@ const towerDefs=[
  const pattern=spikes?'Reflect':rarity==='Common'?'Single Target':a[1];
  // Wide Area attacks are only 600/900; Splash never exceeds 900.
  const baseRange=rarity==='Common'?[600,900][Math.floor(i/4)%2]:[300,600,900,1200][Math.floor(i/4)%4];
- const range=spikes?0:a[0]==='Piercing'&&pattern==='Single Target'?900:pattern==='Area'?[600,900][Math.floor(i/4)%2]:pattern==='Splash'?Math.min(900,baseRange):baseRange;
+ const range=i===18?600:spikes?0:a[0]==='Piercing'&&pattern==='Single Target'?900:pattern==='Area'?[600,900][Math.floor(i/4)%2]:pattern==='Splash'?Math.min(900,baseRange):baseRange;
  const rangeDps={0:1,300:1.3,600:1.18,900:1.08,1200:1}[range];
  const mod=rarity==='Common'?'None':a[2]||'None';
  // Spike values are damage returned per qualifying HP-damaging attack.
@@ -119,7 +119,7 @@ const towerDefs=[
  // Single-target towers attack every 0.75–1.00s; multi-target every 1.00–1.25s.
  const interval=pattern==='Single Target'?.75+(i%4)*(.25/3):1+(i%4)*(.25/3);
  const newRate=spikes?0:1/interval;
- const adjustedDamage=spikes?damage:Math.round(damage*a[5]/newRate*100)/100;
+ const adjustedDamage=spikes?damage:Math.round(damage*a[5]/newRate*(i===18?1.2:1)*100)/100; // Rare Chaos Poison Barrage: early-wave reliability
  return {id:i,name:a[0]+' '+(spikes?'Thorns':mod!=='None'?mod+' ':'')+(spikes?'':pattern),type:a[0],pattern,mod:spikes?'None':mod,dmg:adjustedDamage,range:spikes?0:range,rate:newRate,desc:spikes?'Reflects damage when tower HP is hit.':rarity==='Common'?'Basic focused shot.':a[6],rarity};
 });
 // Specialized Spikes: flat retaliation, armor, wound stacking, bleeding and HP synergy.
@@ -173,11 +173,152 @@ for(const [name,type,pattern,mod,rarity,range,exposeType] of additionalTowers){
  const effectiveTargets={'Single Target':1,'Splash':1.55*.70,'Bounce':2.15,'Barrage':2.15*.62,'Area':3.8*.25}[pattern];
  const interval=pattern==='Single Target'?.875:1.125;
  const rate=1/interval;
- const dmg=Math.round(targetDps*rangeFactor*elementFactor/(rate*effectiveTargets*armorFactor)*100)/100;
+ // Ricochet Guard must survive early sparse waves, where bounce chains rarely connect.
+ // Give its primary strike a viable solo-target floor rather than assuming 2.15 hits.
+ const soloDpsFloor=name==='Ricochet Guard'?255:0;
+ const dmg=Math.round(Math.max(targetDps*rangeFactor*elementFactor/(rate*effectiveTargets*armorFactor),soloDpsFloor/rate)*100)/100;
  towerDefs.push({id:towerDefs.length,name,type,pattern,mod,rarity,range,rate,dmg,
   exposeType:exposeType||null,
   desc:exposeType?'Each enemy hit by the splash takes +25% '+exposeType+' damage from subsequent hits (stacks).':
    'Specialized '+pattern.toLowerCase()+' attack.'});
+}
+// v50 targeted early-game balance pass. Adjust the weakest Common/Uncommon
+// performers without flattening damage-type identities or changing Rare/Epic.
+// Explicit IDs distinguish duplicate names with different ranges.
+const earlyTowerBalance={
+ // Commons: moderate floor increases, retaining range/type distinctions.
+ 0:1.30, 4:1.24, 8:1.08, 12:1.29, 16:.87,
+ 20:1.27, 24:1.30, 30:1.12, 35:1.23,
+ 49:1.23, 54:1.26, 57:1.27,
+ // Uncommons: favor underperforming crowd control and short range.
+ 1:1.48, 5:1.05, 9:1.22, 13:1.20,
+ 17:1.58, 21:1.33, 25:1.30, 29:1.28,
+ 31:1.16, 32:1.18, 36:1.30,
+ 40:.88, 41:.88, 44:1.10, 45:1.34,
+ 50:1.14, 55:1.62, 58:1.20
+};
+for(const tower of towerDefs){
+ const factor=earlyTowerBalance[tower.id];
+ if(factor===undefined)continue;
+ console.assert(tower.rarity==='Common'||tower.rarity==='Uncommon','v50 modifier rarity mismatch',tower.name);
+ tower.dmg=Math.round(tower.dmg*factor*100)/100;
+ // Keep the reflected damage number in the item description truthful.
+ if(tower.pattern==='Reflect')tower.desc=tower.desc.replace(/Reflect \d+(?:\.\d+)? damage/,`Reflect ${tower.dmg} damage`);
+}
+// v51 two-wave balance pass. Preserve tower identities and upgrade economy.
+// Common opening consistency: particularly short-range Chaos and retaliation builds.
+// Uncommon crowd-control: boost primary hits and improve bounce chain reliability.
+// Rare: improve the underperforming Area, Splash and retaliation variants; modestly
+// rein in the extreme damage-blocking Bulwark without removing its niche.
+const twoWaveBalance={
+  0:1.08,4:1.07,8:1.06,12:1.06,16:1.34,20:1.08,24:1.08,
+  30:1.18,35:1.20,49:1.08,54:1.08,57:1.09,
+  1:1.12,5:1.08,9:1.09,13:1.09,17:1.38,21:1.12,
+  25:1.10,29:1.11,31:1.10,32:1.10,36:1.16,
+  40:.80,41:.80,44:1.10,45:1.10,50:1.08,55:1.38,58:1.10,
+  2:1.12,6:1.13,10:1.19,14:1.08,18:1.04,
+  22:1.19,26:1.13,28:1.08,
+  33:1.15,37:1.18,39:1.18,42:1.12,43:1.08,
+  46:1.10,47:1.10,48:1.08,51:1.08,52:1.08,53:1.08,
+  56:1.06,59:1.08
+};
+for(const tower of towerDefs){
+ const factor=twoWaveBalance[tower.id];if(factor===undefined)continue;
+ tower.dmg=Math.round(tower.dmg*factor*100)/100;
+ if(tower.pattern==='Reflect')tower.desc=tower.desc.replace(/Reflect \d+(?:\.\d+)? damage/,`Reflect ${tower.dmg} damage`);
+}
+// v52 targeted adjustments after two-wave review.
+// Raise the weak Chaos Common and Frost Bounce opening, while trimming the
+// exceptional defensive growth and damage of the two Uncommon Siphon Barrages.
+for(const t of towerDefs){
+ if(t.name==='Void Initiate')t.dmg=Math.round(t.dmg*1.24*100)/100;
+ if(t.type==='Chaos'&&t.pattern==='Bounce'&&t.mod==='Frost'&&t.rarity==='Uncommon')t.dmg=Math.round(t.dmg*1.32*100)/100;
+ if(t.name==='Mana Siphon Barrage'||t.name==='Vital Siphon Barrage')t.dmg=Math.round(t.dmg*.93*100)/100;
+}
+// v53 rarity-value scaling: keep the 500/2000/5000/10000 shop prices.
+// Buff raw damage rather than altering targeting or attack cadence. Retaliation
+// towers receive the same rarity scaling on their reflected hit damage.
+// Strong Siphon Barrages are deliberately exempt from the Uncommon increase.
+const RARITY_DAMAGE_SCALE={Common:1,Uncommon:1.10,Rare:1.30,Epic:1.55};
+for(const tower of towerDefs){
+ if(tower.name==='Mana Siphon Barrage'||tower.name==='Vital Siphon Barrage')continue;
+ const factor=RARITY_DAMAGE_SCALE[tower.rarity]||1;
+ tower.dmg=Math.round(tower.dmg*factor*100)/100;
+ if(tower.pattern==='Reflect')tower.desc=tower.desc.replace(/Reflect \d+(?:\.\d+)? damage/,`Reflect ${tower.dmg} damage`);
+}
+// Area spells leave a small, nonstacking damage-over-time aftereffect.
+// Subsequent Area hits refresh the effect; they do not accumulate stacks.
+const AREA_LINGER_SECONDS=2, AREA_LINGER_FRACTION=.30;
+// Give Bounce towers a chance to reach adjacent lanes as the island expands.
+// Their attack range remains unchanged; only successive jumps are extended.
+const BOUNCE_CHAIN_REACH=650;
+// Spikes depend on the tower being hit. Adjust survival without giving them
+// a ranged attack; flat blocking is still exclusive to the defensive variants.
+for(const t of towerDefs){
+ if(t.name==='Iron Bastion')t.flatBlock=28;
+ if(t.name==='Iron Thorns'||t.name==='Splinter Guard')t.flatBlock=10;
+ if(t.name==='Barbed Fortress'||t.name==='Serrated Grudge'||t.name==='Reprisal Coil')t.flatBlock=15;
+ if(t.name==='Thorn Growth'){t.hpReflect=.026;t.flatBlock=25;}
+ if(t.name==='Bulwark of Thorns')t.flatBlock=60;
+ if(t.name==='Barbed Fortress')t.bleed=60;
+ if(t.name==='Reprisal Coil')t.rangedBonus=.55;
+}
+// v54 selective Rare/Epic attack-cadence rebalance. Common/Uncommon unchanged.
+// Underperforming Rares: +18% attack frequency. Stronger Rares: +8%.
+// Underperforming Epics: +22%; better-performing Epics: +10%.
+// Spikes have no attack rate, so strengthen only weak retaliation variants.
+const V54_RARE_RATE_18=new Set([6,10,14,22,26,28,42,43,51,59]);
+const V54_RARE_RATE_08=new Set([2,18,46,47,52]);
+const V54_EPIC_RATE_22=new Set([3,7,11,15,19,23,27]);
+const V54_EPIC_RATE_10=new Set([48,53,56]);
+for(const tower of towerDefs){
+ if(V54_RARE_RATE_18.has(tower.id))tower.rate=Math.round(tower.rate*1.18*100000)/100000;
+ else if(V54_RARE_RATE_08.has(tower.id))tower.rate=Math.round(tower.rate*1.08*100000)/100000;
+ else if(V54_EPIC_RATE_22.has(tower.id))tower.rate=Math.round(tower.rate*1.22*100000)/100000;
+ else if(V54_EPIC_RATE_10.has(tower.id))tower.rate=Math.round(tower.rate*1.10*100000)/100000;
+ if(tower.id===33||tower.id===37){tower.dmg=Math.round(tower.dmg*1.10*100)/100;
+  tower.desc=tower.desc.replace(/Reflect \d+(?:\.\d+)? damage/,`Reflect ${tower.dmg} damage`);}
+}
+// v56: selective Epic chain/volley cadence adjustment. No rarity-wide
+// multipliers: Area, Single Target, Spikes, and every lower rarity are unchanged.
+// Extra attacks improve target acquisition and reduce overkill downtime.
+const V56_EPIC_RATE_BONUS={3:1.12,7:1.12,23:1.12,48:1.12};
+for(const tower of towerDefs){
+ const factor=V56_EPIC_RATE_BONUS[tower.id];
+ if(factor){
+  console.assert(tower.rarity==='Epic'&&(tower.pattern==='Bounce'||tower.pattern==='Barrage'),'v56 cadence target mismatch',tower.name);
+  tower.rate=Math.round(tower.rate*factor*100000)/100000;
+ }
+}
+// v57 selective Epic crowd-attack correction, following paired wave tests.
+// Attack patterns, targeting, bounce cap, costs and rarity odds stay unchanged.
+// Prioritize the two Barrage Epics, whose delivered damage lagged most by level 15.
+const V57_EPIC_RATE_BONUS={
+ 3:1.18,  // Normal Poison Bounce
+ 7:1.12,  // Piercing Bounce (closer to Rare-pair benchmark)
+ 23:1.35, // Siege Fire Barrage
+ 48:1.30  // Champion's Arsenal
+};
+for(const tower of towerDefs){
+ const factor=V57_EPIC_RATE_BONUS[tower.id];
+ if(!factor)continue;
+ console.assert(tower.rarity==='Epic'&&(tower.pattern==='Bounce'||tower.pattern==='Barrage'),'v57 cadence mismatch',tower.name);
+ tower.rate=Math.round(tower.rate*factor*100000)/100000;
+}
+// v58: targeted Epic damage-per-hit adjustment, based on v57 late-wave
+// target-count, attack-idle, and overkill diagnostics. Attack rates remain unchanged.
+// Area Epics, Single Target Epics, lower rarities, and shop odds are untouched.
+const V58_EPIC_DAMAGE_BONUS={
+ 3:1.15,  // Normal Poison Bounce
+ 7:1.05,  // Piercing Bounce
+ 23:1.25, // Siege Fire Barrage
+ 48:1.20  // Champion's Arsenal
+};
+for(const tower of towerDefs){
+ const factor=V58_EPIC_DAMAGE_BONUS[tower.id];
+ if(!factor)continue;
+ console.assert(tower.rarity==='Epic'&&(tower.pattern==='Bounce'||tower.pattern==='Barrage'),'v58 damage target mismatch',tower.name);
+ tower.dmg=Math.round(tower.dmg*factor*100)/100;
 }
 // Sanity-check the intended shop composition during development.
 const rosterCounts={};for(const t of towerDefs){const c=rosterCounts[t.type]||=( {Common:0,Uncommon:0,Rare:0,Epic:0} );c[t.rarity]++}
@@ -197,15 +338,15 @@ const supDefs=[
 const damageTypes=['Normal','Piercing','Magic','Chaos','Spikes','Siege'];
 for(const type of damageTypes){supDefs.push({name:type+' Training',icon:'⚔️',kind:'typedDamage',damageType:type,value:.10,desc:'+10% '+type+' damage.',rarity:'Common'});supDefs.push({name:type+' Mastery',icon:'💥',kind:'typedDamage',damageType:type,value:.25,desc:'+25% '+type+' damage.',rarity:'Rare'});}
 supDefs.push({name:'Advanced Combat Drills',icon:'⚔️',kind:'damage',value:.10,desc:'+10% all tower damage.',rarity:'Uncommon'});
-supDefs.push({name:'Precision Calibration',icon:'🎯',kind:'crit',value:.10,desc:'+10 percentage points critical chance.',rarity:'Rare'});
+supDefs.push({name:'Precision Calibration',icon:'🎯',kind:'crit',value:.10,desc:'+10% critical chance.',rarity:'Rare'});
 supDefs.push({name:'Rapid Fire Training',icon:'🏹',kind:'attackSpeed',value:.10,desc:'+10% tower attack speed.',rarity:'Uncommon'});
 supDefs.push({name:'Masterful Tempo',icon:'⚡',kind:'attackSpeed',value:.20,desc:'+20% tower attack speed.',rarity:'Rare'});
-supDefs.push({name:'Phantom Evasion',icon:'🌫️',kind:'evasion',value:.20,desc:'+20 percentage points evasion chance.',rarity:'Rare'});
+supDefs.push({name:'Phantom Evasion',icon:'🌫️',kind:'evasion',value:.20,desc:'+20% evasion chance.',rarity:'Rare'});
 supDefs.push({name:'Reinforced Plating',icon:'🛡️',kind:'armor',value:20,desc:'Increase Armor by 20.',rarity:'Rare'});
 supDefs.push({name:'Legendary Warcraft',icon:'🔥',kind:'damage',value:.40,desc:'+40% all tower damage.',rarity:'Epic'});
 supDefs.push({name:'Mythic Warcraft',icon:'🌟',kind:'damage',value:.75,desc:'+75% all tower damage.',rarity:'Epic'});
 let S;
-function fresh(){return {time:0,level:1,nextRefresh:30,started:false,paused:false,over:false,won:false,gold:5000,hp:2500,maxHp:2500,regen:0,hpGrowth:0,shieldGrowth:0,shieldRegen:0,shieldArmor:0,incomeGrowth:0,incomeGrowthTimer:0,armor:0,evasion:0,shield:0,maxShield:0,bounty:0,bountyBonusGold:0,income:0,compound:0,damage:0,typedDamage:{},crit:0,attackSpeed:0,incomeTimer:0,towers:[],enemies:[],shots:[],fx:[],combatFx:[],goldPops:[],kills:0,killGoldEarned:0,attacksFired:0,effectiveDamage:0,overkillDamage:0,frameTargets:new Set(),roundTypes:[],roundTypeLevel:0,clearUsed:false,clearAuto:false,speed:1,free:6,paid:0,rerollsUsed:0,lastCompound:0,spawn:0,boss:false,nextId:1,tOffers:[],sOffers:[],challenge:null,challengeFailed:false,challengeAwarded:false}}
+function fresh(){return {time:0,level:1,nextRefresh:30,started:false,paused:false,over:false,won:false,gold:5000,hp:2500,maxHp:2500,regen:0,hpGrowth:0,shieldGrowth:0,shieldRegen:0,shieldArmor:0,incomeGrowth:0,incomeGrowthTimer:0,armor:0,evasion:0,shield:0,maxShield:0,bounty:0,bountyBonusGold:0,income:0,compound:0,damage:0,typedDamage:{},crit:0,attackSpeed:0,incomeTimer:0,towers:[],enemies:[],shots:[],fx:[],combatFx:[],goldPops:[],kills:0,killGoldEarned:0,attacksFired:0,effectiveDamage:0,overkillDamage:0,frameTargets:new Set(),roundTypes:[],roundTypeLevel:0,clearUsed:false,clearAuto:false,speed:1,free:6,paid:0,rerollsUsed:0,lastCompound:0,spawn:0,boss:false,nextId:1,tOffers:[],sOffers:[],challenge:null,challengeFailed:false,challengeAwarded:false,rarityPurchases:[],timeChallengeAwarded:false}}
 S=fresh();
 function shuffle(a){return a.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1])}function fmt(n){return Math.floor(n).toLocaleString('en-US')}function clock(n){return String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0')}function log(m){$('log').innerHTML=m+'<br>'+ $('log').innerHTML;if($('log').innerHTML.length>1300)$('log').innerHTML=$('log').innerHTML.slice(0,1300)}function toast(m){log('» '+m)}
 function cap(l){return l===1?6:l===2?1:l<=4?2:l<=10?3:5}function cost(){return Math.min(1000,100*(S.paid+1))}function left(){return Math.max(0,cap(S.level)-S.rerollsUsed)}
@@ -247,24 +388,27 @@ const challengeDefs=[
  ...damageTypes.map(type=>({id:'type-'+type,name:type+' Only',icon:({Normal:'⚔️',Piercing:'🏹',Magic:'🔮',Chaos:'🌀',Spikes:'🛡️',Siege:'💣'})[type],description:'Defeat the boss using only '+type+' primary-damage towers. Elemental effects are allowed.',eligible:t=>t.type===type})),
  {id:'single',name:'Single Target',icon:'🎯',description:'Win using only Single Target towers.',eligible:t=>t.pattern==='Single Target'},
  {id:'chains',name:'Bounce + Barrage',icon:'⛓️',description:'Win using only Bounce and Barrage towers, in any combination.',eligible:t=>t.pattern==='Bounce'||t.pattern==='Barrage'},
- {id:'zones',name:'Splash + Area',icon:'💥',description:'Win using only Splash and Area towers, in any combination.',eligible:t=>t.pattern==='Splash'||t.pattern==='Area'}
+ {id:'zones',name:'Splash + Area',icon:'💥',description:'Win using only Splash and Area towers, in any combination.',eligible:t=>t.pattern==='Splash'||t.pattern==='Area'},
+ {id:'common-10',name:'Common Survivor',icon:'⚪',description:'Reach 10:00 after buying only Common towers during the first 10 minutes. Supports and rerolls are unrestricted. After 10:00 buy any rarity; reward is immediate.',timeRarity:'Common',eligible:t=>t.rarity==='Common'},
+ {id:'uncommon-10',name:'Uncommon Survivor',icon:'🟢',description:'Reach 10:00 after buying only Uncommon towers during the first 10 minutes. Supports and rerolls are unrestricted. After 10:00 buy any rarity; reward is immediate.',timeRarity:'Uncommon',eligible:t=>t.rarity==='Uncommon'}
 ];
 const CHALLENGE_KEY='tower-survivor-crowns-v1';
 function readChallengeProgress(){try{const v=JSON.parse(localStorage.getItem(CHALLENGE_KEY)||'{}');return {points:Number(v.points)||0,completed:Array.isArray(v.completed)?v.completed:[]}}catch{return {points:0,completed:[]}}}
 let crownProgress=readChallengeProgress(),selectedChallengeDetail=null;
 function saveChallengeProgress(){try{localStorage.setItem(CHALLENGE_KEY,JSON.stringify(crownProgress))}catch{}}
-function eligibleChallenges(){return S.towers.length?challengeDefs.filter(c=>S.towers.every(t=>c.eligible(t))):[]}
-function awardChallenge(){if(S.challengeAwarded)return;S.challengeAwarded=true;const eligible=eligibleChallenges();let newly=[];
+function eligibleChallenges(){return challengeDefs.filter(c=>c.timeRarity?(S.rarityPurchases.length>0&&S.rarityPurchases.every(p=>p.rarity===c.timeRarity)):(S.towers.length>0&&S.towers.every(t=>c.eligible(t))))}
+function awardTimeChallenges(){if(S.timeChallengeAwarded||S.time<600)return;S.timeChallengeAwarded=true;const eligible=eligibleChallenges().filter(c=>c.timeRarity);const newly=[];for(const def of eligible){if(!crownProgress.completed.includes(def.id)){crownProgress.completed.push(def.id);crownProgress.points+=100;newly.push(def.name)}}if(newly.length){saveChallengeProgress();toast('10:00 SURVIVOR! '+newly.join(', ')+' · +'+(newly.length*100)+' Crown Points!')}renderCrownPanel()}
+function awardChallenge(){if(S.challengeAwarded)return;S.challengeAwarded=true;const eligible=eligibleChallenges().filter(c=>!c.timeRarity);let newly=[];
  for(const def of eligible){if(!crownProgress.completed.includes(def.id)){crownProgress.completed.push(def.id);crownProgress.points+=100;newly.push(def.name)}}
  if(newly.length){saveChallengeProgress();toast('Crown Challenges complete: '+newly.join(', ')+' · +'+(newly.length*100)+' Crown Points!')}
  renderCrownPanel();}
 function renderCrownPanel(){const panel=$('crownPanel');const eligible=eligibleChallenges();
  let html='<div class="ownedHeader"><span>♛ CROWN CHALLENGES</span><button class="challengeClose" id="closeCrowns">✕</button></div>';
- html+='<div class="challengeSummary">'+crownProgress.points+' Crown Points · '+crownProgress.completed.length+'/'+challengeDefs.length+' skins unlocked<br>Every run automatically qualifies for any challenges your tower purchases follow. Defeat the 15-minute boss to earn rewards. Supports and elemental effects are unrestricted.</div>';
+ html+='<div class="challengeSummary">'+crownProgress.points+' Crown Points · '+crownProgress.completed.length+'/'+challengeDefs.length+' skins unlocked<br>Every run automatically qualifies for any challenges your tower purchases follow. Survive to 10:00 for rarity Survivor rewards; other challenges require defeating the 15-minute boss. Supports and elemental effects are unrestricted.</div>';
  html+='<div class="challengeGrid">'+challengeDefs.map(c=>'<button type="button" class="challengeTile'+(eligible.some(v=>v.id===c.id)?' selected':'')+(crownProgress.completed.includes(c.id)?' completed':'')+'" data-challenge="'+c.id+'"><span class="symbol">'+c.icon+'</span><span>'+c.name+'</span><span style="font-size:8px;color:#f5d17b">'+(crownProgress.completed.includes(c.id)?'✓ Skin earned':eligible.some(v=>v.id===c.id)?'ON TRACK':'100 pts')+'</span></button>').join('')+'</div>';
  const detail=challengeDefs.find(c=>c.id===selectedChallengeDetail);
  if(detail){const completed=crownProgress.completed.includes(detail.id),onTrack=eligible.some(c=>c.id===detail.id);
- html+='<div class="challengeDetail"><b>'+detail.icon+' '+detail.name+'</b><div>'+detail.description+'</div><div>Reward: 100 Crown Points + '+detail.name+' castle skin unlock (first victory).</div><div>Status: '+(completed?'Previously completed · ':'')+(onTrack?'On track this run':S.towers.length?'Not eligible this run':'Eligible until you buy a tower')+'</div></div>';
+ html+='<div class="challengeDetail"><b>'+detail.icon+' '+detail.name+'</b><div>'+detail.description+'</div><div>Reward: 100 Crown Points + '+detail.name+' castle skin unlock (first completion).</div><div>Status: '+(completed?'Previously completed · ':'')+(onTrack?'On track this run':S.towers.length?'Not eligible this run':'Eligible until you buy a tower')+'</div></div>';
  }else html+='<div class="challengeSummary">Tap any challenge tile for its rules. No selection required.</div>';
  panel.innerHTML=html;
  $('closeCrowns').onclick=()=>showCrowns(false);
@@ -282,7 +426,7 @@ ownedButton.addEventListener('pointercancel',()=>{ownedHoldActive=false;clearTim
 ownedButton.addEventListener('pointerleave',()=>{if(ownedHoldActive){clearTimeout(ownedHoldTimer)}});
 ownedButton.addEventListener('click',e=>{e.preventDefault();if(ownedSuppressClick){ownedSuppressClick=false;return}ownedPinned=!ownedPinned;showOwned(ownedPinned)});
 function showToast(name){const el=$('toast'),rect=c.getBoundingClientRect();el.textContent='✦ '+name+' ✦';el.style.left=(rect.left+rect.width*.5)+'px';el.style.top=(rect.top+rect.height*.275)+'px';el.classList.remove('show');void el.offsetWidth;el.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>el.classList.remove('show'),850)}
-function takeTower(t){if(S.over)return;let costGold=price(t.rarity);if(S.gold<costGold){toast('NOT ENOUGH GOLD');return}S.gold-=costGold;S.started=true;hideChallengeNudge();S.towers.push({...t,instanceId:S.nextId++,cool:t.rate>0?Math.random()/Math.max(.1,t.rate*(1+S.attackSpeed)):0,spellCooldown:Math.random()*3,attacksFired:0,effectiveDamage:0,overkillDamage:0});log('Independent tower built: '+t.name);if((t.shieldPerHit||t.shieldLeech)&&S.maxShield===0){S.maxShield=1;S.shield=1}S.tOffers=S.tOffers.map(v=>v===t?null:v);showToast(t.name);render();renderOwnedTowers();if(!$('crownPanel').hidden)renderCrownPanel()}
+function takeTower(t){if(S.over)return;let costGold=price(t.rarity);if(S.gold<costGold){toast('NOT ENOUGH GOLD');return}S.gold-=costGold;S.started=true;hideChallengeNudge();if(S.time<600)S.rarityPurchases.push({rarity:t.rarity,time:S.time});S.towers.push({...t,instanceId:S.nextId++,cool:t.rate>0?Math.random()/Math.max(.1,t.rate*(1+S.attackSpeed)):0,spellCooldown:Math.random()*3,attacksFired:0,effectiveDamage:0,overkillDamage:0});log('Independent tower built: '+t.name);if((t.shieldPerHit||t.shieldLeech)&&S.maxShield===0){S.maxShield=1;S.shield=1}S.tOffers=S.tOffers.map(v=>v===t?null:v);showToast(t.name);render();renderOwnedTowers();if(!$('crownPanel').hidden)renderCrownPanel()}
 function takeSupport(s){if(S.over)return;let costGold=price(s.rarity);if(S.gold<costGold){toast('NOT ENOUGH GOLD');return}S.gold-=costGold;S.started=true;hideChallengeNudge();switch(s.kind){case'income':S.income+=s.value;break;case'bounty':S.bounty+=s.value;break;case'compound':S.compound+=s.value;break;case'hp':S.maxHp+=s.value;S.hp=Math.min(S.maxHp,S.hp+s.value);break;case'regen':S.regen+=s.value;break;case'armor':S.armor+=s.value;break;case'evasion':S.evasion=Math.min(.4,S.evasion+s.value);break;case'shield':S.maxShield+=s.value;S.shield=Math.min(S.maxShield,S.shield+s.value);break;case'damage':S.damage+=s.value;break;case'typedDamage':S.typedDamage[s.damageType]=(S.typedDamage[s.damageType]||0)+s.value;renderOwnedTowers();break;case'crit':S.crit+=s.value;break;case'attackSpeed':S.attackSpeed+=s.value;break;case'hpGrowth':{const initial=s.value===10?1000:2000;S.maxHp+=initial;S.hp+=initial;S.hpGrowth+=s.value;break}case'incomeGrowth':S.income+=10;S.incomeGrowth+=s.value;break;case'bountyIncome':S.bounty+=s.value[0];S.income=(50+S.income)*(1+s.value[1])-50;break;case'shieldGrowth':S.maxShield+=2000;S.shield+=2000;S.shieldGrowth+=s.value;break;case'shieldArmor':S.maxShield+=2000;S.shield+=2000;S.shieldArmor=1-(1-S.shieldArmor)*(1-s.value);break;case'shieldRegen':S.maxShield+=2000;S.shield+=2000;S.shieldRegen+=s.value;break;}S.sOffers=S.sOffers.map(v=>v===s?null:v);showToast(s.name);render()}
 function ui(){document.querySelectorAll('.card').forEach(card=>{if(card.dataset.cost){const disabled=S.gold<Number(card.dataset.cost)||S.over;card.classList.toggle('unaffordable',disabled);card.setAttribute('aria-disabled',String(disabled))}}); $('shieldStat').style.visibility=S.maxShield>0?'visible':'hidden';if(S.maxShield>0){$('shieldValue').textContent=fmt(S.shield)+' / '+fmt(S.maxShield);$('shieldBar').style.width=Math.max(0,100*S.shield/S.maxShield)+'%'}$('hp').textContent=fmt(Math.max(0,S.hp))+' / '+fmt(S.maxHp);$('hpbar').style.width=Math.max(0,S.hp/S.maxHp*100)+'%';$('gold').textContent=fmt(S.gold);$('level').textContent=Math.min(30,S.level)+' / 30';$('time').textContent=clock(S.time);$('regenValue').textContent=fmt(S.regen+S.hpGrowth);$('armorValue').textContent=fmt(S.armor)+' · '+(armorReduction(S.armor)*100).toFixed(1)+'%';const rawTowerDamage=S.towers.reduce((sum,t)=>sum+t.dmg*(1+(S.typedDamage[t.type]||0)),0)*(1+S.damage)*(1+S.crit);$('damageScore').textContent=(rawTowerDamage/100).toFixed(1);const passiveIncome=(50+S.income+S.compound)*economyFactor();const killIncomeRate=S.time>0?S.killGoldEarned/S.time:0;$('incomeScore').textContent=((passiveIncome+killIncomeRate)/10).toFixed(1);$('clear').textContent=S.clearUsed?'⚡ CLEAR · USED':'⚡ CLEAR · READY';$('clear').disabled=S.clearUsed||S.over;$('reroll').disabled=!can();const freeRerolls=!S.started&&S.free>0;$('reroll').textContent='↻ Reroll '+(freeRerolls?'FREE':fmt(cost())+'g');let remain=Math.max(0,S.nextRefresh-S.time);$('rerollInfo').textContent=`Refresh in ${Math.ceil(remain)}s`; $('refreshFill').style.width=(Math.max(0,Math.min(1,remain/30))*100)+'%'}
 const creepDefs=[
@@ -350,12 +494,12 @@ function drawGroundSpell(v){const q=v.points[0],age=1-v.life/v.max,area=v.kind==
  if(area){x.globalAlpha=fade*.7;x.strokeStyle=v.accent;x.lineWidth=1.5;for(let i=0;i<6;i++){const a=v.seed+i*Math.PI/3+age*.55;x.beginPath();x.arc(Math.cos(a)*r*.62,Math.sin(a)*r*.62,3.5,0,Math.PI*2);x.stroke()}}
  x.restore();}
 
-// Bounce may jump to at most four additional distinct enemies, each within 300 tower-range units of the previous victim.
+// Bounce may jump to at most four additional distinct enemies, within 650 range units of the previous victim.
 function bounceTargets(first,candidates){
  const chain=[first],visited=new Set([first]);
  while(chain.length<5){
   const previous=chain[chain.length-1];
-  const next=candidates.filter(e=>!visited.has(e)&&!e.dead&&dist(previous,e)<=300*RANGE_WORLD_SCALE)
+  const next=candidates.filter(e=>!visited.has(e)&&!e.dead&&dist(previous,e)<=BOUNCE_CHAIN_REACH*RANGE_WORLD_SCALE)
     .sort((a,b)=>dist(previous,a)-dist(previous,b))[0];
   if(!next)break;
   chain.push(next);visited.add(next);
@@ -404,7 +548,12 @@ function shoot(t,dt){
  if(t.pattern==='Splash'||t.pattern==='Area')groundSpell(t,areaCenter,t.pattern==='Area'?AREA_RADIUS:SPLASH_RADIUS);
  if(t.pattern==='Bounce'&&hitlist.length>1)combatEffect('chain',hitlist.map(a=>({x:a.x,y:a.y})),t.mod==='Frost'?'#8cddff':t.mod==='Poison'?'#b0f779':'#f7db8d');
  const landedHits=hitlist.filter(a=>!a.dead).length;let damageDealt=0;
- hitlist.forEach((a,i)=>{if(a.dead)return;const before=Math.max(0,a.hp);hit(a,d*(t.pattern==='Splash'?SPLASH_DAMAGE_FACTOR:t.pattern==='Area'?AREA_DAMAGE_FACTOR:t.pattern==='Bounce'?Math.pow(.72,i):t.pattern==='Barrage'?.62:1),t.mod,t.type,t.exposeType);damageDealt+=trackDamage(t,before,a.hp);S.frameTargets.add(a.id)});
+ hitlist.forEach((a,i)=>{if(a.dead)return;const before=Math.max(0,a.hp);hit(a,d*(t.pattern==='Splash'?SPLASH_DAMAGE_FACTOR:t.pattern==='Area'?AREA_DAMAGE_FACTOR:t.pattern==='Bounce'?Math.pow(.72,i):t.pattern==='Barrage'?.62:1),t.mod,t.type,t.exposeType);damageDealt+=trackDamage(t,before,a.hp);
+  if(t.pattern==='Area'&&!a.dead){
+   const applied=d*AREA_DAMAGE_FACTOR;
+   a.areaLinger={time:AREA_LINGER_SECONDS,dps:applyArmorDamage(a,applied*AREA_LINGER_FRACTION,t.type)/AREA_LINGER_SECONDS};
+  }
+  S.frameTargets.add(a.id)});
  if(t.shieldLeech&&S.maxShield===0){S.maxShield=1;S.shield=1}
  if(t.shieldLeech&&S.maxShield>0)S.shield=Math.min(S.maxShield,S.shield+damageDealt*t.shieldLeech);
  if(t.hpLeech)S.hp=Math.min(S.maxHp,S.hp+damageDealt*t.hpLeech);
@@ -414,7 +563,7 @@ function shoot(t,dt){
  S.shots.push({x:e.x,y:e.y,life:.12,color:t.mod==='Fire'?'#ff8738':t.mod==='Frost'?'#70d8ff':t.mod==='Poison'?'#86e86e':'#f5e4a5'});
 }
 function modal(t,p,b){S.paused=true;$('mt').textContent=t;$('mp').textContent=p;$('mb').textContent=b;$('overlay').style.display='flex'}
-function update(dt){if(S.paused||S.over||!S.started)return;dt*=S.speed;S.time+=dt;if(!S.ownedStatsAt||S.time-S.ownedStatsAt>=1){S.ownedStatsAt=S.time;if(!$('ownedPanel').hidden)renderOwnedTowers()}S.level=Math.min(30,Math.floor(S.time/30)+1);if(S.time>=S.nextRefresh){refreshAll();S.nextRefresh=(Math.floor(S.time/30)+1)*30}if(S.time>=900&&!S.boss)spawn(true);if(!S.boss){S.spawn-=dt;let catchup=0;while(S.spawn<=0&&catchup++<8){spawn();S.spawn+=waveSpawnInterval(S.level)}}S.incomeTimer+=dt;if(S.incomeTimer>=2){let ticks=Math.floor(S.incomeTimer/2);S.gold+=Math.floor((50+S.income)*2*ticks*economyFactor());S.incomeTimer-=2*ticks}let n=Math.floor(S.time/30);if(n>S.lastCompound){S.gold+=Math.floor(S.compound*30*(n-S.lastCompound)*economyFactor());S.lastCompound=n}S.incomeGrowthTimer+=dt;if(S.incomeGrowthTimer>=10){const ticks=Math.floor(S.incomeGrowthTimer/10);S.income+=ticks*S.incomeGrowth;S.incomeGrowthTimer-=ticks*10}S.maxHp+=S.hpGrowth*dt;S.hp=Math.min(S.maxHp,S.hp+S.hpGrowth*dt);S.maxShield+=S.shieldGrowth*dt;S.shield=Math.min(S.maxShield,S.shield+S.shieldGrowth*dt);S.hp=Math.min(S.maxHp,S.hp+S.regen*dt);S.shield=Math.min(S.maxShield,S.shield+(S.maxShield*.05+S.shieldRegen)*dt);S.frameTargets.clear();S.towers.forEach(t=>shoot(t,dt));S.enemies.forEach(e=>{if(e.dead)return;e.fire=Math.max(0,e.fire-dt);e.poison=Math.max(0,e.poison-dt);e.frost=Math.max(0,e.frost-dt);if(e.fire>0)e.hp-=11*dt;if(e.poison>0)e.hp-=18*dt;if(e.bleedTime>0){e.hp-=(e.bleedDps||0)*Math.min(dt,e.bleedTime);e.bleedTime=Math.max(0,e.bleedTime-dt);if(e.bleedTime===0)e.bleedDps=0;}let dx=CX-e.x,dy=CY-e.y,d=Math.hypot(dx,dy)||1;const stoppingDistance=e.ranged?Math.max(KEEP_WALL+e.r,e.reach*RANGE_WORLD_SCALE):KEEP_WALL+e.r;if(d>stoppingDistance){const step=Math.min(d-stoppingDistance,e.speed*(1-Math.min(.75,e.frost*.09))*dt);e.x+=dx/d*step;e.y+=dy/d*step;}e.attackFlash=Math.max(0,(e.attackFlash||0)-dt);e.attack+=dt;if(d<=stoppingDistance+2&&e.attack>=(e.boss?1:e.ranged?1.2:.7)){e.attack=0;e.attackFlash=.23;if(Math.random()>=S.evasion){let dmg=e.dmg*(1-armorReduction(S.armor));const block=S.towers.reduce((sum,t)=>sum+(t.type==='Spikes'?(t.flatBlock||0):0),0);dmg=Math.max(0,dmg-block);if(S.shield>0)dmg*=1-S.shieldArmor;let a=Math.min(S.shield,dmg);S.shield-=a;S.hp-=dmg-a;if(dmg>a||block>0&&S.shield<=0){for(const t of S.towers){if(t.type!=='Spikes')continue;const woundMultiplier=1+(e.spikeWounds||0)*.25;
+function update(dt){if(S.paused||S.over||!S.started)return;dt*=S.speed;S.time+=dt;if(S.time>=600&&!S.timeChallengeAwarded)awardTimeChallenges();if(!S.ownedStatsAt||S.time-S.ownedStatsAt>=1){S.ownedStatsAt=S.time;if(!$('ownedPanel').hidden)renderOwnedTowers()}S.level=Math.min(30,Math.floor(S.time/30)+1);if(S.time>=S.nextRefresh){refreshAll();S.nextRefresh=(Math.floor(S.time/30)+1)*30}if(S.time>=900&&!S.boss)spawn(true);if(!S.boss){S.spawn-=dt;let catchup=0;while(S.spawn<=0&&catchup++<8){spawn();S.spawn+=waveSpawnInterval(S.level)}}S.incomeTimer+=dt;if(S.incomeTimer>=2){let ticks=Math.floor(S.incomeTimer/2);S.gold+=Math.floor((50+S.income)*2*ticks*economyFactor());S.incomeTimer-=2*ticks}let n=Math.floor(S.time/30);if(n>S.lastCompound){S.gold+=Math.floor(S.compound*30*(n-S.lastCompound)*economyFactor());S.lastCompound=n}S.incomeGrowthTimer+=dt;if(S.incomeGrowthTimer>=10){const ticks=Math.floor(S.incomeGrowthTimer/10);S.income+=ticks*S.incomeGrowth;S.incomeGrowthTimer-=ticks*10}S.maxHp+=S.hpGrowth*dt;S.hp=Math.min(S.maxHp,S.hp+S.hpGrowth*dt);S.maxShield+=S.shieldGrowth*dt;S.shield=Math.min(S.maxShield,S.shield+S.shieldGrowth*dt);S.hp=Math.min(S.maxHp,S.hp+S.regen*dt);S.shield=Math.min(S.maxShield,S.shield+(S.maxShield*.05+S.shieldRegen)*dt);S.frameTargets.clear();S.towers.forEach(t=>shoot(t,dt));S.enemies.forEach(e=>{if(e.dead)return;e.fire=Math.max(0,e.fire-dt);e.poison=Math.max(0,e.poison-dt);e.frost=Math.max(0,e.frost-dt);if(e.fire>0)e.hp-=11*dt;if(e.poison>0)e.hp-=18*dt;if(e.areaLinger&&e.areaLinger.time>0){const tick=Math.min(dt,e.areaLinger.time);e.hp-=e.areaLinger.dps*tick;e.areaLinger.time-=tick;}if(e.bleedTime>0){e.hp-=(e.bleedDps||0)*Math.min(dt,e.bleedTime);e.bleedTime=Math.max(0,e.bleedTime-dt);if(e.bleedTime===0)e.bleedDps=0;}let dx=CX-e.x,dy=CY-e.y,d=Math.hypot(dx,dy)||1;const stoppingDistance=e.ranged?Math.max(KEEP_WALL+e.r,e.reach*RANGE_WORLD_SCALE):KEEP_WALL+e.r;if(d>stoppingDistance){const step=Math.min(d-stoppingDistance,e.speed*(1-Math.min(.75,e.frost*.09))*dt);e.x+=dx/d*step;e.y+=dy/d*step;}e.attackFlash=Math.max(0,(e.attackFlash||0)-dt);e.attack+=dt;if(d<=stoppingDistance+2&&e.attack>=(e.boss?1:e.ranged?1.2:.7)){e.attack=0;e.attackFlash=.23;if(Math.random()>=S.evasion){let dmg=e.dmg*(1-armorReduction(S.armor));const block=S.towers.reduce((sum,t)=>sum+(t.type==='Spikes'?(t.flatBlock||0):0),0);dmg=Math.max(0,dmg-block);if(S.shield>0)dmg*=1-S.shieldArmor;let a=Math.min(S.shield,dmg);S.shield-=a;S.hp-=dmg-a;if(dmg>a||block>0&&S.shield<=0){for(const t of S.towers){if(t.type!=='Spikes')continue;const woundMultiplier=1+(e.spikeWounds||0)*.25;
  const rawReflect=(t.halfCreepHp?e.maxHp*.5:t.dmg+(t.hpReflect||0)*S.maxHp)*(e.armor==='Light'?1+(t.lightBonus||0):1)*(e.ranged?1+(t.rangedBonus||0):1);
  const retaliation=rawReflect*woundMultiplier*(1+S.damage)*(1+(S.typedDamage.Spikes||0))*(Math.random()<S.crit?2:1);
  const hpBeforeReflect=Math.max(0,e.hp);hit(e,retaliation,'None','Spikes');trackDamage(t,hpBeforeReflect,e.hp);S.attacksFired++;t.attacksFired++;
