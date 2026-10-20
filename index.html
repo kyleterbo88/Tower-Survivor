@@ -33,7 +33,7 @@
 #challengeNudge[hidden]{display:none}
 @keyframes challengeNudgeIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
 
-/* v46 HUD iconography: vector icons, two-line labels and values, six-panel layout. */
+/* v47 creep attack range fix; v46 HUD iconography: vector icons, two-line labels and values, six-panel layout. */
 .stats .stat{min-width:0;overflow:hidden}
 .statIconRow{display:flex;align-items:center;justify-content:center;gap:clamp(2px,.9vw,7px);min-width:0;width:100%}
 .statIconRow .statBody{flex:1;min-width:0;text-align:left}
@@ -75,8 +75,8 @@ function armorReduction(armor){const a=Math.max(0,armor);if(a<=50)return a/100;c
 let showRangeRings=false;
 const KEEP_WALL=31; // outer stone-wall collision radius; enemies stay outside the silhouette
 // AoE sizes use the same displayed range units as tower range.
-// Splash diameter 300 (radius 150); Area radius 600 covers 1/4 of a 1200-radius circular island.
-const SPLASH_RADIUS=150*RANGE_WORLD_SCALE, AREA_RADIUS=600*RANGE_WORLD_SCALE;
+// Splash radius doubled from 150 to 300 range units (four times the affected area). Area unchanged.
+const SPLASH_RADIUS=300*RANGE_WORLD_SCALE, AREA_RADIUS=600*RANGE_WORLD_SCALE;
 const SPLASH_DAMAGE_FACTOR=.70, AREA_DAMAGE_FACTOR=.25;
 const towerDefs=[
 ['Normal','Single Target','',90,230,1.1,'Balanced single-target shots.'],['Normal','Barrage','',42,195,2.5,'Rapid light projectiles.'],['Normal','Splash','Fire',70,180,.75,'Burning splash hits.'],['Normal','Bounce','Poison',65,205,.85,'Poison spreads through targets.'],['Normal','Area','Frost',55,160,.65,'Chills enemies in an area.'],
@@ -205,7 +205,7 @@ supDefs.push({name:'Reinforced Plating',icon:'🛡️',kind:'armor',value:20,des
 supDefs.push({name:'Legendary Warcraft',icon:'🔥',kind:'damage',value:.40,desc:'+40% all tower damage.',rarity:'Epic'});
 supDefs.push({name:'Mythic Warcraft',icon:'🌟',kind:'damage',value:.75,desc:'+75% all tower damage.',rarity:'Epic'});
 let S;
-function fresh(){return {time:0,level:1,nextRefresh:30,started:false,paused:false,over:false,won:false,gold:5000,hp:2500,maxHp:2500,regen:0,hpGrowth:0,shieldGrowth:0,shieldRegen:0,shieldArmor:0,incomeGrowth:0,incomeGrowthTimer:0,armor:0,evasion:0,shield:0,maxShield:0,bounty:0,bountyBonusGold:0,income:0,compound:0,damage:0,typedDamage:{},crit:0,attackSpeed:0,incomeTimer:0,towers:[],enemies:[],shots:[],fx:[],combatFx:[],goldPops:[],kills:0,killGoldEarned:0,roundTypes:[],roundTypeLevel:0,clearUsed:false,clearAuto:false,speed:1,free:6,paid:0,rerollsUsed:0,lastCompound:0,spawn:0,boss:false,nextId:1,tOffers:[],sOffers:[],challenge:null,challengeFailed:false,challengeAwarded:false}}
+function fresh(){return {time:0,level:1,nextRefresh:30,started:false,paused:false,over:false,won:false,gold:5000,hp:2500,maxHp:2500,regen:0,hpGrowth:0,shieldGrowth:0,shieldRegen:0,shieldArmor:0,incomeGrowth:0,incomeGrowthTimer:0,armor:0,evasion:0,shield:0,maxShield:0,bounty:0,bountyBonusGold:0,income:0,compound:0,damage:0,typedDamage:{},crit:0,attackSpeed:0,incomeTimer:0,towers:[],enemies:[],shots:[],fx:[],combatFx:[],goldPops:[],kills:0,killGoldEarned:0,attacksFired:0,effectiveDamage:0,overkillDamage:0,frameTargets:new Set(),roundTypes:[],roundTypeLevel:0,clearUsed:false,clearAuto:false,speed:1,free:6,paid:0,rerollsUsed:0,lastCompound:0,spawn:0,boss:false,nextId:1,tOffers:[],sOffers:[],challenge:null,challengeFailed:false,challengeAwarded:false}}
 S=fresh();
 function shuffle(a){return a.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1])}function fmt(n){return Math.floor(n).toLocaleString('en-US')}function clock(n){return String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0')}function log(m){$('log').innerHTML=m+'<br>'+ $('log').innerHTML;if($('log').innerHTML.length>1300)$('log').innerHTML=$('log').innerHTML.slice(0,1300)}function toast(m){log('» '+m)}
 function cap(l){return l===1?6:l===2?1:l<=4?2:l<=10?3:5}function cost(){return Math.min(1000,100*(S.paid+1))}function left(){return Math.max(0,cap(S.level)-S.rerollsUsed)}
@@ -229,12 +229,15 @@ function render(){
 }
 function renderOwnedTowers(){
  const panel=$('ownedPanel');$('ownedCount').textContent=S.towers.length;
- let html='<div class="ownedHeader"><span>♜ OWNED TOWERS ('+S.towers.length+')</span><span class="ownedHint">Type → range</span></div>';
+ let html='<div class="ownedHeader"><span>♜ OWNED TOWERS ('+S.towers.length+')</span><span class="ownedHint">Independent attacks · grouped copies</span></div>';
+ html+='<div class="ownedHint" style="margin-bottom:5px">Attacks: '+fmt(S.attacksFired)+' · Effective damage: '+fmt(S.effectiveDamage)+' · Overkill: '+fmt(S.overkillDamage)+' ('+(S.effectiveDamage+S.overkillDamage>0?(100*S.overkillDamage/(S.effectiveDamage+S.overkillDamage)).toFixed(1):'0.0')+'%)</div>';
  if(!S.towers.length){panel.innerHTML=html+'<div class="ownedEmpty">No towers purchased yet.<br>Buy a tower from the Armory.</div>';return}
  const rarityDots={Common:'#d8dde1',Uncommon:'#42d878',Rare:'#4aa5ff',Epic:'#bd72ff'};
  for(const type of damageTypes){const towers=S.towers.filter(t=>t.type===type).sort((a,b)=>b.range-a.range||a.name.localeCompare(b.name));if(!towers.length)continue;
- html+='<div class="ownedGroup"><div class="ownedGroupTitle" style="color:'+rarityColor(type)+'">'+type.toUpperCase()+' · +'+Math.round(((1+S.damage)*(1+(S.typedDamage[type]||0))-1)*100)+'% DMG · '+towers.length+'</div>';
- for(const t of towers){const color=rarityColor(t.type);html+='<div class="ownedItem"><div class="ownedItemIcon">'+towerSvg(t)+'</div><div class="ownedItemBody"><div class="ownedItemName">'+t.name+(t.level>1?' · Lv '+t.level:'')+'<span class="ownedRarity" title="'+t.rarity+'" style="background:'+rarityDots[t.rarity]+'"></span></div><div class="ownedItemDetail">'+t.range+' range · '+t.pattern+(t.mod!=='None'?' + '+t.mod:'')+' · '+fmt(t.dmg)+' DMG</div><div class="ownedItemDetail">'+ability(t)+'</div></div></div>'}
+ html+='<div class="ownedGroup"><div class="ownedGroupTitle" style="color:'+rarityColor(type)+'">'+type.toUpperCase()+' · +'+Math.round(((1+S.damage)*(1+(S.typedDamage[type]||0))-1)*100)+'% DMG · '+towers.length+' copies</div>';
+ const grouped=new Map();for(const t of towers){const key=t.id;if(!grouped.has(key))grouped.set(key,[]);grouped.get(key).push(t)}
+ for(const copies of grouped.values()){const t=copies[0],n=copies.length,attacks=copies.reduce((v,a)=>v+a.attacksFired,0),effective=copies.reduce((v,a)=>v+a.effectiveDamage,0),overkill=copies.reduce((v,a)=>v+a.overkillDamage,0);
+ html+='<div class="ownedItem"><div class="ownedItemIcon">'+towerSvg(t)+'</div><div class="ownedItemBody"><div class="ownedItemName">'+t.name+(n>1?' ×'+n:'')+'<span class="ownedRarity" title="'+t.rarity+'" style="background:'+rarityDots[t.rarity]+'"></span></div><div class="ownedItemDetail">'+t.range+' range · '+t.pattern+(t.mod!=='None'?' + '+t.mod:'')+' · '+fmt(t.dmg)+' DMG each</div><div class="ownedItemDetail">'+ability(t)+'</div><div class="ownedItemDetail">'+fmt(attacks)+' attacks · '+fmt(effective)+' effective · '+fmt(overkill)+' overkill</div></div></div>'}
  html+='</div>'}
  panel.innerHTML=html;
 }
@@ -279,7 +282,7 @@ ownedButton.addEventListener('pointercancel',()=>{ownedHoldActive=false;clearTim
 ownedButton.addEventListener('pointerleave',()=>{if(ownedHoldActive){clearTimeout(ownedHoldTimer)}});
 ownedButton.addEventListener('click',e=>{e.preventDefault();if(ownedSuppressClick){ownedSuppressClick=false;return}ownedPinned=!ownedPinned;showOwned(ownedPinned)});
 function showToast(name){const el=$('toast'),rect=c.getBoundingClientRect();el.textContent='✦ '+name+' ✦';el.style.left=(rect.left+rect.width*.5)+'px';el.style.top=(rect.top+rect.height*.275)+'px';el.classList.remove('show');void el.offsetWidth;el.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>el.classList.remove('show'),850)}
-function takeTower(t){if(S.over)return;let costGold=price(t.rarity);if(S.gold<costGold){toast('NOT ENOUGH GOLD');return}S.gold-=costGold;S.started=true;hideChallengeNudge();let old=S.towers.find(v=>v.id===t.id);if(old){old.level++;old.dmg*=1.22;old.rate*=1.08;log('Tower upgraded: '+t.name)}else S.towers.push({...t,level:1,cool:0});if((t.shieldPerHit||t.shieldLeech)&&S.maxShield===0){S.maxShield=1;S.shield=1}S.tOffers=S.tOffers.map(v=>v===t?null:v);showToast(t.name);render();renderOwnedTowers();if(!$('crownPanel').hidden)renderCrownPanel()}
+function takeTower(t){if(S.over)return;let costGold=price(t.rarity);if(S.gold<costGold){toast('NOT ENOUGH GOLD');return}S.gold-=costGold;S.started=true;hideChallengeNudge();S.towers.push({...t,instanceId:S.nextId++,cool:t.rate>0?Math.random()/Math.max(.1,t.rate*(1+S.attackSpeed)):0,spellCooldown:Math.random()*3,attacksFired:0,effectiveDamage:0,overkillDamage:0});log('Independent tower built: '+t.name);if((t.shieldPerHit||t.shieldLeech)&&S.maxShield===0){S.maxShield=1;S.shield=1}S.tOffers=S.tOffers.map(v=>v===t?null:v);showToast(t.name);render();renderOwnedTowers();if(!$('crownPanel').hidden)renderCrownPanel()}
 function takeSupport(s){if(S.over)return;let costGold=price(s.rarity);if(S.gold<costGold){toast('NOT ENOUGH GOLD');return}S.gold-=costGold;S.started=true;hideChallengeNudge();switch(s.kind){case'income':S.income+=s.value;break;case'bounty':S.bounty+=s.value;break;case'compound':S.compound+=s.value;break;case'hp':S.maxHp+=s.value;S.hp=Math.min(S.maxHp,S.hp+s.value);break;case'regen':S.regen+=s.value;break;case'armor':S.armor+=s.value;break;case'evasion':S.evasion=Math.min(.4,S.evasion+s.value);break;case'shield':S.maxShield+=s.value;S.shield=Math.min(S.maxShield,S.shield+s.value);break;case'damage':S.damage+=s.value;break;case'typedDamage':S.typedDamage[s.damageType]=(S.typedDamage[s.damageType]||0)+s.value;renderOwnedTowers();break;case'crit':S.crit+=s.value;break;case'attackSpeed':S.attackSpeed+=s.value;break;case'hpGrowth':{const initial=s.value===10?1000:2000;S.maxHp+=initial;S.hp+=initial;S.hpGrowth+=s.value;break}case'incomeGrowth':S.income+=10;S.incomeGrowth+=s.value;break;case'bountyIncome':S.bounty+=s.value[0];S.income=(50+S.income)*(1+s.value[1])-50;break;case'shieldGrowth':S.maxShield+=2000;S.shield+=2000;S.shieldGrowth+=s.value;break;case'shieldArmor':S.maxShield+=2000;S.shield+=2000;S.shieldArmor=1-(1-S.shieldArmor)*(1-s.value);break;case'shieldRegen':S.maxShield+=2000;S.shield+=2000;S.shieldRegen+=s.value;break;}S.sOffers=S.sOffers.map(v=>v===s?null:v);showToast(s.name);render()}
 function ui(){document.querySelectorAll('.card').forEach(card=>{if(card.dataset.cost){const disabled=S.gold<Number(card.dataset.cost)||S.over;card.classList.toggle('unaffordable',disabled);card.setAttribute('aria-disabled',String(disabled))}}); $('shieldStat').style.visibility=S.maxShield>0?'visible':'hidden';if(S.maxShield>0){$('shieldValue').textContent=fmt(S.shield)+' / '+fmt(S.maxShield);$('shieldBar').style.width=Math.max(0,100*S.shield/S.maxShield)+'%'}$('hp').textContent=fmt(Math.max(0,S.hp))+' / '+fmt(S.maxHp);$('hpbar').style.width=Math.max(0,S.hp/S.maxHp*100)+'%';$('gold').textContent=fmt(S.gold);$('level').textContent=Math.min(30,S.level)+' / 30';$('time').textContent=clock(S.time);$('regenValue').textContent=fmt(S.regen+S.hpGrowth);$('armorValue').textContent=fmt(S.armor)+' · '+(armorReduction(S.armor)*100).toFixed(1)+'%';const rawTowerDamage=S.towers.reduce((sum,t)=>sum+t.dmg*(1+(S.typedDamage[t.type]||0)),0)*(1+S.damage)*(1+S.crit);$('damageScore').textContent=(rawTowerDamage/100).toFixed(1);const passiveIncome=(50+S.income+S.compound)*economyFactor();const killIncomeRate=S.time>0?S.killGoldEarned/S.time:0;$('incomeScore').textContent=((passiveIncome+killIncomeRate)/10).toFixed(1);$('clear').textContent=S.clearUsed?'⚡ CLEAR · USED':'⚡ CLEAR · READY';$('clear').disabled=S.clearUsed||S.over;$('reroll').disabled=!can();const freeRerolls=!S.started&&S.free>0;$('reroll').textContent='↻ Reroll '+(freeRerolls?'FREE':fmt(cost())+'g');let remain=Math.max(0,S.nextRefresh-S.time);$('rerollInfo').textContent=`Refresh in ${Math.ceil(remain)}s`; $('refreshFill').style.width=(Math.max(0,Math.min(1,remain/30))*100)+'%'}
 const creepDefs=[
@@ -323,7 +326,7 @@ function bountyFactor(){const level=Math.min(30,S.level);if(level<=4)return 1;if
 function creepGold(e){const level=Math.min(30,S.level),base=Math.max(100,100+(level-1)*10);return Math.floor(base*(e.goldMult||1)*(1+S.bounty)*.375*economyFactor()*bountyFactor())}
 function applyArmorDamage(e,d,type){let mult=1;const armor=e.armor||'Medium';if(type==='Piercing')mult=armor==='Light'?1.35:armor==='Heavy'?.8:1;if(type==='Siege')mult=armor==='Heavy'?1.4:armor==='Light'?.85:1;if(type==='Magic')mult=armor==='Medium'?1.25:1;if(type==='Spikes')mult=armor==='Light'?1.2:armor==='Heavy'?.9:1;if(type==='Chaos')mult=1.1;return d*mult}
 
-function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}function fx(x,y,color,r=8){S.fx.push({x,y,color,r,life:.25})}
+function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}function fx(x,y,color,r=8){S.fx.push({x,y,color,r,life:.25});if(S.fx.length>90)S.fx.splice(0,S.fx.length-90)}
 function kill(e){if(e.dead)return;e.dead=true;S.kills++;const baseGold=Math.floor(Math.max(100,100+(S.level-1)*10)*(e.goldMult||1));const earnedGold=creepGold(e);S.gold+=earnedGold;S.killGoldEarned+=earnedGold;S.bountyBonusGold+=Math.max(0,earnedGold-baseGold);if(e.boss){S.gold+=Math.floor(1500*economyFactor());S.killGoldEarned+=Math.floor(1500*economyFactor());S.over=true;S.won=true;awardChallenge();modal('Victory!','You defeated the 15-minute boss.','New Run')}fx(e.x,e.y,'#ffd36b',e.boss?25:10);S.goldPops.push({x:e.x,y:e.y-14,text:'+'+fmt(earnedGold+(e.boss?Math.floor(1500*economyFactor()):0))+'g',life:1.1,max:1.1})}
 function hit(e,d,mod,type='Normal',exposeType=null){const vulnerability=1+.25*((e.typeWounds&&e.typeWounds[type])||0);e.hp-=applyArmorDamage(e,d*vulnerability,type);if(exposeType){e.typeWounds||={};e.typeWounds[exposeType]=(e.typeWounds[exposeType]||0)+1;}if(mod==='Fire')e.fire=Math.min(5,e.fire+2.5);if(mod==='Poison')e.poison=Math.min(8,e.poison+2.5);if(mod==='Frost')e.frost=Math.min(5,e.frost+1.3);fx(e.x,e.y,mod==='Fire'?'#ff8738':mod==='Frost'?'#70d8ff':mod==='Poison'?'#86e86e':'#ffe39a',4);if(e.hp<=0)kill(e)}
 // Cosmetic-only ground spell effects; no damage is applied by lingering visuals.
@@ -359,16 +362,62 @@ function bounceTargets(first,candidates){
  }
  return chain;
 }
-function shoot(t,dt){if(t.type==='Spikes')return;if(t.range===300&&(t.pattern==='Single Target'||t.pattern==='Splash'||t.pattern==='Bounce')){t.spellCooldown=(t.spellCooldown||0)-dt;if(t.spellCooldown<=0){const distant=S.enemies.filter(a=>!a.dead&&dist({x:CX,y:CY},a)>300*RANGE_WORLD_SCALE&&dist({x:CX,y:CY},a)<=900*RANGE_WORLD_SCALE).sort((a,b)=>dist({x:CX,y:CY},a)-dist({x:CX,y:CY},b))[0];if(distant){hit(distant,t.dmg*(1+S.damage)*(1+(S.typedDamage[t.type]||0))*.8,t.mod,t.type);S.shots.push({x:distant.x,y:distant.y,life:.18,color:'#dcaaff'});t.spellCooldown=3}}}t.cool-=dt;if(t.cool>0)return;let arr=S.enemies.filter(e=>!e.dead&&dist({x:CX,y:CY},e)<=t.range*RANGE_WORLD_SCALE).sort((a,b)=>dist({x:CX,y:CY},a)-dist({x:CX,y:CY},b));if(!arr.length)return;let e=arr[0],d=t.dmg*(1+S.damage)*(1+(S.typedDamage[t.type]||0))*(Math.random()<S.crit?2:1);t.cool=1/Math.max(.1,t.rate*(1+S.attackSpeed));const areaCenter=t.pattern==='Area'&&t.range===300?{x:CX,y:CY}:e;
-let hitlist=t.pattern==='Area'?S.enemies.filter(a=>!a.dead&&dist(a,areaCenter)<=AREA_RADIUS):t.pattern==='Splash'?S.enemies.filter(a=>!a.dead&&dist(a,e)<=SPLASH_RADIUS):t.pattern==='Bounce'?bounceTargets(e,arr):t.pattern==='Barrage'?arr.slice(0,3):[e];
-if(t.pattern==='Splash'||t.pattern==='Area')groundSpell(t,areaCenter,t.pattern==='Area'?AREA_RADIUS:SPLASH_RADIUS);
-if(t.pattern==='Bounce'&&hitlist.length>1)combatEffect('chain',hitlist.map(a=>({x:a.x,y:a.y})),t.mod==='Frost'?'#8cddff':t.mod==='Poison'?'#b0f779':'#f7db8d');
-const landedHits=hitlist.filter(a=>!a.dead).length;let damageDealt=0;hitlist.forEach((a,i)=>{const before=Math.max(0,a.hp);hit(a,d*(t.pattern==='Splash'?SPLASH_DAMAGE_FACTOR:t.pattern==='Area'?AREA_DAMAGE_FACTOR:t.pattern==='Bounce'?Math.pow(.72,i):t.pattern==='Barrage'?.62:1),t.mod,t.type,t.exposeType);damageDealt+=Math.min(before,Math.max(0,before-a.hp))});if(t.shieldLeech&&S.maxShield===0){S.maxShield=1;S.shield=1}if(t.shieldLeech&&S.maxShield>0)S.shield=Math.min(S.maxShield,S.shield+damageDealt*t.shieldLeech);if(t.hpLeech)S.hp=Math.min(S.maxHp,S.hp+damageDealt*t.hpLeech);if(t.shieldPerHit&&S.maxShield===0){S.maxShield=1;S.shield=1}if(t.shieldPerHit&&S.maxShield>0){S.maxShield+=landedHits*t.shieldPerHit;S.shield=Math.min(S.maxShield,S.shield+landedHits*t.shieldPerHit);}if(t.hpPerHit){S.maxHp+=landedHits*t.hpPerHit;S.hp=Math.min(S.maxHp,S.hp+landedHits*t.hpPerHit)}S.shots.push({x:e.x,y:e.y,life:.12,color:t.mod==='Fire'?'#ff8738':t.mod==='Frost'?'#70d8ff':t.mod==='Poison'?'#86e86e':'#f5e4a5'})}
+// Prefer dangerous near-keep enemies, but spread independent attacks across targets
+// already attacked this frame when the alternative is similarly threatening.
+function selectTarget(candidates,t){
+ if(!candidates.length)return null;
+ if(t.pattern==='Splash'||t.pattern==='Area'){
+  const radius=t.pattern==='Splash'?SPLASH_RADIUS:AREA_RADIUS;
+  const candidatesToCheck=candidates.slice(0,14);
+  return candidatesToCheck.reduce((best,e)=>{
+   const score=candidates.reduce((n,a)=>n+(!a.dead&&dist(a,e)<=radius?1:0),0)-dist(e,{x:CX,y:CY})*.002;
+   return score>best.score?{e,score}:best;
+  },{e:candidates[0],score:-Infinity}).e;
+ }
+ const first=candidates[0];
+ if(first.boss||!S.frameTargets.has(first.id))return first;
+ const alternative=candidates.find(e=>!S.frameTargets.has(e.id)&&!e.boss&&dist(e,{x:CX,y:CY})<=dist(first,{x:CX,y:CY})+90);
+ return alternative||first;
+}
+function trackDamage(t,before,after){
+ const dealt=Math.max(0,before-after),effective=Math.min(before,dealt),overkill=Math.max(0,dealt-effective);
+ S.effectiveDamage+=effective;S.overkillDamage+=overkill;
+ t.effectiveDamage+=effective;t.overkillDamage+=overkill;
+ return effective;
+}
+function shoot(t,dt){
+ if(t.type==='Spikes')return;
+ if(t.range===300&&(t.pattern==='Single Target'||t.pattern==='Splash'||t.pattern==='Bounce')){
+  t.spellCooldown=(t.spellCooldown||0)-dt;
+  if(t.spellCooldown<=0){
+   const distant=S.enemies.filter(a=>!a.dead&&dist({x:CX,y:CY},a)>300*RANGE_WORLD_SCALE&&dist({x:CX,y:CY},a)<=900*RANGE_WORLD_SCALE).sort((a,b)=>dist({x:CX,y:CY},a)-dist({x:CX,y:CY},b))[0];
+   if(distant){const before=Math.max(0,distant.hp);hit(distant,t.dmg*(1+S.damage)*(1+(S.typedDamage[t.type]||0))*.8,t.mod,t.type);trackDamage(t,before,distant.hp);S.attacksFired++;t.attacksFired++;S.frameTargets.add(distant.id);S.shots.push({x:distant.x,y:distant.y,life:.18,color:'#dcaaff'});t.spellCooldown=3}
+  }
+ }
+ t.cool-=dt;if(t.cool>0)return;
+ const arr=S.enemies.filter(e=>!e.dead&&dist({x:CX,y:CY},e)<=t.range*RANGE_WORLD_SCALE).sort((a,b)=>dist({x:CX,y:CY},a)-dist({x:CX,y:CY},b));
+ if(!arr.length)return;
+ const e=selectTarget(arr,t),d=t.dmg*(1+S.damage)*(1+(S.typedDamage[t.type]||0))*(Math.random()<S.crit?2:1);
+ t.cool=1/Math.max(.1,t.rate*(1+S.attackSpeed));S.attacksFired++;t.attacksFired++;S.frameTargets.add(e.id);
+ const areaCenter=t.pattern==='Area'&&t.range===300?{x:CX,y:CY}:e;
+ const hitlist=t.pattern==='Area'?S.enemies.filter(a=>!a.dead&&dist(a,areaCenter)<=AREA_RADIUS):t.pattern==='Splash'?S.enemies.filter(a=>!a.dead&&dist(a,e)<=SPLASH_RADIUS):t.pattern==='Bounce'?bounceTargets(e,arr):t.pattern==='Barrage'?[e,...arr.filter(a=>a!==e).slice(0,2)]:[e];
+ if(t.pattern==='Splash'||t.pattern==='Area')groundSpell(t,areaCenter,t.pattern==='Area'?AREA_RADIUS:SPLASH_RADIUS);
+ if(t.pattern==='Bounce'&&hitlist.length>1)combatEffect('chain',hitlist.map(a=>({x:a.x,y:a.y})),t.mod==='Frost'?'#8cddff':t.mod==='Poison'?'#b0f779':'#f7db8d');
+ const landedHits=hitlist.filter(a=>!a.dead).length;let damageDealt=0;
+ hitlist.forEach((a,i)=>{if(a.dead)return;const before=Math.max(0,a.hp);hit(a,d*(t.pattern==='Splash'?SPLASH_DAMAGE_FACTOR:t.pattern==='Area'?AREA_DAMAGE_FACTOR:t.pattern==='Bounce'?Math.pow(.72,i):t.pattern==='Barrage'?.62:1),t.mod,t.type,t.exposeType);damageDealt+=trackDamage(t,before,a.hp);S.frameTargets.add(a.id)});
+ if(t.shieldLeech&&S.maxShield===0){S.maxShield=1;S.shield=1}
+ if(t.shieldLeech&&S.maxShield>0)S.shield=Math.min(S.maxShield,S.shield+damageDealt*t.shieldLeech);
+ if(t.hpLeech)S.hp=Math.min(S.maxHp,S.hp+damageDealt*t.hpLeech);
+ if(t.shieldPerHit&&S.maxShield===0){S.maxShield=1;S.shield=1}
+ if(t.shieldPerHit&&S.maxShield>0){S.maxShield+=landedHits*t.shieldPerHit;S.shield=Math.min(S.maxShield,S.shield+landedHits*t.shieldPerHit)}
+ if(t.hpPerHit){S.maxHp+=landedHits*t.hpPerHit;S.hp=Math.min(S.maxHp,S.hp+landedHits*t.hpPerHit)}
+ S.shots.push({x:e.x,y:e.y,life:.12,color:t.mod==='Fire'?'#ff8738':t.mod==='Frost'?'#70d8ff':t.mod==='Poison'?'#86e86e':'#f5e4a5'});
+}
 function modal(t,p,b){S.paused=true;$('mt').textContent=t;$('mp').textContent=p;$('mb').textContent=b;$('overlay').style.display='flex'}
-function update(dt){if(S.paused||S.over||!S.started)return;dt*=S.speed;S.time+=dt;S.level=Math.min(30,Math.floor(S.time/30)+1);if(S.time>=S.nextRefresh){refreshAll();S.nextRefresh=(Math.floor(S.time/30)+1)*30}if(S.time>=900&&!S.boss)spawn(true);if(!S.boss){S.spawn-=dt;let catchup=0;while(S.spawn<=0&&catchup++<8){spawn();S.spawn+=waveSpawnInterval(S.level)}}S.incomeTimer+=dt;if(S.incomeTimer>=2){let ticks=Math.floor(S.incomeTimer/2);S.gold+=Math.floor((50+S.income)*2*ticks*economyFactor());S.incomeTimer-=2*ticks}let n=Math.floor(S.time/30);if(n>S.lastCompound){S.gold+=Math.floor(S.compound*30*(n-S.lastCompound)*economyFactor());S.lastCompound=n}S.incomeGrowthTimer+=dt;if(S.incomeGrowthTimer>=10){const ticks=Math.floor(S.incomeGrowthTimer/10);S.income+=ticks*S.incomeGrowth;S.incomeGrowthTimer-=ticks*10}S.maxHp+=S.hpGrowth*dt;S.hp=Math.min(S.maxHp,S.hp+S.hpGrowth*dt);S.maxShield+=S.shieldGrowth*dt;S.shield=Math.min(S.maxShield,S.shield+S.shieldGrowth*dt);S.hp=Math.min(S.maxHp,S.hp+S.regen*dt);S.shield=Math.min(S.maxShield,S.shield+(S.maxShield*.05+S.shieldRegen)*dt);S.towers.forEach(t=>shoot(t,dt));S.enemies.forEach(e=>{if(e.dead)return;e.fire=Math.max(0,e.fire-dt);e.poison=Math.max(0,e.poison-dt);e.frost=Math.max(0,e.frost-dt);if(e.fire>0)e.hp-=11*dt;if(e.poison>0)e.hp-=18*dt;if(e.bleedTime>0){e.hp-=(e.bleedDps||0)*Math.min(dt,e.bleedTime);e.bleedTime=Math.max(0,e.bleedTime-dt);if(e.bleedTime===0)e.bleedDps=0;}let dx=CX-e.x,dy=CY-e.y,d=Math.hypot(dx,dy)||1;const stoppingDistance=KEEP_WALL+e.r+(e.ranged?e.reach*RANGE_WORLD_SCALE:0);if(d>stoppingDistance){const step=Math.min(d-stoppingDistance,e.speed*(1-Math.min(.75,e.frost*.09))*dt);e.x+=dx/d*step;e.y+=dy/d*step;}e.attackFlash=Math.max(0,(e.attackFlash||0)-dt);e.attack+=dt;if(d<=stoppingDistance+2&&e.attack>=(e.boss?1:e.ranged?1.2:.7)){e.attack=0;e.attackFlash=.23;if(Math.random()>=S.evasion){let dmg=e.dmg*(1-armorReduction(S.armor));const block=S.towers.reduce((sum,t)=>sum+(t.type==='Spikes'?(t.flatBlock||0):0),0);dmg=Math.max(0,dmg-block);if(S.shield>0)dmg*=1-S.shieldArmor;let a=Math.min(S.shield,dmg);S.shield-=a;S.hp-=dmg-a;if(dmg>a||block>0&&S.shield<=0){for(const t of S.towers){if(t.type!=='Spikes')continue;const woundMultiplier=1+(e.spikeWounds||0)*.25;
+function update(dt){if(S.paused||S.over||!S.started)return;dt*=S.speed;S.time+=dt;if(!S.ownedStatsAt||S.time-S.ownedStatsAt>=1){S.ownedStatsAt=S.time;if(!$('ownedPanel').hidden)renderOwnedTowers()}S.level=Math.min(30,Math.floor(S.time/30)+1);if(S.time>=S.nextRefresh){refreshAll();S.nextRefresh=(Math.floor(S.time/30)+1)*30}if(S.time>=900&&!S.boss)spawn(true);if(!S.boss){S.spawn-=dt;let catchup=0;while(S.spawn<=0&&catchup++<8){spawn();S.spawn+=waveSpawnInterval(S.level)}}S.incomeTimer+=dt;if(S.incomeTimer>=2){let ticks=Math.floor(S.incomeTimer/2);S.gold+=Math.floor((50+S.income)*2*ticks*economyFactor());S.incomeTimer-=2*ticks}let n=Math.floor(S.time/30);if(n>S.lastCompound){S.gold+=Math.floor(S.compound*30*(n-S.lastCompound)*economyFactor());S.lastCompound=n}S.incomeGrowthTimer+=dt;if(S.incomeGrowthTimer>=10){const ticks=Math.floor(S.incomeGrowthTimer/10);S.income+=ticks*S.incomeGrowth;S.incomeGrowthTimer-=ticks*10}S.maxHp+=S.hpGrowth*dt;S.hp=Math.min(S.maxHp,S.hp+S.hpGrowth*dt);S.maxShield+=S.shieldGrowth*dt;S.shield=Math.min(S.maxShield,S.shield+S.shieldGrowth*dt);S.hp=Math.min(S.maxHp,S.hp+S.regen*dt);S.shield=Math.min(S.maxShield,S.shield+(S.maxShield*.05+S.shieldRegen)*dt);S.frameTargets.clear();S.towers.forEach(t=>shoot(t,dt));S.enemies.forEach(e=>{if(e.dead)return;e.fire=Math.max(0,e.fire-dt);e.poison=Math.max(0,e.poison-dt);e.frost=Math.max(0,e.frost-dt);if(e.fire>0)e.hp-=11*dt;if(e.poison>0)e.hp-=18*dt;if(e.bleedTime>0){e.hp-=(e.bleedDps||0)*Math.min(dt,e.bleedTime);e.bleedTime=Math.max(0,e.bleedTime-dt);if(e.bleedTime===0)e.bleedDps=0;}let dx=CX-e.x,dy=CY-e.y,d=Math.hypot(dx,dy)||1;const stoppingDistance=e.ranged?Math.max(KEEP_WALL+e.r,e.reach*RANGE_WORLD_SCALE):KEEP_WALL+e.r;if(d>stoppingDistance){const step=Math.min(d-stoppingDistance,e.speed*(1-Math.min(.75,e.frost*.09))*dt);e.x+=dx/d*step;e.y+=dy/d*step;}e.attackFlash=Math.max(0,(e.attackFlash||0)-dt);e.attack+=dt;if(d<=stoppingDistance+2&&e.attack>=(e.boss?1:e.ranged?1.2:.7)){e.attack=0;e.attackFlash=.23;if(Math.random()>=S.evasion){let dmg=e.dmg*(1-armorReduction(S.armor));const block=S.towers.reduce((sum,t)=>sum+(t.type==='Spikes'?(t.flatBlock||0):0),0);dmg=Math.max(0,dmg-block);if(S.shield>0)dmg*=1-S.shieldArmor;let a=Math.min(S.shield,dmg);S.shield-=a;S.hp-=dmg-a;if(dmg>a||block>0&&S.shield<=0){for(const t of S.towers){if(t.type!=='Spikes')continue;const woundMultiplier=1+(e.spikeWounds||0)*.25;
  const rawReflect=(t.halfCreepHp?e.maxHp*.5:t.dmg+(t.hpReflect||0)*S.maxHp)*(e.armor==='Light'?1+(t.lightBonus||0):1)*(e.ranged?1+(t.rangedBonus||0):1);
  const retaliation=rawReflect*woundMultiplier*(1+S.damage)*(1+(S.typedDamage.Spikes||0))*(Math.random()<S.crit?2:1);
- hit(e,retaliation,'None','Spikes');
+ const hpBeforeReflect=Math.max(0,e.hp);hit(e,retaliation,'None','Spikes');trackDamage(t,hpBeforeReflect,e.hp);S.attacksFired++;t.attacksFired++;
  if(t.bleed&&!e.dead){e.bleedDps=(e.bleedDps||0)+t.bleed;e.bleedTime=3}
  if(t.woundStack&&!e.dead)e.spikeWounds=(e.spikeWounds||0)+t.woundStack/.25;
 combatEffect('blast',[{x:e.x,y:e.y}],'#ffb35c',14);if(e.dead)break}}}else fx(CX,CY,'#d6f4ff',15);fx(CX+(e.x-CX)/Math.max(1,d)*KEEP_WALL,CY+(e.y-CY)/Math.max(1,d)*KEEP_WALL,'#ff5c68',14)}if(e.hp<=0)kill(e)});S.enemies=S.enemies.filter(e=>!e.dead);S.shots.forEach(v=>v.life-=dt);S.shots=S.shots.filter(v=>v.life>0);S.fx.forEach(v=>v.life-=dt);S.fx=S.fx.filter(v=>v.life>0);S.combatFx.forEach(v=>v.life-=dt);S.combatFx=S.combatFx.filter(v=>v.life>0);S.goldPops.forEach(v=>{v.life-=dt;v.y-=19*dt});S.goldPops=S.goldPops.filter(v=>v.life>0);if(!S.clearUsed&&S.hp<=S.maxHp*.01){S.hp=S.maxHp*.01;S.clearUsed=true;S.clearAuto=true;S.enemies=[];log('Emergency Clear auto-cast at 1% HP: enemies removed, no kill gold and no healing.')}if(S.hp<=0){S.hp=0;S.over=true;modal('Tower Destroyed','Survived '+clock(S.time)+'. Kills: '+S.kills+'.','New Run')}ui()}
@@ -521,7 +570,7 @@ function draw(){
  // Purchased towers become permanent, color-coded turrets built into the keep.
  // Multiple purchases fill battlements and add tiers instead of orbiting enemies.
  const mounts=[[-37,-39],[37,-39],[-37,13],[37,13],[-18,-53],[18,-53],[-48,-13],[48,-13],[-18,16],[18,16],[-30,-22],[30,-22]];
- S.towers.forEach((t,i)=>{const m=mounts[i%mounts.length],tier=Math.floor(i/mounts.length),px=CX+m[0]*.61,py=CY+(m[1]-tier*5)*.61;
+ S.towers.slice(-36).forEach((t,i)=>{const m=mounts[i%mounts.length],tier=Math.floor(i/mounts.length),px=CX+m[0]*.61,py=CY+(m[1]-tier*5)*.61;
   const color=t.mod==='Fire'?'#e76b31':t.mod==='Frost'?'#4fc4fa':t.mod==='Poison'?'#6bd35a':rarityColor(t.type);
   x.save();x.translate(px,py);x.scale(.72,.72);x.shadowColor=color;x.shadowBlur=5;
   x.fillStyle='#40454d';x.strokeStyle='#a6a8a2';x.lineWidth=1.5;x.beginPath();x.moveTo(-10,5);x.lineTo(-9,-4);x.lineTo(0,-9);x.lineTo(9,-4);x.lineTo(10,5);x.closePath();x.fill();x.stroke();
@@ -536,7 +585,7 @@ function draw(){
    x.fillStyle='#8a6339';x.fillRect(-4,-13,8,10);x.fillStyle=color;x.beginPath();x.moveTo(-7,-12);x.lineTo(0,-21);x.lineTo(7,-12);x.closePath();x.fill();x.strokeStyle='#e7d4a0';x.lineWidth=1;x.stroke();
   }
   x.restore();
-  if(t.level>1){x.fillStyle='#ffe89a';x.beginPath();x.arc(px+6,py-9,2.3,0,Math.PI*2);x.fill()}
+  
  });
  S.combatFx.forEach(v=>{if(v.kind==='areaSpell'||v.kind==='splashSpell')drawGroundSpell(v);});
  S.combatFx.forEach(v=>{if(v.kind==='areaSpell'||v.kind==='splashSpell')return;const progress=1-v.life/v.max;x.save();x.globalAlpha=Math.max(0,v.life/v.max)*.85;x.strokeStyle=v.color;x.shadowColor=v.color;x.shadowBlur=9;
