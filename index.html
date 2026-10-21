@@ -49,6 +49,39 @@
 .combinedScores .label{font-size:clamp(6px,1.5vw,8px);white-space:nowrap}
 .combinedScores .val{font-size:clamp(7px,1.85vw,12px);white-space:nowrap;overflow:visible}
 @media(max-width:360px){.stats .stat{padding:4px 3px}.combinedScores .val{font-size:clamp(7px,2vw,10px)}.combinedScores .hudIcon{width:11px;height:11px}}
+
+/* v59: legible, scan-first tower cards and single-row combat controls. */
+#controls{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(0,1.15fr);gap:5px}
+#controls button{min-width:0;min-height:36px;padding:6px 3px;font-size:clamp(10px,2.7vw,13px);white-space:nowrap}
+#controls #reroll{background:#354e40;border-color:#77a27c;color:#f0ffe9}
+#controls #pause{background:#374457}
+#controls #speed{background:#294963}
+#battlefield #refreshOverlay{position:absolute;z-index:3;left:8px;bottom:5px;min-width:118px;max-width:42%;padding:4px 7px;border-radius:7px;background:#101e2ba8;border:1px solid #7b94a04d;pointer-events:none;backdrop-filter:blur(2px)}
+#refreshOverlay .timer{font-size:clamp(10px,2.6vw,12px);font-weight:750;color:#f1e8c5;white-space:nowrap;text-shadow:0 1px 3px #000}
+#refreshOverlay .refreshbar{height:3px;margin-top:3px;background:#253c4a}
+#drop{gap:4px}
+#drop .shopsection:first-of-type{flex:4.35}
+#drop .shopsection:last-of-type{flex:2.65}
+#towers .card{gap:1px;padding:3px 3px 2px;justify-content:flex-start}
+#towers .towericon{height:clamp(19px,3.3dvh,27px);flex-shrink:0}
+#towers .towericon svg{width:100%;height:100%}
+#towers .towername{font-size:clamp(9px,2.5vw,12px);line-height:1.05;font-weight:900;min-height:0;overflow-wrap:anywhere;text-align:center;text-shadow:0 1px 2px #000b}
+#towers .details{display:flex;flex-direction:column;gap:2px;font-size:clamp(8px,2.15vw,11px);line-height:1.08;color:#e2ebef;min-height:0;overflow:hidden}
+#towers .details .field-label{color:#b9cbd5;font-weight:750}
+#towers .tower-primary{display:flex;flex-direction:column;align-items:center;gap:0;text-align:center;padding:2px 0;border-radius:4px;background:#0b1d2b9c}
+#towers .tower-primary .field-label{font-size:clamp(8px,2.1vw,10px)}
+#towers .tower-primary .field-value{font-size:clamp(10px,2.65vw,13px);font-weight:900;line-height:1.08;overflow-wrap:anywhere}
+#towers .tower-primary .damage-type{ text-shadow:0 1px 2px #000 }
+#towers .tower-secondary{display:flex;justify-content:space-between;gap:2px;font-size:clamp(8px,2.15vw,11px)}
+#towers .tower-secondary span:last-child{font-weight:850;color:#fff}
+#towers .tower-ability{font-size:clamp(7.5px,1.95vw,10px);line-height:1.12;overflow-wrap:anywhere;color:#e0e9ee}
+#towers .tower-ability .field-label{display:block;color:#b9cbd5;font-size:clamp(8px,2vw,10px)}
+#towers .cost{flex-shrink:0;font-size:clamp(9px,2.35vw,12px);line-height:1.05}
+#supports .card b{font-size:clamp(9px,2.3vw,12px)}
+#supports .desc{font-size:clamp(8px,2.1vw,10px);line-height:1.13}
+#supports .cost{font-size:clamp(9px,2.3vw,11px)}
+@media(max-height:700px){#drop .shopsection:first-of-type{flex:4.7}#drop .shopsection:last-of-type{flex:2.3}#towers .towericon{height:18px}#towers .details{gap:1px}#towers .tower-primary{padding:1px 0}#towers .towername{font-size:9px}#towers .tower-ability{font-size:7.5px}}
+@media(min-width:650px){#towers .towername{font-size:14px}#towers .tower-primary .field-value{font-size:15px}#towers .tower-secondary{font-size:12px}#towers .tower-ability{font-size:11px}}
 </style></head><body><div id="app">
 <header><div><h1>🏰 Tower Survivor</h1><div class="muted">Island defense · buy towers and upgrades with gold</div></div></header>
 <div class="stats">
@@ -59,9 +92,9 @@
   <div class="stat combinedScores" title="Damage and Income scores"><div class="scoreDamage"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m4 3 7 7-2 2-7-7V3Zm16 0-7 7 2 2 7-7V3Z" fill="#d6e5f5"/><path d="m9 12 9 9 3-3-9-9m3 3-9 9-3-3 9-9" fill="none" stroke="#e66d72" stroke-width="2.7" stroke-linecap="round"/><path d="m5 19 3-3m8 0 3 3" stroke="#f4a449" stroke-width="2" stroke-linecap="round"/></svg><div class="statBody"><div class="label">Damage</div><div class="val" id="damageScore">0.0</div></div></div></div><div class="scoreIncome"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><ellipse cx="8" cy="17.8" rx="5.5" ry="2.4" fill="#e79b0a"/><path d="M2.5 11v6.8c0 3.2 11 3.2 11 0V11" fill="#f3ae19" stroke="#ffda58" stroke-width=".9"/><ellipse cx="8" cy="11" rx="5.5" ry="2.4" fill="#ffdf62"/><path d="M10 6v8c0 3.3 11 3.3 11 0V6" fill="#e8a31b" stroke="#ffda58" stroke-width=".9"/><ellipse cx="15.5" cy="6" rx="5.5" ry="2.4" fill="#ffdb55"/></svg><div class="statBody"><div class="label">Income</div><div class="val" id="incomeScore">0.5</div></div></div></div></div>
   <div class="stat combinedScores" title="HP regeneration and armor"><div class="scoreDamage"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7Z" fill="#42d878"/><path d="M10 3h2v17h-2M3 10h17v2H3" fill="#a0ffc1" opacity=".35"/></svg><div class="statBody"><div class="label">HP/s</div><div class="val" id="regenValue">0</div></div></div></div><div class="scoreIncome"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 21 5v6c0 5.5-3.5 9-9 11-5.5-2-9-5.5-9-11V5Z" fill="#829fb2"/><path d="M12 3.5 5 6v5c0 4.5 2.5 7.2 7 9Z" fill="#d5e5ed"/><path d="M12 3.5 19 6v5c0 4.5-2.5 7.2-7 9Z" fill="#90acbf"/></svg><div class="statBody"><div class="label">Armor</div><div class="val" id="armorValue">0 · 0%</div></div></div></div></div>
 </div>
-<div id="battlefield"><button id="clear" type="button">⚡ CLEAR · READY</button><canvas id="game" width="700" height="793"></canvas><button id="rangeToggle" type="button" aria-pressed="false" title="Show targeting ranges">◎ Range</button><button id="ownedToggle" type="button" aria-label="Show owned towers" aria-controls="ownedPanel" aria-expanded="false" title="Hold to view towers; tap to pin">♜<span id="ownedCount">0</span></button><div id="ownedPanel" role="region" aria-label="Owned towers" hidden></div><button id="crownToggle" type="button" aria-label="Crown Challenges" aria-expanded="false" title="Crown Challenges">♛</button><div id="crownPanel" role="region" aria-label="Crown Challenges" hidden></div><div id="challengeNudge" role="status">Challenges</div></div>
-<div id="controls"><button id="speed">▶▶ 1× Speed</button><button id="pause">Ⅱ Pause</button></div>
-<div id="drop"><div class="armorytop"><div class="timer" id="rerollInfo">Refresh in 30s</div><div class="refreshbar"><div id="refreshFill"></div></div><div class="rerollpair"><button id="reroll">↻ Reroll</button></div></div><section class="shopsection"><div class="cards" id="towers"></div></section><section class="shopsection"><div class="cards" id="supports"></div></section></div>
+<div id="battlefield"><div id="refreshOverlay" aria-live="off"><span class="timer" id="rerollInfo">Refresh in 30s</span><div class="refreshbar"><div id="refreshFill"></div></div></div><button id="clear" type="button">⚡ CLEAR · READY</button><canvas id="game" width="700" height="793"></canvas><button id="rangeToggle" type="button" aria-pressed="false" title="Show targeting ranges">◎ Range</button><button id="ownedToggle" type="button" aria-label="Show owned towers" aria-controls="ownedPanel" aria-expanded="false" title="Hold to view towers; tap to pin">♜<span id="ownedCount">0</span></button><div id="ownedPanel" role="region" aria-label="Owned towers" hidden></div><button id="crownToggle" type="button" aria-label="Crown Challenges" aria-expanded="false" title="Crown Challenges">♛</button><div id="crownPanel" role="region" aria-label="Crown Challenges" hidden></div><div id="challengeNudge" role="status">Challenges</div></div>
+<div id="controls"><button id="reroll">↻ Reroll</button><button id="pause">Ⅱ Pause</button><button id="speed">▶▶ 1× Speed</button></div>
+<div id="drop"><section class="shopsection"><div class="cards" id="towers"></div></section><section class="shopsection"><div class="cards" id="supports"></div></section></div>
 <div id="log">Starting treasury: 5,000 gold · Income pays every 2 seconds at 50 gold/s. Buy towers and supports to begin.</div><footer>Rarity costs: Common 500 · Uncommon 2,000 · Rare 5,000 · Epic 10,000 gold</footer></div><div id="toast"></div>
 <div id="overlay"><div class="modal"><h2 id="mt">Paused</h2><p id="mp">Take a breather.</p><button id="mb">Resume</button></div></div>
 <script>
@@ -361,10 +394,26 @@ function reroll(){if(!can()){toast('NOT ENOUGH GOLD / REROLLS');return}if(!S.sta
 function rarityColor(type){return ({Normal:'#f3f5f7',Piercing:'#ffd84d',Magic:'#9355dc',Chaos:'#70f04d',Spikes:'#c92636',Siege:'#d4c5a0'})[type]||'#f3f5f7'}
 function iconGlyph(t){const m={Normal:['✦','➶','☄','⌁','✺'],Piercing:['➤','➶','⟢','⌖','✧'],Magic:['✧','❄','☼','✺','✴'],Chaos:['✹','✸','⛧','✺','◈'],Spikes:['♠','✣','✥','✦','❋'],Siege:['▰','⬟','◉','✹','⬢']};let i=t.id%5;let glyph=m[t.type][i];if(t.mod==='Fire')glyph=['♨','✹','☄','✺','✴'][i];if(t.mod==='Frost')glyph=['❄','✧','❅','✥','✦'][i];if(t.mod==='Poison')glyph=['☠','♧','✤','❋','✥'][i];return glyph}
 function towerSvg(t){let col=rarityColor(t.type),g=iconGlyph(t);let secondary=t.mod==='Fire'?'#ff743d':t.mod==='Frost'?'#7ddcff':t.mod==='Poison'?'#8be66e':col;return `<svg viewBox="0 0 40 40" role="img" aria-label="${t.type} ${t.pattern} tower icon"><defs><linearGradient id="grad${t.id}" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${col}"/><stop offset="1" stop-color="${secondary}"/></linearGradient></defs><circle cx="20" cy="20" r="17" fill="#0b1720" stroke="${col}" stroke-width="1.5"/><path d="M20 4 L24 13 L35 15 L27 23 L29 34 L20 28 L11 34 L13 23 L5 15 L16 13 Z" fill="url(#grad${t.id})" opacity=".23"/><text x="20" y="26" font-size="20" text-anchor="middle" fill="url(#grad${t.id})" stroke="#09131a" stroke-width=".25" paint-order="stroke">${g}</text></svg>`}
-function ability(t){if(t.type==='Spikes')return t.desc;if(t.hpPerHit)return '+'+t.hpPerHit+' max/current HP per hit';if(t.shieldLeech)return '30% damage → shield; unlocks shield';if(t.hpLeech)return '30% damage → HP';if(t.shieldPerHit)return '+'+t.shieldPerHit+' max/current shield per hit; unlocks';if(t.range===300&&t.pattern==='Area')return '360° close-range AoE';if(t.range===300&&['Single Target','Splash','Bounce'].includes(t.pattern))return 'Long-range spell every 3s';return t.mod==='Fire'?'Fire: damage over time; weakens enemy attacks':t.mod==='Frost'?'Frost: stacking movement and attack slow':t.mod==='Poison'?'Poison: stacking damage over time and attack slow':t.pattern==='Splash'?'300 diameter splash':t.pattern==='Area'?'Wide AoE: 600 radius / 25% hit':t.pattern==='Bounce'?'Chains between targets':t.shieldPerHit?'Gain +10 maximum mana shield per enemy hit':t.pattern==='Barrage'?'Rapid multi-target volley':'Focused single-target damage'}
+function ability(t){
+ if(t.type==='Spikes')return t.desc;
+ if(t.hpPerHit)return '+'+t.hpPerHit+' max HP + heal / hit';
+ if(t.shieldLeech)return '30% hit damage → shield';
+ if(t.hpLeech)return '30% hit damage → HP';
+ if(t.shieldPerHit)return '+'+t.shieldPerHit+' max shield + refill / hit';
+ if(t.range===300&&t.pattern==='Area')return 'Close-range 360° zone';
+ if(t.range===300&&['Single Target','Splash','Bounce'].includes(t.pattern))return 'Extra spell every 3s';
+ if(t.mod==='Fire')return 'Burn + weaken attacks';
+ if(t.mod==='Frost')return 'Stacking slow: move + attack';
+ if(t.mod==='Poison')return 'Stacking poison + attack slow';
+ if(t.pattern==='Splash')return '300-unit splash diameter';
+ if(t.pattern==='Area')return '600-unit area radius · 25% hit';
+ if(t.pattern==='Bounce')return 'Chains up to 5 targets';
+ if(t.pattern==='Barrage')return 'Volley: up to 3 targets';
+ return 'Focused single-target hit';
+}
 function render(){
  $('towers').innerHTML='';$('supports').innerHTML='';
- S.tOffers.forEach(t=>{if(!t){let blank=document.createElement('div');blank.className='card empty';$('towers').append(blank);return}let d=document.createElement('div');d.className='card '+t.rarity.toLowerCase();d.dataset.cost=price(t.rarity);d.innerHTML=`<div class="towericon">${towerSvg(t)}</div><b>${t.name}</b><div class="details"><div><strong>DMG:</strong> ${fmt(t.dmg)}</div><div><strong>Type:</strong> <span style="color:${rarityColor(t.type)}">${t.type}</span>${t.mod!=='None'?' + '+t.mod:''}</div><div><strong>Attack:</strong> ${t.pattern}</div><div><strong>Range:</strong> ${t.range}</div><div><strong>Skill:</strong> ${ability(t)}</div></div><div class="cost">${fmt(price(t.rarity))}g</div>`;d.onclick=()=>takeTower(t);d.setAttribute('role','button');d.tabIndex=0;d.setAttribute('aria-label','Buy '+t.name+' for '+price(t.rarity)+' gold');d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();takeTower(t)}};$('towers').append(d)});
+ S.tOffers.forEach(t=>{if(!t){let blank=document.createElement('div');blank.className='card empty';$('towers').append(blank);return}let d=document.createElement('div');d.className='card '+t.rarity.toLowerCase();d.dataset.cost=price(t.rarity);d.innerHTML=`<div class="towericon">${towerSvg(t)}</div><b class="towername" style="color:${rarityColor(t.type)}">${t.name}</b><div class="details"><div class="tower-primary"><span class="field-label">Type</span><span class="field-value damage-type" style="color:${rarityColor(t.type)}">${t.type}${t.mod!=='None'?' + '+t.mod:''}</span></div><div class="tower-primary"><span class="field-label">Attack</span><span class="field-value attack-type">${t.pattern}</span></div><div class="tower-secondary"><span class="field-label">Range</span><span>${t.range}</span></div><div class="tower-secondary"><span class="field-label">Damage</span><span>${fmt(t.dmg)}</span></div><div class="tower-ability"><span class="field-label">Ability</span><span>${ability(t)}</span></div></div><div class="cost">${fmt(price(t.rarity))}g</div>`;d.onclick=()=>takeTower(t);d.setAttribute('role','button');d.tabIndex=0;d.setAttribute('aria-label','Buy '+t.name+' for '+price(t.rarity)+' gold');d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();takeTower(t)}};$('towers').append(d)});
  S.sOffers.forEach(s=>{if(!s){let blank=document.createElement('div');blank.className='card empty';$('supports').append(blank);return}let d=document.createElement('div');d.className='card '+s.rarity.toLowerCase();d.dataset.cost=price(s.rarity);d.innerHTML=`<div class="towericon" style="font-size:23px;color:${s.rarity==='Rare'?'#4aa5ff':s.rarity==='Epic'?'#bd72ff':s.rarity==='Uncommon'?'#42d878':'#f4f5f7'}">${s.icon}</div><b>${s.name}</b><div class="desc">${s.desc}</div><div class="cost">${fmt(price(s.rarity))}g</div>`;d.onclick=()=>takeSupport(s);d.setAttribute('role','button');d.tabIndex=0;d.setAttribute('aria-label','Buy '+s.name+' for '+price(s.rarity)+' gold');d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();takeSupport(s)}};$('supports').append(d)});
  ui();
 }
