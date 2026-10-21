@@ -82,6 +82,30 @@
 #supports .cost{font-size:clamp(9px,2.3vw,11px)}
 @media(max-height:700px){#drop .shopsection:first-of-type{flex:4.7}#drop .shopsection:last-of-type{flex:2.3}#towers .towericon{height:18px}#towers .details{gap:1px}#towers .tower-primary{padding:1px 0}#towers .towername{font-size:9px}#towers .tower-ability{font-size:7.5px}}
 @media(min-width:650px){#towers .towername{font-size:14px}#towers .tower-primary .field-value{font-size:15px}#towers .tower-secondary{font-size:12px}#towers .tower-ability{font-size:11px}}
+
+/* v60: compact single-line type/attack, reserved space for complete abilities. */
+#towers .card{gap:1px;padding:2px 3px 2px}
+#towers .towericon{height:clamp(16px,2.7dvh,22px)}
+#towers .towername{font-size:clamp(8px,2.1vw,10px);line-height:1.05}
+#towers .details{gap:1px;overflow:visible;flex:1 1 auto;min-height:0;font-size:clamp(7.5px,1.85vw,9px)}
+#towers .tower-primary{flex-direction:row;justify-content:space-between;align-items:baseline;gap:2px;text-align:left;padding:2px 3px;min-height:0}
+#towers .tower-primary .field-label{font-size:clamp(7.5px,1.85vw,9px);flex:0 0 auto}
+#towers .tower-primary .field-value{font-size:clamp(8px,2.05vw,10px);line-height:1.08;text-align:right;min-width:0}
+#towers .tower-secondary{font-size:clamp(7.5px,1.85vw,9px)}
+#towers .tower-ability{font-size:clamp(7.5px,1.85vw,9px);line-height:1.12;overflow-wrap:break-word;word-break:normal;flex:1 1 auto}
+#towers .tower-ability .field-label{font-size:clamp(7.5px,1.85vw,9px);margin-bottom:1px}
+#towers .cost{font-size:clamp(9px,2.15vw,11px)}
+@media(max-height:700px){#towers .towericon{height:15px}#towers .towername{font-size:8px}#towers .tower-primary{padding:1px 2px}#towers .tower-ability{font-size:7px}}
+@media(min-width:650px){#towers .towername{font-size:12px}#towers .tower-primary .field-value{font-size:12px}#towers .tower-secondary{font-size:11px}#towers .tower-ability{font-size:11px}}
+/* v61: match compact Damage / Income / HP/s / Armor typography to the main HUD,
+   preserving the same two-line layout and panel dimensions. */
+.combinedScores .label{font-size:clamp(9px,2.25vw,11px);line-height:1.05;white-space:nowrap}
+.combinedScores .val{font-size:clamp(10px,2.65vw,13px);line-height:1.12;white-space:nowrap;overflow:visible;font-weight:800}
+.combinedScores .statIconRow{gap:clamp(1px,.35vw,3px)}
+.combinedScores .hudIcon{width:clamp(10px,2.2vw,17px);height:clamp(10px,2.2vw,17px)}
+@media(max-width:360px){.combinedScores .label{font-size:9px}.combinedScores .val{font-size:10px}.combinedScores .hudIcon{width:10px;height:10px}}
+/* v62: center upgrade tile descriptions without changing tile geometry. */
+#supports .desc{text-align:center;}
 </style></head><body><div id="app">
 <header><div><h1>🏰 Tower Survivor</h1><div class="muted">Island defense · buy towers and upgrades with gold</div></div></header>
 <div class="stats">
