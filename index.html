@@ -124,7 +124,7 @@
 .stats .stat .val,.stats .combinedScores .val{font-size:clamp(9px,2.15vw,12px);font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums}
 @media(max-width:360px){.stats .stat .label,.stats .combinedScores .label{font-size:8px}.stats .stat .val,.stats .combinedScores .val{font-size:9px}}
 </style></head><body><div id="app">
-<header><div><h1>🏰 Tower Survivor v67</h1></div></header>
+<header><div><h1>🏰 Tower Survivor v69</h1></div></header>
 <div class="stats">
   <div class="stat statIcon"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#ff405c" d="M12 21s-9-5.8-9-12a5.1 5.1 0 0 1 9-3.1A5.1 5.1 0 0 1 21 9c0 6.2-9 12-9 12Z"/><path fill="#ff8090" opacity=".65" d="M6 8c.5-2 2-2.6 3.4-1.6" stroke="#ffb4be" stroke-width="1.3" stroke-linecap="round"/></svg><div class="statBody"><div class="label">Tower HP</div><div class="val" id="hp">2,500 / 2,500</div></div></div><div class="bar"><div id="hpbar" style="width:100%"></div></div></div>
   <div class="stat statIcon" id="shieldStat" style="visibility:hidden"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 21 5v6c0 5.5-3.5 9-9 11-5.5-2-9-5.5-9-11V5Z" fill="#169bff"/><path d="M12 3.5 5 6v5c0 4.5 2.5 7.2 7 9Z" fill="#63d8ff"/><path d="M12 3.5 19 6v5c0 4.5-2.5 7.2-7 9Z" fill="#2680e8"/></svg><div class="statBody"><div class="label">Mana Shield</div><div class="val" id="shieldValue">0 / 0</div></div></div><div class="bar"><div id="shieldBar" style="width:0%;background:#67caff"></div></div></div>
@@ -141,16 +141,19 @@
 <script>
 (()=>{
 const $=id=>document.getElementById(id),c=$('game'),x=c.getContext('2d'),W=700,H=793,CX=350,CY=396.5;
-// Range scales with the expanded island; 1200 stops just short of the side shoreline.
-const RANGE_WORLD_SCALE=300/1200;
+// Shared world-to-canvas conversion: the 1200-unit ring is tangent to the nearest sandy shoreline.
+// Measured from the island coastline Bezier path after its 1.31 x 1.40 canvas transform.
+// All tower targeting, bounce jumps, AoE hit radii, and ranged-creep reach use this value.
+const SHORELINE_NEAREST_RADIUS=357.6694676653293;
+const RANGE_WORLD_SCALE=SHORELINE_NEAREST_RADIUS/1200;
 // 0-50 armor: 1 percentage point per armor. Beyond 50, diminishing returns,
 // with 100 armor giving 75% reduction and a hard 75% cap.
 function armorReduction(armor){const a=Math.max(0,armor);if(a<=50)return a/100;const t=Math.min(1,(a-50)/50);return .5+.25*(2*t-t*t)}
 let showRangeRings=false;
 const KEEP_WALL=31; // outer stone-wall collision radius; enemies stay outside the silhouette
 // AoE sizes use the same displayed range units as tower range.
-// Splash radius doubled from 150 to 300 range units (four times the affected area). Area unchanged.
-const SPLASH_RADIUS=300*RANGE_WORLD_SCALE, AREA_RADIUS=600*RANGE_WORLD_SCALE;
+// Splash retains its 300-unit radius; Area radius reduced by 10% from 600 to 540 units.
+const SPLASH_RADIUS=300*RANGE_WORLD_SCALE, AREA_RADIUS=540*RANGE_WORLD_SCALE;
 const SPLASH_DAMAGE_FACTOR=.70, AREA_DAMAGE_FACTOR=.25;
 const towerDefs=[
 ['Normal','Single Target','',90,230,1.1,'Balanced single-target shots.'],['Normal','Barrage','',42,195,2.5,'Rapid light projectiles.'],['Normal','Splash','Fire',70,180,.75,'Burning splash hits.'],['Normal','Bounce','Poison',65,205,.85,'Poison spreads through targets.'],['Normal','Area','Frost',55,160,.65,'Chills enemies in an area.'],
@@ -473,7 +476,7 @@ function ability(t){
  if(t.mod==='Frost')return 'Stacking slow: move + attack';
  if(t.mod==='Poison')return 'Stacking poison + attack slow';
  if(t.pattern==='Splash')return '300-unit splash diameter';
- if(t.pattern==='Area')return '600-unit area radius · 25% hit';
+ if(t.pattern==='Area')return '540-unit area radius · 25% hit';
  if(t.pattern==='Bounce')return 'Chains up to 5 targets';
  if(t.pattern==='Barrage')return 'Volley: up to 3 targets';
  return 'Focused single-target hit';
@@ -594,21 +597,48 @@ const FX_CAP=36;
 function spellPalette(t){return t.mod==='Fire'?['#ff8a35','#ffc66b']:t.mod==='Frost'?['#65cfff','#c6f4ff']:t.mod==='Poison'?['#8fe45a','#d1ff8b']:[rarityColor(t.type),t.type==='Magic'?'#d7b5ff':t.type==='Chaos'?'#c8ffb0':'#fff1cb']}
 function groundSpell(t,point,r){const area=t.pattern==='Area';const palette=spellPalette(t);S.combatFx.push({kind:area?'areaSpell':'splashSpell',points:[{x:point.x,y:point.y}],color:palette[0],accent:palette[1],element:t.mod,r,life:area?1.25:1.05,max:area?1.25:1.05,seed:Math.random()*6.28});if(S.combatFx.length>FX_CAP)S.combatFx.splice(0,S.combatFx.length-FX_CAP)}
 function combatEffect(kind,points,color,r=40){S.combatFx.push({kind,points,color,r,life:.38,max:.38});if(S.combatFx.length>FX_CAP)S.combatFx.splice(0,S.combatFx.length-FX_CAP)}
-function drawGroundSpell(v){const q=v.points[0],age=1-v.life/v.max,area=v.kind==='areaSpell',r=v.r,fade=Math.min(1,age*9)*Math.min(1,v.life/.42),wave=area?(0.88+.08*Math.sin(age*15+v.seed)):(.3+.7*Math.min(1,age*5));
- x.save();x.translate(q.x,q.y);x.globalAlpha=fade*(area?.43:.56);
- // Fading ground mark remains visible after the initial impact.
- x.fillStyle=v.color;x.beginPath();x.ellipse(0,0,r*(area?.96:.88),r*(area?.96:.72),v.seed*.12,0,Math.PI*2);x.fill();
- x.globalAlpha=fade*(area?.76:.9);x.strokeStyle=v.accent;x.lineWidth=area?2.4:3.2;x.setLineDash(area?[8,7]:[]);x.beginPath();x.arc(0,0,r*wave,0,Math.PI*2);x.stroke();x.setLineDash([]);
- x.globalAlpha=fade*.8;x.lineWidth=1.4;
- const count=area?9:12;
- for(let i=0;i<count;i++){const a=v.seed+i*2.39996+age*(area?.75:1.8),distance=r*(area?.4+.42*((i*7%11)/11):.16+.7*age),px=Math.cos(a)*distance,py=Math.sin(a)*distance;
-  if(v.element==='Frost'){x.strokeStyle=v.accent;x.beginPath();x.moveTo(px-3,py-3);x.lineTo(px+3,py+3);x.moveTo(px-3,py+3);x.lineTo(px+3,py-3);x.stroke()}
-  else if(v.element==='Fire'){x.fillStyle=i%3?v.color:v.accent;x.beginPath();x.ellipse(px,py-4*age,2.2,4.5,Math.sin(a)*.4,0,Math.PI*2);x.fill()}
-  else if(v.element==='Poison'){x.strokeStyle=v.accent;x.beginPath();x.arc(px,py-3*age,2+(i%3),0,Math.PI*2);x.stroke()}
-  else {x.fillStyle=v.accent;x.beginPath();x.arc(px,py,area?1.8:2.8,0,Math.PI*2);x.fill()}
+function drawGroundSpell(v){
+ const q=v.points[0],age=1-v.life/v.max,area=v.kind==='areaSpell',r=v.r;
+ const fade=Math.min(1,age*12)*Math.min(1,v.life/.42);
+ const seed=v.seed;
+ // All visual marks are flat terrain decals. Damage still uses the exact circular hit radius.
+ // The perimeter is intentionally irregular, with no circular outline or raised particles.
+ x.save();x.translate(q.x,q.y);x.globalCompositeOperation='source-over';
+ const layers=area?3:2;
+ for(let layer=0;layer<layers;layer++){
+  const scale=(area?.92:.83)-layer*.16;
+  const alpha=fade*(area?.18:.24)*(1-layer*.22);
+  x.globalAlpha=alpha;
+  x.fillStyle=layer===0?v.color:layer===1?v.accent:v.color;
+  x.beginPath();
+  const steps=36;
+  for(let i=0;i<=steps;i++){
+   const a=i/steps*Math.PI*2;
+   const wobble=1+.105*Math.sin(5*a+seed*2.1)+.07*Math.sin(9*a-seed*1.7)+.045*Math.cos(13*a+seed);
+   const rr=r*scale*wobble;
+   const px=Math.cos(a)*rr,py=Math.sin(a)*rr*.84;
+   if(i===0)x.moveTo(px,py);else x.lineTo(px,py);
+  }
+  x.closePath();x.fill();
  }
- if(area){x.globalAlpha=fade*.7;x.strokeStyle=v.accent;x.lineWidth=1.5;for(let i=0;i<6;i++){const a=v.seed+i*Math.PI/3+age*.55;x.beginPath();x.arc(Math.cos(a)*r*.62,Math.sin(a)*r*.62,3.5,0,Math.PI*2);x.stroke()}}
- x.restore();}
+ // Scattered irregular scorch, frost, poison and arcane stains lie on the same ground plane.
+ const count=area?16:11;
+ for(let i=0;i<count;i++){
+  const a=seed+i*2.399963,dist=r*(.12+.69*((i*7%17)/17));
+  const px=Math.cos(a)*dist,py=Math.sin(a)*dist*.84;
+  const size=(area?3.3:2.5)+(i%4)*1.15;
+  x.globalAlpha=fade*(.19+(i%3)*.055);
+  x.fillStyle=i%3===0?v.accent:v.color;
+  x.beginPath();
+  x.ellipse(px,py,size*(1+.3*Math.sin(seed+i)),size*.48,a,0,Math.PI*2);
+  x.fill();
+  if(v.element==='Frost'&&i%3===0){
+   x.globalAlpha=fade*.26;x.strokeStyle=v.accent;x.lineWidth=1;
+   x.beginPath();x.moveTo(px-size,py);x.lineTo(px+size,py);x.moveTo(px,py-size*.7);x.lineTo(px,py+size*.7);x.stroke();
+  }
+ }
+ x.restore();
+}
 
 // Bounce may jump to at most four additional distinct enemies, within 650 range units of the previous victim.
 function bounceTargets(first,candidates){
@@ -794,6 +824,8 @@ function draw(){
  [[155,155],[525,155],[555,440],[150,445],[245,100],[470,515],[90,310],[600,310],[245,550],[470,95]].forEach(([tx,ty],i)=>{x.fillStyle='#5a3f2b';x.fillRect(tx-3,ty+3,6,13);x.fillStyle=i%2?'#245d37':'#2e713d';x.beginPath();x.arc(tx,ty,12,0,Math.PI*2);x.fill();x.fillStyle='#43894a';x.beginPath();x.arc(tx-4,ty-5,7,0,Math.PI*2);x.fill()});
  [[190,250],[520,300],[200,490],[495,220]].forEach(([rx,ry])=>{x.fillStyle='#858d86';x.beginPath();x.ellipse(rx,ry,9,6,.3,0,Math.PI*2);x.fill()});
  x.restore();
+ // Ground spell decals are drawn after terrain but BELOW the keep, creeps and projectiles.
+ S.combatFx.forEach(v=>{if(v.kind==='areaSpell'||v.kind==='splashSpell')drawGroundSpell(v);});
  // Debug range circles share the exact RANGE_WORLD_SCALE used by shoot().
  if(showRangeRings){x.save();for(const [range,color] of [[300,'#f9e99b'],[600,'#a7e9e1'],[900,'#f5b9ef'],[1200,'#ffffff']]){const r=range*RANGE_WORLD_SCALE;x.beginPath();x.arc(CX,CY,r,0,Math.PI*2);x.lineWidth=1.7;x.setLineDash([6,6]);x.strokeStyle=color;x.globalAlpha=.65;x.stroke();x.setLineDash([]);x.globalAlpha=.95;x.font='bold 12px system-ui';x.textAlign='left';x.lineWidth=3;x.strokeStyle='#102a36';x.strokeText(String(range),CX+r+3,CY-4);x.fillStyle=color;x.fillText(String(range),CX+r+3,CY-4)}x.restore()}
  // projectiles and enemies
@@ -854,7 +886,6 @@ function draw(){
   x.restore();
   
  });
- S.combatFx.forEach(v=>{if(v.kind==='areaSpell'||v.kind==='splashSpell')drawGroundSpell(v);});
  S.combatFx.forEach(v=>{if(v.kind==='areaSpell'||v.kind==='splashSpell')return;const progress=1-v.life/v.max;x.save();x.globalAlpha=Math.max(0,v.life/v.max)*.85;x.strokeStyle=v.color;x.shadowColor=v.color;x.shadowBlur=9;
   if(v.kind==='blast'){const q=v.points[0];x.lineWidth=3.5;x.beginPath();x.arc(q.x,q.y,Math.max(3,v.r*(.2+.8*progress)),0,Math.PI*2);x.stroke();x.lineWidth=1;x.beginPath();x.arc(q.x,q.y,Math.max(3,v.r*(.05+.45*progress)),0,Math.PI*2);x.stroke()}
   else {x.lineWidth=3.5; x.beginPath();v.points.forEach((q,i)=>{if(i===0)x.moveTo(q.x,q.y);else x.lineTo(q.x,q.y)});x.stroke();v.points.forEach(q=>{x.beginPath();x.arc(q.x,q.y,5+progress*5,0,Math.PI*2);x.stroke()})}x.restore()});
