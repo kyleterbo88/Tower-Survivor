@@ -129,7 +129,7 @@
 .guideDialog{width:min(510px,100%);max-height:92dvh;overflow:auto;overscroll-behavior:contain;background:#172734;border:1px solid #597184;border-radius:14px;box-shadow:0 18px 55px #000b;padding:16px;color:#edf5f7}
 .guideDialog h2{font-size:19px;margin:0 0 7px}.guideDialog h3{font-size:13px;color:#f6d78b;margin:14px 0 5px}.guideDialog p,.guideDialog li{font-size:12px;line-height:1.48;color:#d3e0e8}.guideDialog p{margin:6px 0}.guideDialog ul{padding-left:18px;margin:6px 0}.guideDialog .guideTop{display:flex;justify-content:space-between;gap:10px;align-items:center}.guideDialog .guideClose{background:transparent;border:1px solid #657b89;padding:4px 9px}.guideActions{display:grid;gap:8px;margin-top:15px}.guideActions button{padding:11px 8px;font-size:12px}.guidePrimary{background:#426348;border-color:#8ab68a}.guideWarning{color:#f6d78b}.guidePill{display:inline-block;border:1px solid #567184;border-radius:12px;padding:2px 7px;font-size:10px;color:#a9d4e6}
 </style></head><body><div id="app">
-<header><div><h1>🏰 Tower Survivor v76</h1></div></header>
+<header><div><h1>🏰 Tower Survivor v81</h1></div></header>
 <div class="stats">
   <div class="stat statIcon"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#ff405c" d="M12 21s-9-5.8-9-12a5.1 5.1 0 0 1 9-3.1A5.1 5.1 0 0 1 21 9c0 6.2-9 12-9 12Z"/><path fill="#ff8090" opacity=".65" d="M6 8c.5-2 2-2.6 3.4-1.6" stroke="#ffb4be" stroke-width="1.3" stroke-linecap="round"/></svg><div class="statBody"><div class="label">Tower HP</div><div class="val" id="hp">2,500 / 2,500</div></div></div><div class="bar"><div id="hpbar" style="width:100%"></div></div></div>
   <div class="stat statIcon" id="shieldStat" style="visibility:hidden"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 21 5v6c0 5.5-3.5 9-9 11-5.5-2-9-5.5-9-11V5Z" fill="#169bff"/><path d="M12 3.5 5 6v5c0 4.5 2.5 7.2 7 9Z" fill="#63d8ff"/><path d="M12 3.5 19 6v5c0 4.5-2.5 7.2-7 9Z" fill="#2680e8"/></svg><div class="statBody"><div class="label">Mana Shield</div><div class="val" id="shieldValue">0 / 0</div></div></div><div class="bar"><div id="shieldBar" style="width:0%;background:#67caff"></div></div></div>
@@ -170,9 +170,9 @@ const towerDefs=[
 ['Magic','Area','Poison',85,205,.7,'Poison cloud covers a wide area.'],['Magic','Single Target','Frost',125,290,.75,'Heavy chilling strike.'],['Magic','Bounce','Fire',68,235,.95,'Flame jumps between targets.'],['Magic','Splash','Poison',70,210,.78,'Toxic magical blast.'],['Magic','Barrage','',42,200,2.2,'Volley of arcane bolts.'],
 ['Chaos','Single Target','',160,245,.62,'Very high single-target damage.'],['Chaos','Splash','',100,200,.62,'Explosive chaos impact.'],['Chaos','Bounce','Frost',72,230,.9,'Chilling chain attack.'],['Chaos','Barrage','Poison',48,210,1.8,'Rapid toxic projectiles.'],['Chaos','Area','Fire',65,180,.75,'Persistent fiery zone.'],
 
-['Siege','Splash','',170,220,.42,'Heavy cannon with large splash.'],['Siege','Single Target','',225,290,.36,'Devastating focused shot.'],['Siege','Area','Poison',115,190,.42,'Toxic bombardment covers a wide area.'],['Siege','Barrage','Fire',58,215,1.25,'Burning volleys weaken enemies.'],['Siege','Bounce','Frost',85,240,.62,'Heavy ricochets chill targets.'],['Siege','Single Target','Poison',150,265,.45,'Toxic siege bolt.'],['Siege','Splash','Fire',130,215,.45,'Flame cannon with burning splash.'],['Siege','Area','Frost',90,185,.5,'Frost mortar slows groups.'],['Siege','Barrage','',55,230,1.4,'Repeating siege volley.'],['Siege','Splash','Poison',105,205,.5,'Venomous blast.']
+['Siege','Splash','',170,220,.42,'Heavy cannon with large splash.'],['Siege','Single Target','',225,290,.36,'Devastating focused shot.'],['Siege','Area','Poison',115,190,.42,'Toxic bombardment covers a wide area.'],['Siege','Barrage','Fire',58,215,1.25,'Burning volleys weaken enemies.'],['Siege','Splash','Frost',85,240,.62,'Chilling cannon splash.'],['Siege','Single Target','Poison',150,265,.45,'Toxic siege bolt.'],['Siege','Splash','Fire',130,215,.45,'Flame cannon with burning splash.'],['Siege','Area','Frost',90,185,.5,'Frost mortar slows groups.'],['Siege','Barrage','',55,230,1.4,'Repeating siege volley.'],['Siege','Splash','Poison',105,205,.5,'Venomous blast.']
 ] .map((a,i)=>{
- const rarity=i===28?'Rare':['Common','Uncommon','Rare','Epic'][i%4];
+ const rarity=(i===24||i===28)?'Rare':['Common','Uncommon','Rare','Epic'][i%4];
  const scale={Common:1,Uncommon:1.5,Rare:2.25,Epic:3.375}[rarity];
  // Commons are always focused single-target towers at 600 or 900 range.
  // Other rarities span all four ranges; shorter range gets a modest DPS advantage.
@@ -406,9 +406,6 @@ for(const tower of towerDefs){
  console.assert(tower.rarity==='Epic'&&(tower.pattern==='Bounce'||tower.pattern==='Barrage'),'v58 damage target mismatch',tower.name);
  tower.dmg=Math.round(tower.dmg*factor*100)/100;
 }
-// Sanity-check the intended shop composition during development.
-const rosterCounts={};for(const t of towerDefs){const c=rosterCounts[t.type]||=( {Common:0,Uncommon:0,Rare:0,Epic:0} );c[t.rarity]++}
-console.assert(Object.values(rosterCounts).every(c=>c.Common===2&&c.Uncommon===3&&c.Rare===3&&c.Epic===2), 'Tower rarity balance mismatch',rosterCounts);
 // v66: five conventional types receive single-target and diminishing-chain stun.
 // 1.0s primary stun; bounce chain falls to .70/.49/.34/.24 seconds.
 // Modest raw DPS to account for crowd control. Boss stun resistance: 90% shorter.
@@ -426,15 +423,75 @@ const stunTowerSpecs=[
 ];
 for(const [name,type,pattern,rarity,range,dmg,rate] of stunTowerSpecs){
  towerDefs.push({id:towerDefs.length,name,type,pattern,mod:'None',rarity,range,dmg,rate,stun:1,
- desc:pattern==='Bounce'?'Stuns chain targets for 1.00 / 0.70 / 0.49 / 0.34 / 0.24 seconds (boss resistant).':'Stuns target for 1 second (boss resistant).'});
+ desc:pattern==='Bounce'?'Stuns up to 5 chained enemies.':'Stuns target for 1s.'});
 }
 // Uncommon retaliation + small on-hit heal; Rare utility reflection deliberately low.
-towerDefs.push({id:towerDefs.length,name:'Mending Thorns',type:'Spikes',pattern:'Reflect',mod:'None',rarity:'Uncommon',range:0,rate:0,dmg:175,healWhenHit:20,desc:'Reflect 175 damage and heal 20 castle HP each time HP is hit.'});
-towerDefs.push({id:towerDefs.length,name:'Thorn Ward',type:'Spikes',pattern:'Reflect',mod:'None',rarity:'Rare',range:0,rate:0,dmg:155,flatBlock:8,desc:'Reflect 155 damage and block 8 damage per enemy attack.'});
+towerDefs.push({id:towerDefs.length,name:'Mending Thorns',type:'Spikes',pattern:'Reflect',mod:'None',rarity:'Uncommon',range:0,rate:0,dmg:175,healWhenHit:20,desc:'Reflects damage; heals 20 HP on hit.'});
+towerDefs.push({id:towerDefs.length,name:'Thorn Ward',type:'Spikes',pattern:'Reflect',mod:'None',rarity:'Rare',range:0,rate:0,dmg:155,flatBlock:8,desc:'Reflects damage; blocks 8 per attack.'});
 
 
 for(const t of towerDefs.filter(t=>t.stun||t.healWhenHit||t.name==='Thorn Ward')){t.dmg=Math.round(t.dmg*(t.rarity==='Rare'?1.30:1.10)*100)/100;if(t.type==='Spikes')t.desc=t.desc.replace(/Reflect \d+(?:\.\d+)? damage/,`Reflect ${t.dmg} damage`);}
 
+// Player-facing naming pass: Common towers are always unmodified Single Target,
+// regardless of their source archetype. Distinct names prevent duplicate shop cards.
+const commonNameCount={};
+for(const t of towerDefs){
+ if(t.rarity==='Common'&&t.type!=='Spikes'){
+  const n=commonNameCount[t.type]||0;
+  t.name=t.type+' '+(['Sentry','Watchtower','Outpost','Guardian'][n]||'Sentry '+(n+1));
+  commonNameCount[t.type]=n+1;
+ }
+}
+// Distinguish any other same-named variants without altering tower mechanics.
+const nameCount={};
+for(const t of towerDefs){
+ const n=nameCount[t.name]||0;
+ if(n)t.name+=' ('+(t.range||'Reflect')+' Range'+(n>1?' '+(n+1):'')+')';
+ nameCount[t.name]=(nameCount[t.name]||0)+1;
+}
+// One Common per primary damage type. Preserve the existing combat stats
+// of each retained tower; Spikes keeps its purpose-built Iron Thorns.
+const retainedCommonTypes=new Set();
+for(let i=towerDefs.length-1;i>=0;i--){
+ const t=towerDefs[i];
+ if(t.rarity!=='Common')continue;
+ if(t.type==='Spikes'&&t.name!=='Iron Thorns'){towerDefs.splice(i,1);continue}
+ if(t.type!=='Spikes'&&t.name!==t.type+' Sentry'){towerDefs.splice(i,1);continue}
+ if(retainedCommonTypes.has(t.type)){towerDefs.splice(i,1);continue}
+ retainedCommonTypes.add(t.type);
+}
+console.assert(retainedCommonTypes.size===6,'Expected one Common for each damage type',Array.from(retainedCommonTypes));
+// v85: twelve towers per type. Preserve shield/HP siphons and all retained commons.
+const newRareTowers=[
+ ['Thunderclap Volley','Normal','Barrage','None',600,132,.94,{stun:.30,desc:'Briefly stuns volley targets.'}],
+ ['Venom-Tipped Bolts','Piercing','Barrage','Poison',900,145,.94,{}],
+ ['Phoenix Convergence','Magic','Splash','Fire',600,225,.90,{}],
+ ['Plague Cascade','Chaos','Bounce','Poison',900,165,.88,{}],
+ ['Vengeful Thorns','Spikes','Reflect','None',0,155,0,{vengeance:.05,desc:'Retaliation adds +5% future Spikes damage taken (max 25%).'}]
+];
+for(const [name,type,pattern,mod,range,dmg,rate,extra] of newRareTowers){towerDefs.push({id:towerDefs.length,name,type,pattern,mod,rarity:'Rare',range,dmg,rate,desc:mod==='Fire'?'Applies burn for 5s per hit':mod==='Poison'?'Applies poison for 8s per hit':'Specialized attack.',...extra})}
+const elementalReworks={
+ 'Ricochet Guard':{stun:1,desc:'Stuns chained targets.'},
+ 'Veteran Marksman':{mod:'Frost'},
+ 'Piercing Frost Barrage':{mod:'Poison',name:'Piercing Poison Barrage'},
+ 'Ballista Battery':{mod:'Poison'},
+ 'Shrapnel Volley':{mod:'Poison'},
+ 'Magic Barrage':{mod:'Fire'},
+ 'Echoing Hex':{stun:0,desc:'Chains arcane strikes.'},
+ 'Abyssal Barrage':{mod:'Frost'},
+ 'Discordant Chain':{stun:0,desc:'Chains chaotic strikes.'},
+ 'Siege Poison Single Target':{mod:'None',name:'Siege Heavy Cannon'},
+ 'Siege Poison Splash':{mod:'Fire',name:'Siege Fireburst Splash'},
+ 'Siege Poison Area':{mod:'None',name:'Siege Bombardment Area'}
+};
+for(const t of towerDefs){if(elementalReworks[t.name])Object.assign(t,elementalReworks[t.name])}
+const desired={Normal:[1,4,5,2],Piercing:[1,4,5,2],Magic:[1,4,5,2],Chaos:[1,4,5,2],Siege:[1,4,5,2],Spikes:[1,4,5,2]};
+for(const type of Object.keys(desired)){
+ const group=towerDefs.filter(t=>t.type===type),rarities=['Common','Uncommon','Rare','Epic'];
+ console.assert(group.length===12&&rarities.every((r,i)=>group.filter(t=>t.rarity===r).length===desired[type][i]),'v83 tower roster mismatch',type,group.map(t=>t.name));
+}
+// IDs are used for icon gradients; make them unique after removing duplicates.
+for(let i=0;i<towerDefs.length;i++)towerDefs[i].id=i;
 const supDefs=[
 ['Income Engine','🪙','income',5,'+5 gold per second.'],['Bounty Contract','💰','bounty',.5,'+50% gold from kills.'],['Compounding Treasury','📈','compound',5,'+5 gold/s every 30 seconds.'],['Reinforced Core','❤️','hp',2000,'Increase Maximum HP by 2,000.'],['Regenerative Matrix','💚','regen',10,'+10 HP per second.'],['Fortified Armor','🛡️','armor',5,'Increase Armor by 5.'],['Evasion Field','🌫️','evasion',.10,'10% chance to evade attacks.'],['Mana Shield','🔷','shield',1000,'Increase Maximum Mana Shield by 1,000.'],['Combat Drills','⚔️','damage',.05,'+5% all tower damage.'],['Critical Calibration','💥','crit',.20,'+20% critical chance.'],
 ['Vitality Growth','❤️','hpGrowth',10,'Increase Maximum HP by 1,000; +10 max HP/s.'],
@@ -442,7 +499,7 @@ const supDefs=[
 ['Royal Bounty','👑','bountyIncome',[1,.35],'+100% kill bounty; +35% current passive gold/s.'],
 ['Prosperity Pact','💎','bountyIncome',[.5,.25],'+50% kill bounty; +25% current passive gold/s.'],
 ['Arcane Reservoir','🔷','shieldGrowth',10,'Increase Maximum Mana Shield by 2,000; +10 max shield/s.'],
-['Aegis Barrier','🔷','shieldArmor',.20,'Increase Maximum Mana Shield by 2,000; 20% less shield damage (diminishing returns; 50% max).'],
+['Arcane Barrier','🔷','shieldArmor',.15,'Increase Maximum Mana Shield by 2,000; 15% less damage while the barrier is active (diminishing returns; 50% max). Deactivates at 0 shield; reactivates only above 150 shield.'],
 ['Titanic Vitality','💗','hpGrowth',35,'Increase Maximum HP by 2,000; +35 max HP/s.'],
 ['Arcane Renewal','💠','shieldRegen',50,'Increase Maximum Mana Shield by 2,000; +50 mana shield regen/s.']
 ].map((a,i)=>({name:a[0],icon:a[1],kind:a[2],value:a[3],desc:a[4],rarity:(['Common','Common','Uncommon','Uncommon','Uncommon','Uncommon','Uncommon','Common','Common','Epic','Uncommon','Uncommon','Epic','Rare','Uncommon','Rare','Rare','Uncommon'][i]||'Common')}));
@@ -457,12 +514,26 @@ supDefs.push({name:'Reinforced Plating',icon:'🛡️',kind:'armor',value:10,des
 supDefs.push({name:'Legendary Warcraft',icon:'🔥',kind:'damage',value:.40,desc:'+40% all tower damage.',rarity:'Epic'});
 supDefs.push({name:'Mythic Warcraft',icon:'🌟',kind:'damage',value:.75,desc:'+75% all tower damage.',rarity:'Epic'});
 let S;
-function fresh(){return {time:0,level:1,nextRefresh:30,started:false,paused:false,over:false,won:false,gold:5000,hp:2500,maxHp:2500,regen:0,hpGrowth:0,shieldGrowth:0,shieldRegen:0,shieldArmor:0,incomeGrowth:0,incomeGrowthTimer:0,armor:0,evasion:0,shield:0,maxShield:0,bounty:0,bountyBonusGold:0,income:0,compound:0,damage:0,typedDamage:{},crit:0,attackSpeed:0,incomeTimer:0,towers:[],enemies:[],shots:[],fx:[],combatFx:[],groundFx:[],goldPops:[],kills:0,killGoldEarned:0,attacksFired:0,effectiveDamage:0,overkillDamage:0,frameTargets:new Set(),roundTypes:[],roundTypeLevel:0,clearUsed:false,clearAuto:false,speed:1,free:6,paid:0,rerollsUsed:0,lastCompound:0,spawn:0,boss:false,nextId:1,tOffers:[],sOffers:[],challenge:null,challengeFailed:false,challengeAwarded:false,rarityPurchases:[],timeChallengeAwarded:false}}
+function fresh(){return {time:0,level:1,nextRefresh:30,started:false,paused:false,over:false,won:false,gold:5000,hp:2500,maxHp:2500,regen:0,hpGrowth:0,shieldGrowth:0,shieldRegen:0,shieldArmor:0,shieldBarrierActive:false,incomeGrowth:0,incomeGrowthTimer:0,armor:0,evasion:0,shield:0,maxShield:0,bounty:0,bountyBonusGold:0,income:0,compound:0,damage:0,typedDamage:{},crit:0,attackSpeed:0,incomeTimer:0,towers:[],enemies:[],shots:[],fx:[],combatFx:[],groundFx:[],goldPops:[],kills:0,killGoldEarned:0,attacksFired:0,effectiveDamage:0,overkillDamage:0,frameTargets:new Set(),roundTypes:[],roundTypeLevel:0,clearUsed:false,clearAuto:false,speed:1,free:6,paid:0,rerollsUsed:0,lastCompound:0,spawn:0,boss:false,nextId:1,tOffers:[],sOffers:[],challenge:null,challengeFailed:false,challengeAwarded:false,rarityPurchases:[],timeChallengeAwarded:false}}
 S=fresh();
 function shuffle(a){return a.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1])}function fmt(n){return Math.floor(n).toLocaleString('en-US')}function clock(n){return String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0')}function log(m){$('log').innerHTML=m+'<br>'+ $('log').innerHTML;if($('log').innerHTML.length>1300)$('log').innerHTML=$('log').innerHTML.slice(0,1300)}function toast(m){log('» '+m)}
 function cap(l){return l===1?6:l===2?1:l<=4?2:l<=10?3:5}function cost(){return Math.min(1000,100*(S.paid+1))}function left(){return Math.max(0,cap(S.level)-S.rerollsUsed)}
 function price(r){return ({Common:500,Uncommon:2000,Rare:5000,Epic:10000})[r]||500}
-function makeTowerOffers(){let pool=towerDefs.filter(t=>t.rarity!=='Epic'||S.level>=6);let epics=S.level>=6?shuffle(pool.filter(t=>t.rarity==='Epic')):[];let non=shuffle(pool.filter(t=>t.rarity!=='Epic')).slice(0,4);if(epics.length&&Math.random()<.33){non=non.slice(0,3);non.push(epics[0])}return shuffle(non).slice(0,4)}
+function makeTowerOffers(){
+ // Guaranteed one Common through level 15, then a 60% chance.
+ const commons=towerDefs.filter(t=>t.rarity==='Common');
+ const eligible=towerDefs.filter(t=>t.rarity!=='Common'&&(t.rarity!=='Epic'||S.level>=6));
+ const includeCommon=S.level<=15||Math.random()<.60;
+ const result=includeCommon?[commons[Math.floor(Math.random()*commons.length)]]:[];
+ const nonEpic=shuffle(eligible.filter(t=>t.rarity!=='Epic'));
+ const epic=eligible.filter(t=>t.rarity==='Epic');
+ // Retain existing 33% Epic appearance chance from level 6 onward.
+ const includeEpic=epic.length>0&&Math.random()<.33;
+ const slots=4-result.length-(includeEpic?1:0);
+ result.push(...nonEpic.slice(0,slots));
+ if(includeEpic)result.push(shuffle(epic)[0]);
+ return shuffle(result);
+}
 function weightedSupportOffers(){let pool=supDefs.slice(),out=[];while(pool.length&&out.length<4){let weights=pool.map(s=>{let w=s.rarity==='Common'?8:s.rarity==='Uncommon'?5:s.rarity==='Rare'?1.45:.7;return ['income','bounty','compound','incomeGrowth','bountyIncome'].includes(s.kind)?w*.72:w}),total=weights.reduce((a,b)=>a+b,0),r=Math.random()*total,idx=0;for(;idx<weights.length-1;idx++){r-=weights[idx];if(r<0)break}out.push(pool.splice(idx,1)[0])}return out}
 function offers(){S.tOffers=makeTowerOffers();S.sOffers=weightedSupportOffers();render()}
 function refreshAll(){S.level=Math.min(30,Math.floor(S.time/30)+1);offers();S.rerollsUsed=0;S.nextRefresh=(Math.floor(S.time/30)+1)*30;toast('ARMORY REFRESH');ui()}
@@ -479,11 +550,11 @@ function ability(t){
  if(t.shieldLeech)return '30% hit damage → shield';
  if(t.hpLeech)return '30% hit damage → HP';
  if(t.shieldPerHit)return '+'+t.shieldPerHit+' max shield + refill / hit';
- if(t.range===300&&t.pattern==='Area')return 'Close-range 360° zone';
- if(t.range===300&&['Single Target','Splash','Bounce'].includes(t.pattern))return 'Extra spell every 3s';
- if(t.mod==='Fire')return 'Burn + weaken attacks';
- if(t.mod==='Frost')return 'Stacking slow: move + attack';
- if(t.mod==='Poison')return 'Stacking poison + attack slow';
+ if(t.mod==='Fire')return 'Applies burn for 5s per hit';
+ if(t.mod==='Frost')return 'Applies stacking movement slow';
+ if(t.mod==='Poison')return 'Applies poison for 8s per hit';
+ if(t.range===300&&t.pattern==='Area'&&t.mod==='None')return 'Close-range 360° zone';
+ if(t.range===300&&['Single Target','Splash','Bounce'].includes(t.pattern)&&t.mod==='None')return 'Extra spell every 3s';
  if(t.pattern==='Splash')return '300-unit splash diameter';
  if(t.pattern==='Area')return '540-unit area radius · 25% hit';
  if(t.pattern==='Bounce')return 'Chains up to 5 targets';
@@ -586,7 +657,9 @@ function waveSpawnInterval(lvl){
  const density=lvl>=25?.90:lvl>=20?.93:lvl>=10?.96:1;
  return Math.max(.34,base*density);
 }
-function spawn(boss=false){let side=Math.floor(Math.random()*4),x,y;if(side===0){x=Math.random()*W;y=-10}else if(side===1){x=W+10;y=Math.random()*H}else if(side===2){x=Math.random()*W;y=H+10}else{x=-10;y=Math.random()*H}let lvl=Math.min(30,Math.floor(S.time/30)+1);if(!boss&&S.roundTypeLevel!==lvl)setRoundCreeps(lvl);let type=null;if(!boss){let roll=Math.random();type=S.roundTypes[roll<.70?0:roll<.92?1:2]}let hp=1.25*1.15*.90*(boss?18000*1.18*1.75:waveBaseHp(lvl)*type.hp*creepHealthFactor(lvl)*wavePressure(lvl)),speed=boss?20:(30+lvl*1.1)*type.speed,dmg=0.8625*(boss?850:(80+lvl*5)*type.dmg);S.enemies.push({id:S.nextId++,x,y,hp,maxHp:hp,speed,dmg,r:boss?23:(type.role==='heavy'?13:type.role==='medium'?10:8)*(0.80+Math.random()*.44),attack:0,attackFlash:0,ranged:!boss&&(type.name==='Ranger'||type.name==='Warlock'),reach:!boss&&type.name==='Ranger'?100+Math.random()*100:!boss&&type.name==='Warlock'?200+Math.random()*100:0,boss,kind:type?.name||'Boss',armor:type?.armor||'Heavy',role:type?.role||'boss',goldMult:type?.gold||4,color:type?.color||'#a92c4e',shape:type?.shape||'square',visualVariant:Math.floor(Math.random()*4),visualTint:Math.random()*.22,fire:0,poison:0,frost:0});if(boss){S.boss=true;log('BOSS SPAWNED!')}}
+// v85: attack damage is unchanged through level 19; +10% at 20, +25% at 25, +40% at 30.
+function lateWaveAttackMultiplier(level){return level<20?1:1.10+0.03*(Math.min(30,level)-20)}
+function spawn(boss=false){let side=Math.floor(Math.random()*4),x,y;if(side===0){x=Math.random()*W;y=-10}else if(side===1){x=W+10;y=Math.random()*H}else if(side===2){x=Math.random()*W;y=H+10}else{x=-10;y=Math.random()*H}let lvl=Math.min(30,Math.floor(S.time/30)+1);if(!boss&&S.roundTypeLevel!==lvl)setRoundCreeps(lvl);let type=null;if(!boss){let roll=Math.random();type=S.roundTypes[roll<.70?0:roll<.92?1:2]}let hp=1.25*1.15*.90*(boss?18000*1.18*1.75*2.25:waveBaseHp(lvl)*type.hp*creepHealthFactor(lvl)*wavePressure(lvl)),speed=boss?35:(30+lvl*1.1)*type.speed,dmg=0.8625*(boss?1400:(80+lvl*5)*type.dmg*lateWaveAttackMultiplier(lvl));S.enemies.push({id:S.nextId++,x,y,hp,maxHp:hp,speed,dmg,r:boss?23:(type.role==='heavy'?13:type.role==='medium'?10:8)*(0.80+Math.random()*.44),attack:0,attackFlash:0,ranged:!boss&&(type.name==='Ranger'||type.name==='Warlock'),reach:!boss&&type.name==='Ranger'?100+Math.random()*100:!boss&&type.name==='Warlock'?200+Math.random()*100:0,boss,kind:type?.name||'Boss',armor:type?.armor||'Heavy',role:type?.role||'boss',goldMult:type?.gold||4,color:type?.color||'#a92c4e',shape:type?.shape||'square',visualVariant:Math.floor(Math.random()*4),visualTint:Math.random()*.22,fire:0,poison:0,poisonStacks:0,fireSources:{},poisonSources:{},frost:0});if(boss){S.boss=true;log('BOSS SPAWNED!')}}
 // Keep levels 1–4 unchanged. Reduce later wealth generation to curb huge boss-run surpluses.
 function economyFactor(){const level=S.level; if(level<=4)return 1;if(level<=20)return 1-.60*(level-4)/16;return Math.max(.30,.40-.01*(level-20))}
 // Slightly tougher opening, progressively sturdier late waves. Boss gets its own +18% HP.
@@ -600,13 +673,31 @@ function applyArmorDamage(e,d,type){let mult=1;const armor=e.armor||'Medium';if(
 
 function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}function fx(x,y,color,r=8){S.fx.push({x,y,color,r,life:.25});if(S.fx.length>90)S.fx.splice(0,S.fx.length-90)}
 function kill(e){if(e.dead)return;e.dead=true;S.kills++;const baseGold=Math.floor(Math.max(100,100+(S.level-1)*10)*(e.goldMult||1));const earnedGold=creepGold(e);S.gold+=earnedGold;S.killGoldEarned+=earnedGold;S.bountyBonusGold+=Math.max(0,earnedGold-baseGold);if(e.boss){S.gold+=Math.floor(1500*economyFactor());S.killGoldEarned+=Math.floor(1500*economyFactor());S.over=true;S.won=true;awardChallenge();modal('Victory!','You defeated the 15-minute boss.','New Run')}fx(e.x,e.y,'#ffd36b',e.boss?25:10);S.goldPops.push({x:e.x,y:e.y-14,text:'+'+fmt(earnedGold+(e.boss?Math.floor(1500*economyFactor()):0))+'g',life:1.1,max:1.1})}
-function hit(e,d,mod,type='Normal',exposeType=null){const vulnerability=1+.25*((e.typeWounds&&e.typeWounds[type])||0);e.hp-=applyArmorDamage(e,d*vulnerability,type);if(exposeType){e.typeWounds||={};e.typeWounds[exposeType]=(e.typeWounds[exposeType]||0)+1;}if(mod==='Fire')e.fire=Math.min(5,e.fire+2.5);if(mod==='Poison')e.poison=Math.min(8,e.poison+2.5);if(mod==='Frost')e.frost=Math.min(5,e.frost+1.3);fx(e.x,e.y,mod==='Fire'?'#ff8738':mod==='Frost'?'#70d8ff':mod==='Poison'?'#86e86e':'#ffe39a',4);if(e.hp<=0)kill(e)}
+function applyElement(e,mod,source){
+ if(mod==='Fire'){
+  if(source){const key=source.instanceId||('tower-'+source.id);e.fireSources||={};e.fireSources[key]={time:5,mult:(1+S.damage)*(1+(S.typedDamage[source.type]||0))}}
+  else e.fire=Math.min(5,e.fire+2.5);
+ }else if(mod==='Poison'){
+  if(source){const key=source.instanceId||('tower-'+source.id);e.poisonSources||={};const old=e.poisonSources[key];e.poisonSources[key]={time:8,stacks:Math.min(5,(old?.stacks||0)+1),mult:(1+S.damage)*(1+(S.typedDamage[source.type]||0))}}
+  else {e.poison=8;e.poisonStacks=Math.min(5,(e.poisonStacks||0)+1)}
+ }else if(mod==='Frost')e.frost=Math.min(5,e.frost+1.3);
+}
+function hit(e,d,mod,type='Normal',exposeType=null,source=null){const vulnerability=1+.25*((e.typeWounds&&e.typeWounds[type])||0);e.hp-=applyArmorDamage(e,d*vulnerability,type);if(exposeType){e.typeWounds||={};e.typeWounds[exposeType]=(e.typeWounds[exposeType]||0)+1;}applyElement(e,mod,source);fx(e.x,e.y,mod==='Fire'?'#ff8738':mod==='Frost'?'#70d8ff':mod==='Poison'?'#86e86e':'#ffe39a',4);if(e.hp<=0)kill(e)}
 // Cosmetic-only ground spell effects; no damage is applied by lingering visuals.
+// Elemental zones apply only status effects, never a second direct attack.
+function tickElementalZones(dt){
+ for(const z of S.groundFx){if(!['Fire','Frost','Poison'].includes(z.element)||z.life<=0)continue;
+  z.applyTimer-=dt;
+  while(z.applyTimer<=0){z.applyTimer+=.5;
+   for(const e of S.enemies){if(!e.dead&&dist(e,z.points[0])<=z.r)applyElement(e,z.element,z.source)}
+  }
+ }
+}
 const FX_CAP=48;
 const GROUND_FX_CAP=110; // Ground decals have their own budget; chains/blasts cannot evict them.
 function spellPalette(t){return t.mod==='Fire'?['#ff8a35','#ffc66b']:t.mod==='Frost'?['#65cfff','#c6f4ff']:t.mod==='Poison'?['#8fe45a','#d1ff8b']:[rarityColor(t.type),t.type==='Magic'?'#d7b5ff':t.type==='Chaos'?'#c8ffb0':'#fff1cb']}
 const groundFxDiagnostics={emitted:0,drawn:0,byTower:{}};window.groundFxDiagnostics=groundFxDiagnostics;
-function groundSpell(t,point,r){groundFxDiagnostics.emitted++;const key=t.name||t.type+' '+t.mod+' '+t.pattern;groundFxDiagnostics.byTower[key]=(groundFxDiagnostics.byTower[key]||0)+1;const area=t.pattern==='Area';const palette=spellPalette(t);S.groundFx.push({kind:area?'areaSpell':'splashSpell',points:[{x:point.x,y:point.y}],color:palette[0],accent:palette[1],element:t.mod,r,life:area?1.25:1.05,max:area?1.25:1.05,seed:Math.random()*6.28});if(S.groundFx.length>GROUND_FX_CAP)S.groundFx.splice(0,S.groundFx.length-GROUND_FX_CAP)}
+function groundSpell(t,point,r){groundFxDiagnostics.emitted++;const key=t.name||t.type+' '+t.mod+' '+t.pattern;groundFxDiagnostics.byTower[key]=(groundFxDiagnostics.byTower[key]||0)+1;const area=t.pattern==='Area';const palette=spellPalette(t);S.groundFx.push({kind:area?'areaSpell':'splashSpell',points:[{x:point.x,y:point.y}],color:palette[0],accent:palette[1],element:t.mod,r,life:['Fire','Frost','Poison'].includes(t.mod)?1.5:(area?1.25:1.05),max:['Fire','Frost','Poison'].includes(t.mod)?1.5:(area?1.25:1.05),source:t,applyTimer:.5,seed:Math.random()*6.28});if(S.groundFx.length>GROUND_FX_CAP)S.groundFx.splice(0,S.groundFx.length-GROUND_FX_CAP)}
 function combatEffect(kind,points,color,r=40){S.combatFx.push({kind,points,color,r,life:.38,max:.38});if(S.combatFx.length>FX_CAP)S.combatFx.splice(0,S.combatFx.length-FX_CAP)}
 function drawGroundSpell(v){groundFxDiagnostics.drawn++;
  const q=v.points[0],age=1-v.life/v.max,area=v.kind==='areaSpell',r=v.r;
@@ -692,7 +783,7 @@ function shoot(t,dt){
   t.spellCooldown=(t.spellCooldown||0)-dt;
   if(t.spellCooldown<=0){
    const distant=S.enemies.filter(a=>!a.dead&&dist({x:CX,y:CY},a)>300*RANGE_WORLD_SCALE&&dist({x:CX,y:CY},a)<=900*RANGE_WORLD_SCALE).sort((a,b)=>dist({x:CX,y:CY},a)-dist({x:CX,y:CY},b))[0];
-   if(distant){if(t.pattern==='Splash')groundSpell(t,distant,SPLASH_RADIUS);const before=Math.max(0,distant.hp);hit(distant,t.dmg*(1+S.damage)*(1+(S.typedDamage[t.type]||0))*.8,t.mod,t.type);trackDamage(t,before,distant.hp);S.attacksFired++;t.attacksFired++;S.frameTargets.add(distant.id);S.shots.push({x:distant.x,y:distant.y,life:.18,color:'#dcaaff'});t.spellCooldown=3}
+   if(distant){if(t.pattern==='Splash')groundSpell(t,distant,SPLASH_RADIUS);const before=Math.max(0,distant.hp);hit(distant,t.dmg*(1+S.damage)*(1+(S.typedDamage[t.type]||0))*.8,t.mod,t.type,null,t);trackDamage(t,before,distant.hp);S.attacksFired++;t.attacksFired++;S.frameTargets.add(distant.id);S.shots.push({x:distant.x,y:distant.y,life:.18,color:'#dcaaff'});t.spellCooldown=3}
   }
  }
  t.cool-=dt;if(t.cool>0)return;
@@ -705,7 +796,7 @@ function shoot(t,dt){
  if(t.pattern==='Splash'||t.pattern==='Area')groundSpell(t,areaCenter,t.pattern==='Area'?AREA_RADIUS:SPLASH_RADIUS);
  if(t.pattern==='Bounce'&&hitlist.length>1)combatEffect('chain',hitlist.map(a=>({x:a.x,y:a.y})),t.mod==='Frost'?'#8cddff':t.mod==='Poison'?'#b0f779':'#f7db8d');
  const landedHits=hitlist.filter(a=>!a.dead).length;let damageDealt=0;
- hitlist.forEach((a,i)=>{if(a.dead)return;const before=Math.max(0,a.hp);hit(a,d*(t.pattern==='Splash'?SPLASH_DAMAGE_FACTOR:t.pattern==='Area'?AREA_DAMAGE_FACTOR:t.pattern==='Bounce'?Math.pow(.72,i):t.pattern==='Barrage'?.62:1),t.mod,t.type,t.exposeType);damageDealt+=trackDamage(t,before,a.hp);
+ hitlist.forEach((a,i)=>{if(a.dead)return;const before=Math.max(0,a.hp);hit(a,d*(t.pattern==='Splash'?SPLASH_DAMAGE_FACTOR:t.pattern==='Area'?AREA_DAMAGE_FACTOR:t.pattern==='Bounce'?Math.pow(.72,i):t.pattern==='Barrage'?.62:1),t.mod,t.type,t.exposeType,t);damageDealt+=trackDamage(t,before,a.hp);
   if(t.stun&&!a.dead)a.stun=Math.max(a.stun||0,t.stun*(t.pattern==='Bounce'?Math.pow(.70,i):1)*(a.boss?.10:1));
   if(t.pattern==='Area'&&!a.dead){
    const applied=d*AREA_DAMAGE_FACTOR;
@@ -721,13 +812,28 @@ function shoot(t,dt){
  S.shots.push({x:e.x,y:e.y,life:.12,color:t.mod==='Fire'?'#ff8738':t.mod==='Frost'?'#70d8ff':t.mod==='Poison'?'#86e86e':'#f5e4a5'});
 }
 function modal(t,p,b){S.paused=true;$('mt').textContent=t;$('mp').textContent=p;$('mb').textContent=b;$('overlay').style.display='flex'}
-function update(dt){if(!guideOverlay.hidden||S.paused||S.over||!S.started)return;dt*=S.speed;S.time+=dt;if(S.time>=600&&!S.timeChallengeAwarded)awardTimeChallenges();if(!S.ownedStatsAt||S.time-S.ownedStatsAt>=1){S.ownedStatsAt=S.time;if(!$('ownedPanel').hidden)renderOwnedTowers()}S.level=Math.min(30,Math.floor(S.time/30)+1);if(S.time>=S.nextRefresh){refreshAll();S.nextRefresh=(Math.floor(S.time/30)+1)*30}if(S.time>=900&&!S.boss)spawn(true);if(!S.boss){S.spawn-=dt;let catchup=0;while(S.spawn<=0&&catchup++<8){spawn();S.spawn+=waveSpawnInterval(S.level)}}S.incomeTimer+=dt;if(S.incomeTimer>=2){let ticks=Math.floor(S.incomeTimer/2);S.gold+=Math.floor((50+S.income)*2*ticks*economyFactor());S.incomeTimer-=2*ticks}let n=Math.floor(S.time/30);if(n>S.lastCompound){S.gold+=Math.floor(S.compound*30*(n-S.lastCompound)*economyFactor());S.lastCompound=n}S.incomeGrowthTimer+=dt;if(S.incomeGrowthTimer>=15){const ticks=Math.floor(S.incomeGrowthTimer/15);S.income+=ticks*S.incomeGrowth;S.incomeGrowthTimer-=ticks*15}S.maxHp+=S.hpGrowth*dt;S.hp=Math.min(S.maxHp,S.hp+S.hpGrowth*dt);S.maxShield+=S.shieldGrowth*dt;S.shield=Math.min(S.maxShield,S.shield+S.shieldGrowth*dt);S.hp=Math.min(S.maxHp,S.hp+S.regen*dt);S.shield=Math.min(S.maxShield,S.shield+(S.maxShield*.05+S.shieldRegen)*dt);S.frameTargets.clear();S.towers.forEach(t=>shoot(t,dt));S.enemies.forEach(e=>{if(e.dead)return;e.fire=Math.max(0,e.fire-dt);e.poison=Math.max(0,e.poison-dt);e.frost=Math.max(0,e.frost-dt);if(e.fire>0)e.hp-=11*dt;if(e.poison>0)e.hp-=18*dt;if(e.areaLinger&&e.areaLinger.time>0){const tick=Math.min(dt,e.areaLinger.time);e.hp-=e.areaLinger.dps*tick;e.areaLinger.time-=tick;}if(e.bleedTime>0){e.hp-=(e.bleedDps||0)*Math.min(dt,e.bleedTime);e.bleedTime=Math.max(0,e.bleedTime-dt);if(e.bleedTime===0)e.bleedDps=0;}let dx=CX-e.x,dy=CY-e.y,d=Math.hypot(dx,dy)||1;const stunned=(e.stun||0)>0;e.stun=Math.max(0,(e.stun||0)-dt);const stoppingDistance=e.ranged?Math.max(KEEP_WALL+e.r,e.reach*RANGE_WORLD_SCALE):KEEP_WALL+e.r;if(d>stoppingDistance&&!stunned){const step=Math.min(d-stoppingDistance,e.speed*(1-Math.min(.75,e.frost*.09))*dt);e.x+=dx/d*step;e.y+=dy/d*step;}e.attackFlash=Math.max(0,(e.attackFlash||0)-dt);if(!stunned)e.attack+=dt;if(!stunned&&d<=stoppingDistance+2&&e.attack>=(e.boss?1:e.ranged?1.2:.7)){e.attack=0;e.attackFlash=.23;if(Math.random()>=S.evasion){let dmg=e.dmg*(1-armorReduction(S.armor));const block=S.towers.reduce((sum,t)=>sum+(t.type==='Spikes'?(t.flatBlock||0):0),0);dmg=Math.max(0,dmg-block);if(S.shield>0)dmg*=1-S.shieldArmor;let a=Math.min(S.shield,dmg);S.shield-=a;S.hp-=dmg-a;if(dmg>a||block>0&&S.shield<=0){for(const t of S.towers){if(t.type!=='Spikes')continue;const woundMultiplier=1+(e.spikeWounds||0)*.25;
+function update(dt){if(!guideOverlay.hidden||S.paused||S.over||!S.started)return;dt*=S.speed;S.time+=dt;if(S.time>=600&&!S.timeChallengeAwarded)awardTimeChallenges();if(!S.ownedStatsAt||S.time-S.ownedStatsAt>=1){S.ownedStatsAt=S.time;if(!$('ownedPanel').hidden)renderOwnedTowers()}S.level=Math.min(30,Math.floor(S.time/30)+1);if(S.time>=S.nextRefresh){refreshAll();S.nextRefresh=(Math.floor(S.time/30)+1)*30}if(S.time>=900&&!S.boss)spawn(true);if(!S.boss){S.spawn-=dt;let catchup=0;while(S.spawn<=0&&catchup++<8){spawn();S.spawn+=waveSpawnInterval(S.level)}}S.incomeTimer+=dt;if(S.incomeTimer>=2){let ticks=Math.floor(S.incomeTimer/2);S.gold+=Math.floor((50+S.income)*2*ticks*economyFactor());S.incomeTimer-=2*ticks}let n=Math.floor(S.time/30);if(n>S.lastCompound){S.gold+=Math.floor(S.compound*30*(n-S.lastCompound)*economyFactor());S.lastCompound=n}S.incomeGrowthTimer+=dt;if(S.incomeGrowthTimer>=15){const ticks=Math.floor(S.incomeGrowthTimer/15);S.income+=ticks*S.incomeGrowth;S.incomeGrowthTimer-=ticks*15}S.maxHp+=S.hpGrowth*dt;S.hp=Math.min(S.maxHp,S.hp+S.hpGrowth*dt);S.maxShield+=S.shieldGrowth*dt;S.shield=Math.min(S.maxShield,S.shield+S.shieldGrowth*dt);S.hp=Math.min(S.maxHp,S.hp+S.regen*dt);S.shield=Math.min(S.maxShield,S.shield+(50+S.shieldRegen)*dt);if(!S.shieldBarrierActive&&S.shield>150)S.shieldBarrierActive=true;S.frameTargets.clear();S.towers.forEach(t=>shoot(t,dt));tickElementalZones(dt);S.enemies.forEach(e=>{if(e.dead)return;e.fire=Math.max(0,e.fire-dt);e.poison=Math.max(0,e.poison-dt);e.frost=Math.max(0,e.frost-dt);if(e.vengeanceTime>0){e.vengeanceTime-=dt;if(e.vengeanceTime<=0)e.vengeanceStacks=0;}let fireDps=e.fire>0?30:0,poisonDps=e.poison>0?5*(e.poisonStacks||1):0,poisonSlow=e.poison>0?Math.min(.4,(e.poisonStacks||1)*.08):0;
+ if(e.poison<=0)e.poisonStacks=0;
+ const bossScale=e.boss?.5:1;
+ for(const [key,v] of Object.entries(e.fireSources||{})){
+  v.time-=dt;if(v.time<=0){delete e.fireSources[key];continue}
+  fireDps+=(15+e.maxHp*.007*bossScale)*v.mult;
+ }
+ for(const [key,v] of Object.entries(e.poisonSources||{})){
+  v.time-=dt;if(v.time<=0){delete e.poisonSources[key];continue}
+  poisonDps+=v.stacks*(2.5+e.maxHp*.00125*bossScale)*v.mult;
+  poisonSlow=Math.min(.4,poisonSlow+v.stacks*.08);
+ }
+ e.hp-=(fireDps+poisonDps)*dt;
+ e.fire=Object.keys(e.fireSources||{}).length?Math.max(e.fire,.01):e.fire;
+ e.poison=Object.keys(e.poisonSources||{}).length?Math.max(e.poison,.01):e.poison;if(e.areaLinger&&e.areaLinger.time>0){const tick=Math.min(dt,e.areaLinger.time);e.hp-=e.areaLinger.dps*tick;e.areaLinger.time-=tick;}if(e.bleedTime>0){e.hp-=(e.bleedDps||0)*Math.min(dt,e.bleedTime);e.bleedTime=Math.max(0,e.bleedTime-dt);if(e.bleedTime===0)e.bleedDps=0;}let dx=CX-e.x,dy=CY-e.y,d=Math.hypot(dx,dy)||1;const stunned=(e.stun||0)>0;e.stun=Math.max(0,(e.stun||0)-dt);const stoppingDistance=e.ranged?Math.max(KEEP_WALL+e.r,e.reach*RANGE_WORLD_SCALE):KEEP_WALL+e.r;if(d>stoppingDistance&&!stunned){const step=Math.min(d-stoppingDistance,e.speed*(1-Math.min(.40,e.frost*.09))*dt);e.x+=dx/d*step;e.y+=dy/d*step;}e.attackFlash=Math.max(0,(e.attackFlash||0)-dt);if(!stunned)e.attack+=dt*(1-poisonSlow);if(!stunned&&d<=stoppingDistance+2&&e.attack>=(e.boss?1:e.ranged?1.2:.7)){e.attack=0;e.attackFlash=.23;if(Math.random()>=S.evasion){let dmg=e.dmg*(1-armorReduction(S.armor));const block=S.towers.reduce((sum,t)=>sum+(t.type==='Spikes'?(t.flatBlock||0):0),0);dmg=Math.max(0,dmg-block);if(S.shield>0&&S.shieldBarrierActive)dmg*=1-S.shieldArmor;let a=Math.min(S.shield,dmg);S.shield-=a;if(S.shield<=0)S.shieldBarrierActive=false;S.hp-=dmg-a;if(dmg>a||block>0&&S.shield<=0){for(const t of S.towers){if(t.type!=='Spikes')continue;const woundMultiplier=(1+(e.spikeWounds||0)*.25)*(1+(e.vengeanceStacks||0)*.05);
  const rawReflect=(t.halfCreepHp?e.maxHp*.5:t.dmg+(t.hpReflect||0)*S.maxHp)*(e.armor==='Light'?1+(t.lightBonus||0):1)*(e.ranged?1+(t.rangedBonus||0):1);
  const retaliation=rawReflect*woundMultiplier*(1+S.damage)*(1+(S.typedDamage.Spikes||0))*(Math.random()<S.crit?2:1);
  const hpBeforeReflect=Math.max(0,e.hp);hit(e,retaliation,'None','Spikes');trackDamage(t,hpBeforeReflect,e.hp);S.attacksFired++;t.attacksFired++;
  if(t.healWhenHit)S.hp=Math.min(S.maxHp,S.hp+t.healWhenHit);
  if(t.bleed&&!e.dead){e.bleedDps=(e.bleedDps||0)+t.bleed;e.bleedTime=3}
  if(t.woundStack&&!e.dead)e.spikeWounds=(e.spikeWounds||0)+t.woundStack/.25;
+ if(t.vengeance&&!e.dead){e.vengeanceStacks=Math.min(5,(e.vengeanceStacks||0)+1);e.vengeanceTime=8;}
 combatEffect('blast',[{x:e.x,y:e.y}],'#ffb35c',14);if(e.dead)break}}}else fx(CX,CY,'#d6f4ff',15);fx(CX+(e.x-CX)/Math.max(1,d)*KEEP_WALL,CY+(e.y-CY)/Math.max(1,d)*KEEP_WALL,'#ff5c68',14)}if(e.hp<=0)kill(e)});S.enemies=S.enemies.filter(e=>!e.dead);S.shots.forEach(v=>v.life-=dt);S.shots=S.shots.filter(v=>v.life>0);S.fx.forEach(v=>v.life-=dt);S.fx=S.fx.filter(v=>v.life>0);S.combatFx.forEach(v=>v.life-=dt);S.combatFx=S.combatFx.filter(v=>v.life>0);S.groundFx.forEach(v=>v.life-=dt);S.groundFx=S.groundFx.filter(v=>v.life>0);S.goldPops.forEach(v=>{v.life-=dt;v.y-=19*dt});S.goldPops=S.goldPops.filter(v=>v.life>0);if(!S.clearUsed&&S.hp<=S.maxHp*.01){S.hp=S.maxHp*.01;S.clearUsed=true;S.clearAuto=true;S.enemies=[];log('Emergency Clear auto-cast at 1% HP: enemies removed, no kill gold and no healing.')}if(S.hp<=0){S.hp=0;S.over=true;modal('Tower Destroyed','Survived '+clock(S.time)+'. Kills: '+S.kills+'.','New Run')}ui()}
 function drawCreep(e){
  const r=e.r, body=e.boss?'#a92c4e':e.poison?'#72b64e':e.fire?'#e86a36':e.frost?'#5ab5d5':e.color||'#c06c59';
@@ -909,12 +1015,12 @@ $('reroll').onclick=()=>reroll();$('clear').onclick=()=>{if(S.clearUsed||S.over)
 const guideOverlay=$('guideOverlay'),guideTitle=$('guideTitle'),guideBody=$('guideBody'),guideActions=$('guideActions');
 let guidePage='how',guideWelcome=true;
 const GUIDE_CONTENT={
-how:`<p class="guidePill">WELCOME · 15-MINUTE SURVIVAL</p>
+how:`<p class="guidePill">WELCOME TO TOWER SURVIVOR - BETA VERSION</p>
 <p>Defend the central castle for 15 minutes, then defeat the boss. Build a strategy from random shop offers and keep your castle alive.</p>
 <h3>4 Tower Slots — Choose your damage dealers</h3>
 <p>The <b>top four cards</b> let you choose your damage dealers. Each purchased card is removed until the shop refreshes.</p><h3>4 Support Slots</h3><p>The <b>bottom four cards</b> offer upgrades for your castle, economy, and tower damage.</p>
 <h3>Rerolls and refreshes</h3>
-<p>You start with <b>6 free rerolls</b> before your first purchase. After buying anything, rerolls cost gold, starting at <b>100g</b> and increasing by 100g per paid reroll, up to <b>1,000g</b>. Reroll limits depend on the round. The shop refreshes automatically every 30 seconds; rerolling may delay the next refresh so it occurs at least 15 seconds later.</p>
+<p>You start with <b>6 free rerolls</b> before your first purchase. After buying anything, rerolls cost gold, starting at <b>100g</b> and increasing by 100g per paid reroll, up to <b>1,000g</b>. Reroll limits depend on the round. The shop refreshes automatically every 30 seconds; rerolling may delay the next refresh so it occurs at least 15 seconds later. One Common tower appears in every shop through Level 15; from Level 16 onward, each shop has a 60% chance of offering one Common.</p>
 <h3>Damage types</h3>
 <p><b>Normal</b> is balanced; <b>Piercing</b> focuses on precise damage; <b>Magic</b> uses spells and effects; <b>Chaos</b> brings unpredictable heavy offense; <b>Siege</b> favors powerful slower hits; <b>Spikes</b> retaliates when your castle takes damage. Fire, Frost, and Poison can add secondary effects.</p>
 <h3>Build strategies</h3>
@@ -926,11 +1032,14 @@ mechanics:`<p class="guidePill">REFERENCE · GAME RULES</p>
 <h3>Attack patterns</h3>
 <ul><li><b>Single Target:</b> damages one creep per attack.</li><li><b>Barrage:</b> fires frequent smaller projectiles.</li><li><b>Bounce:</b> chains between multiple nearby enemies; stun bounces lose duration on each jump.</li><li><b>Splash:</b> hits a primary target and nearby creeps within a circular damage radius. The visual impact is an irregular ground decal.</li><li><b>Area:</b> damages enemies within a circular zone around the impact, with lower damage per target.</li><li><b>Spikes:</b> retaliates after qualifying castle damage, rather than attacking on a timer.</li></ul>
 <h3>Mana Shield, armor, and evasion</h3>
-<p><b>Important order:</b> Evasion is checked first. On a hit, armor reduces the incoming damage, flat blocking is applied, and Aegis protection reduces damage while shield is present. Mana Shield absorbs the remaining damage before any overflow reaches HP.</p>
-<p>Armor prevents <b>1% per point</b>, capped at <b>50%</b>. Evasion chance is capped at <b>40%</b>. Aegis Barrier grants <b>20% less shield-active damage</b> per purchase with diminishing returns, capped at <b>50%</b>.</p>
-<p>Mana Shield automatically restores <b>5% of maximum shield per second</b>, plus any shield-regeneration upgrades. Shield growth increases maximum and current shield. HP Growth similarly raises maximum and current HP over time.</p>
-<h3>Stun and elemental effects</h3>
-<p>Single-target stuns last 1 second on ordinary creeps. Bounce stuns diminish with each jump. Bosses receive only <b>10%</b> of normal stun duration. Frost slows, while Fire and Poison apply ongoing damage.</p>
+<p><b>Important order:</b> Evasion is checked first. On a hit, armor reduces the incoming damage, flat blocking is applied, and Arcane Barrier protection reduces damage only while the barrier is active. Mana Shield absorbs the remaining damage before any overflow reaches HP.</p>
+<p>Armor prevents <b>1% per point</b>, capped at <b>50%</b>. Evasion chance is capped at <b>40%</b>. Arcane Barrier grants <b>15% less incoming damage</b> per purchase with diminishing returns, capped at <b>50%</b>. The barrier deactivates when Mana Shield reaches zero and reactivates only once shield exceeds <b>150 points</b>. While inactive, even a partially regenerated shield absorbs damage but provides no Arcane Barrier reduction.</p>
+<p>Mana Shield automatically restores a flat <b>50 shield per second</b>, plus any shield-regeneration upgrades. Shield growth increases maximum and current shield. HP Growth similarly raises maximum and current HP over time.</p>
+<h3>Secondary effects: Fire, Frost, Poison</h3>
+<p><b>Fire:</b> each source tower burns for 5s, dealing (15 + 0.7% of target maximum HP) DPS, scaled by damage upgrades. Repeated hits from the same tower refresh rather than duplicate its burn; different towers stack. Bosses resist 50% of the percentage-HP portion.</p>
+<p><b>Frost:</b> each hit adds 1.3 chill points, up to 5. Chill decays by 1 point per second. Each point reduces movement speed by 9%, up to a 40% slow. Frost does not slow attacks.</p>
+<p><b>Poison:</b> each tower applies up to 5 stacks for 8s. Each stack deals (2.5 + 0.125% of target maximum HP) DPS, scaled by damage upgrades. Different towers stack independently. Each stack slows attacks by 8%, capped at 40% total. Bosses resist 50% of the percentage-HP portion.</p><p><b>Lingering zones:</b> elemental Splash and Area attacks leave 1.5s ground effects that apply their status every 0.5s, but never repeat direct attack damage. Different source towers can stack Fire and Poison; overlapping zones from the same tower cannot multiply its DPS.</p><p><b>Vengeful Thorns:</b> each retaliation adds +5% damage taken from future Spikes hits only, up to +25% for 8s. The triggering hit is not amplified.</p>
+<p><b>Stun:</b> stops movement and attacks. Single-target stuns last 1 second; Bounce stun duration decreases on successive targets (1.00 / 0.70 / 0.49 / 0.34 / 0.24 seconds). Bosses receive only <b>10%</b> of normal stun duration. New stuns do not add durations together; the longer remaining stun wins.</p>
 <h3>Economy and rarities</h3>
 <p>Gold comes from passive income and kills. Creep bounty is reduced by 25% from the original economy, and later rounds scale income down. Common costs <b>500g</b>, Uncommon <b>2,000g</b>, Rare <b>5,000g</b>, and Epic <b>10,000g</b>. Epics enter the offer pool from Level 6 but may take time to afford.</p>
 <h3>Clear and victory</h3>
