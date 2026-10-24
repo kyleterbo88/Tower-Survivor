@@ -1,3 +1,15 @@
+v121 — Single Target ability labels now depend only on rarity: Common Direct Hit, Uncommon Focused Hit, Rare Heavy Hit, Epic Devastating Hit. Applies to every damage type, including Chaos. No combat balance changes.
+
+v120 — Tower description clarity: Area 25% is damage per target, not hit chance or a secondary effect. Area deals an additional 30% of that applied damage over 2 seconds. Splash 70%, Barrage 62%, Bounce 72% decay. Primary → secondary → special. Frost now lists exact slow mechanics; names identify elemental effects; compact tower tiles. No combat balance changes.
+
+v120 — Consistent tower ability wording: use imperative verbs Reflect, Block, Heal, Apply, Stun, Restore, Damage, Chain and Cast across Spikes and other towers. No combat changes.
+
+Tower Survivor v118 — HUD center alignment and consistent Spikes descriptions.
+HUD labels and values are centered in their boxes; Owned Towers count centered below title; Spikes descriptions use current base reflect damage after damage upgrades, with concise blocks and unique effects. No combat balance changes.
+
+Tower Survivor v117 — Hotfix: automatic refresh could freeze game simulation.
+Fixed undefined dt reference inside refreshAll(), which raised ReferenceError when an automatic 30-second refresh occurred. Removed unrelated announcement decay and castle-panel rendering from refreshAll; both are already handled in update(dt). No gameplay balance changes.
+
 Tower Survivor v116 — Ankh description and mechanics documentation
 - Shortened Ankh item and badge description by removing emergency Clear sentence.
 - Game Mechanics explicitly documents Ankh activation before automatic emergency Clear.
