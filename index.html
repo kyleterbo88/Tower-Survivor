@@ -200,7 +200,7 @@
 #ownedPanel .ownedBuffStack{width:100%;flex-direction:row;justify-content:center;flex-wrap:wrap;margin:0}
 #ownedPanel .ownedBuffStack>span{flex:0 1 auto}
 
-/* v125: beginner navigation guide; v121: four readable lines in tower tile ability descriptions. */
+/* v126: beginner navigation guide; v121: four readable lines in tower tile ability descriptions. */
 #towers .towername{height:calc(2.6 * 1.02em);line-height:1.02;display:-webkit-box;-webkit-line-clamp:3;line-clamp:3}
 #towers .details{gap:0;grid-template-rows:repeat(4,minmax(0,auto)) minmax(0,1fr)}
 #towers .tower-primary,#towers .tower-secondary{height:13px;min-height:13px;line-height:1;padding-top:0;padding-bottom:0}
@@ -209,7 +209,7 @@
 @media(max-height:700px){#towers .tower-primary,#towers .tower-secondary{height:12px;min-height:12px}#towers .tower-ability{font-size:clamp(6.5px,1.65vw,8px)}}
 @media(min-width:650px){#towers .tower-primary,#towers .tower-secondary{height:18px;min-height:18px}#towers .tower-ability{font-size:11px}}
 </style></head><body><div id="app">
-<header><div><h1>🏰 Tower Survivor v125</h1></div></header>
+<header><div><h1>🏰 Tower Survivor v126</h1></div></header>
 <div class="stats">
   <div class="stat statIcon"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#ff405c" d="M12 21s-9-5.8-9-12a5.1 5.1 0 0 1 9-3.1A5.1 5.1 0 0 1 21 9c0 6.2-9 12-9 12Z"/><path fill="#ff8090" opacity=".65" d="M6 8c.5-2 2-2.6 3.4-1.6" stroke="#ffb4be" stroke-width="1.3" stroke-linecap="round"/></svg><div class="statBody"><div class="label">Tower HP</div><div class="val" id="hp">2,500 / 2,500</div></div></div><div class="bar"><div id="hpbar" style="width:100%"></div></div></div>
   <div class="stat statIcon" id="shieldStat" style="visibility:hidden"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 21 5v6c0 5.5-3.5 9-9 11-5.5-2-9-5.5-9-11V5Z" fill="#169bff"/><path d="M12 3.5 5 6v5c0 4.5 2.5 7.2 7 9Z" fill="#63d8ff"/><path d="M12 3.5 19 6v5c0 4.5-2.5 7.2-7 9Z" fill="#2680e8"/></svg><div class="statBody"><div class="label">Mana Shield</div><div class="val" id="shieldValue">0 / 0</div></div></div><div class="bar"><div id="shieldBar" style="width:0%;background:#67caff"></div></div></div>
@@ -651,18 +651,19 @@ function spikeDescription(t){
  const damage=t.dmg*(1+S.damage)*(1+(S.typedDamage.Spikes||0));
  const reflect='Reflect '+(Math.round(damage*100)/100).toFixed(2).replace(/\.?0+$/,'')+' damage';
  switch(t.name){
-  case 'Iron Thorns':return reflect;
+  case 'Iron Thorns':return reflect+'; Block '+t.flatBlock+' damage';
   case 'Thorn Ward':return reflect+'; Block '+t.flatBlock+' damage per incoming attack.';
   case 'Iron Bastion':return reflect+'; Block '+t.flatBlock+' damage; Heal '+t.healWhenHit+' HP per retaliation.';
   case 'Mending Thorns':return reflect+'; Heal '+t.healWhenHit+' HP per retaliation.';
-  case 'Bulwark of Thorns':return reflect+' + 10% of attacker max HP; blocks '+t.flatBlock+' damage.';
-  case 'Thorn Growth':return reflect+' + '+(t.hpReflect*100)+'% of castle max HP; blocks '+t.flatBlock+' damage.';
+  case 'Bulwark of Thorns':return reflect+' + 10% attacker max HP; Block '+t.flatBlock+' damage.';
+  case 'Thorn Growth':return reflect+' + '+(t.hpReflect*100)+'% castle max HP; Block '+t.flatBlock+' damage.';
   case 'Wrath of Roots':return reflect+' + '+(t.hpReflect*100)+'% of castle max HP.';
   case 'Splinter Guard':return reflect+'; +50% vs Light armor; Block '+t.flatBlock+' damage.';
   case 'Barbed Fortress':return reflect+'; Apply '+t.bleed+' bleed damage/s for 3s; Block '+t.flatBlock+' damage.';
   case 'Serrated Grudge':return reflect+'; Apply stacking +25% Spikes vulnerability per hit; Block '+t.flatBlock+' damage.';
   case 'Reprisal Coil':return reflect+'; +55% vs ranged attackers; Block '+t.flatBlock+' damage.';
-  case 'Crown of Thorns':return reflect+'; Apply Poison (up to 5 stacks).';
+  case 'Crown of Thorns':return reflect+'; Apply Poison (up to 5 stacks/source).';
+  case 'Vengeful Thorns':return reflect+'; Apply +5% Spikes damage taken per retaliation (max +25%, 8s).';
   default:return reflect+(t.flatBlock?'; Block '+t.flatBlock+' damage.':'.');
  }
 }
@@ -679,13 +680,14 @@ function ability(t){
  if(t.mod==='Fire')parts.push('Apply Burn 5s');
  if(t.mod==='Poison')parts.push('Apply Poison 8s (up to 5 stacks/source)');
  if(t.mod==='Frost')parts.push('Apply Chill +1.3/hit; -9% speed/pt (max 40%)');
- if(t.stun)parts.push('Stun '+(t.pattern==='Bounce'?'up to 5 targets':'target')+' for 1s (diminishing)');
+ if(t.stun)parts.push('Stun '+(t.pattern==='Bounce'?'up to 5 targets':'target')+' for '+Number(t.stun).toFixed(t.stun%1?1:0)+'s (diminishing)');
  // Special mechanics last.
+ if(t.exposeType)parts.push('Apply +25% '+t.exposeType+' damage taken per hit (stacks)');
  if(t.hpPerHit)parts.push('Gain '+t.hpPerHit+' max HP; Heal '+t.hpPerHit+' HP/hit');
- if(t.shieldPerHit)parts.push('Gain '+t.shieldPerHit+' max shield; Restore '+t.shieldPerHit+'/hit');
- if(t.shieldLeech)parts.push('Restore shield = 30% of damage dealt');
+ if(t.shieldPerHit)parts.push('Gain '+t.shieldPerHit+' max shield; Restore '+t.shieldPerHit+' shield/hit; Unlock shield');
+ if(t.shieldLeech)parts.push('Restore shield = 30% damage dealt; Unlock shield');
  if(t.hpLeech)parts.push('Heal HP = 30% of damage dealt');
- if(t.range===300&&['Single Target','Splash','Bounce'].includes(t.pattern)&&t.mod==='None')parts.push('Cast extra spell every 3s');
+ if(t.range===300&&['Single Target','Splash','Bounce'].includes(t.pattern)&&t.mod==='None')parts.push('Cast 80% damage spell at distant target every 3s');
  return parts.join('; ');
 }
 function render(){
@@ -1344,7 +1346,7 @@ $('levelButton').addEventListener('click',openLevelDetails);$('levelButton').add
 const guideOverlay=$('guideOverlay'),guideTitle=$('guideTitle'),guideBody=$('guideBody'),guideActions=$('guideActions');
 let guidePage='how',guideWelcome=true;
 const GUIDE_CONTENT={
-patch:`<p class="guidePill">OFFLINE UPDATE HISTORY · v125</p><p>Open a version below to read its changes. Latest updates appear first; this archive begins at v31.</p><details class="patchEntry"><summary>v125 — Offline patch notes menu and Dread Knight announcement verification</summary><div class="patchText"><h3>v125 — Offline patch notes menu and Dread Knight announcement verification</h3>
+patch:`<p class="guidePill">OFFLINE UPDATE HISTORY · v126</p><p>Open a version below to read its changes. Latest updates appear first; this archive begins at v31.</p><details class="patchEntry"><summary>v126 — Tower ability description audit</summary><div class="patchText"><p>Iron Thorns now explicitly displays Block 10 damage. Audited all tower descriptions against combat abilities: added missing Vengeful Thorns stacking debuff, armor-type vulnerability from special Splash towers, accurate 0.3s Thunderclap stun, Mana Shield unlocks, and 80% damage on periodic distant spells. Standardized Spikes Block wording. No balance changes.</p></div></details><details class="patchEntry"><summary>v125 — Offline patch notes menu and Dread Knight announcement verification</summary><div class="patchText"><h3>v125 — Offline patch notes menu and Dread Knight announcement verification</h3>
 <ul>
 <li>Added <strong>Patch Notes</strong> to the in-game Menu, opening a scrollable offline history with collapsible version sections and latest changes first.</li>
 <li>Updated How to Play to direct players to the Patch Notes menu.</li>

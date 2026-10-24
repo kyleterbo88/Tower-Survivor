@@ -1,4 +1,6 @@
-v125: Offline, expandable Patch Notes menu with available v31–v125 history. Verified Dread Knight announcement is DREAD KNIGHT APPROACHES. No balance changes.
+v126 — Tower ability descriptions audited against combat logic. Iron Thorns now shows Block 10 damage; missing special mechanics and incorrect stun duration corrected. No combat changes.
+
+v126: Offline, expandable Patch Notes menu with available v31–v126 history. Verified Dread Knight announcement is DREAD KNIGHT APPROACHES. No balance changes.
 
 v124: Owned Towers groups sort by combined effective damage (descending) within each damage type, refreshed on menu open. Floating castle bars are translucent, rounded and match HUD HP/Mana fill colors. No balance changes.
 
