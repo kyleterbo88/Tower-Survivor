@@ -10,7 +10,7 @@
 #ownedToggle{position:absolute;right:8px;top:8px;z-index:3;width:39px;height:39px;border:1px solid #d8e4ef77;border-radius:9px;background:#0d1b27a8;color:#e4f6ff;font-size:22px;display:flex;align-items:center;justify-content:center;touch-action:none;user-select:none;-webkit-user-select:none;backdrop-filter:blur(3px);padding:0}
 #ownedToggle:active,#ownedToggle[aria-expanded=true]{background:#1e4059df;border-color:#f5c451}
 #ownedCount{position:absolute;right:-3px;bottom:-4px;min-width:17px;height:17px;border-radius:9px;padding:1px 3px;background:#e7ba4b;color:#111a20;font-size:10px;font-weight:900;line-height:15px}
-#ownedPanel{position:absolute;right:7px;top:52px;z-index:3;width:min(310px,calc(100% - 14px));max-height:calc(100% - 62px);overflow:auto;overscroll-behavior:contain;border:1px solid #d3ac56;border-radius:9px;background:#111d2aef;box-shadow:0 6px 24px #0009;color:#e8eff5;padding:8px;backdrop-filter:blur(5px)}
+#ownedPanel{position:absolute;left:calc(50% - 24px);right:auto;top:48px;transform:translateX(-50%);z-index:5;width:min(350px,calc(100% - 68px));max-height:calc(100% - 56px);overflow:auto;overscroll-behavior:contain;border:1px solid #d3ac56;border-radius:9px;background:#111d2aef;box-shadow:0 6px 24px #0009;color:#e8eff5;padding:8px;backdrop-filter:blur(5px)}
 #ownedPanel[hidden]{display:none}
 .ownedHeader{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;margin-bottom:5px;color:#ffe19b}
 .ownedHint{font-size:9px;color:#b8c7d2;font-weight:400}
@@ -25,7 +25,7 @@
 /* Compact inventory rarity dots and Crown Challenges */
 .ownedItemName{color:#f1f5f7!important}.ownedRarity{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:5px;vertical-align:middle;opacity:.75;border:1px solid #ffffff55}.ownedGroupTitle{color:#f4d68e}.ownedItemDetail .damageType{font-weight:800}
 #crownToggle{position:absolute;right:8px;top:53px;z-index:4;width:39px;height:39px;border:1px solid #e8bc6188;border-radius:9px;background:#1d2535b9;color:#f6d174;font-size:23px;padding:0;backdrop-filter:blur(3px)}#crownToggle[aria-expanded=true]{background:#5b4529e8}
-#crownPanel{position:absolute;right:7px;top:98px;z-index:5;width:min(350px,calc(100% - 14px));max-height:calc(100% - 108px);overflow:auto;overscroll-behavior:contain;border:1px solid #d7b45b;border-radius:10px;background:#111d2af7;box-shadow:0 7px 25px #000b;padding:9px;color:#f1f2f4;backdrop-filter:blur(5px)}#crownPanel[hidden]{display:none}.challengeSummary{font-size:10px;color:#d9cbaa;line-height:1.4;margin:6px 0}.challengeGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.challengeTile{min-height:69px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:1px solid #52616e;background:#20303d;border-radius:8px;padding:5px 2px;font-size:9px;font-weight:700;line-height:1.1;text-align:center}.challengeTile .symbol{font-size:23px}.challengeTile.selected{border-color:#f6d174;background:#504326}.challengeTile.completed{box-shadow:inset 0 0 0 1px #d5ad58}.challengeDetail{border-top:1px solid #52616e;margin-top:9px;padding-top:8px;font-size:11px;line-height:1.45}.challengeAction{margin-top:7px;background:#675022;border-color:#d7b45b;width:100%}.challengeAction:disabled{opacity:.45}.challengeClose{background:none;border:0;color:#d8e2eb;font-size:11px;padding:2px 5px}
+#crownPanel{position:absolute;left:calc(50% - 24px);right:auto;top:48px;transform:translateX(-50%);z-index:5;width:min(350px,calc(100% - 68px));max-height:calc(100% - 56px);overflow:auto;overscroll-behavior:contain;border:1px solid #d7b45b;border-radius:10px;background:#111d2af7;box-shadow:0 7px 25px #000b;padding:9px;color:#f1f2f4;backdrop-filter:blur(5px)}#crownPanel[hidden]{display:none}.challengeSummary{font-size:10px;color:#d9cbaa;line-height:1.4;margin:6px 0}.challengeGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.challengeTile{min-height:69px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:1px solid #52616e;background:#20303d;border-radius:8px;padding:5px 2px;font-size:9px;font-weight:700;line-height:1.1;text-align:center}.challengeTile .symbol{font-size:23px}.challengeTile.selected{border-color:#f6d174;background:#504326}.challengeTile.completed{box-shadow:inset 0 0 0 1px #d5ad58}.challengeDetail{border-top:1px solid #52616e;margin-top:9px;padding-top:8px;font-size:11px;line-height:1.45}.challengeAction{margin-top:7px;background:#675022;border-color:#d7b45b;width:100%}.challengeAction:disabled{opacity:.45}.challengeClose{background:none;border:0;color:#d8e2eb;font-size:11px;padding:2px 5px}
 
 /* One-time pre-round challenge invitation; anchored beside the crown button. */
 #challengeNudge{position:absolute;right:77px;top:58px;z-index:4;max-width:min(205px,calc(100% - 112px));padding:9px 11px;border:1px solid #e7bf67;border-radius:10px;background:#1a2635ef;color:#ffdf8b;font-size:13px;font-weight:850;line-height:1.2;box-shadow:0 4px 14px #0008;pointer-events:none;animation:challengeNudgeIn .5s ease-out}
@@ -138,7 +138,7 @@
 #levelOverlay .levelHelp{font-size:11px;line-height:1.5;color:#a9bbc7;margin:12px 0}
 #levelOverlay button{width:100%;padding:10px;margin-top:12px}
 </style></head><body><div id="app">
-<header><div><h1>🏰 Tower Survivor v101</h1></div></header>
+<header><div><h1>🏰 Tower Survivor v104</h1></div></header>
 <div class="stats">
   <div class="stat statIcon"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#ff405c" d="M12 21s-9-5.8-9-12a5.1 5.1 0 0 1 9-3.1A5.1 5.1 0 0 1 21 9c0 6.2-9 12-9 12Z"/><path fill="#ff8090" opacity=".65" d="M6 8c.5-2 2-2.6 3.4-1.6" stroke="#ffb4be" stroke-width="1.3" stroke-linecap="round"/></svg><div class="statBody"><div class="label">Tower HP</div><div class="val" id="hp">2,500 / 2,500</div></div></div><div class="bar"><div id="hpbar" style="width:100%"></div></div></div>
   <div class="stat statIcon" id="shieldStat" style="visibility:hidden"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 21 5v6c0 5.5-3.5 9-9 11-5.5-2-9-5.5-9-11V5Z" fill="#169bff"/><path d="M12 3.5 5 6v5c0 4.5 2.5 7.2 7 9Z" fill="#63d8ff"/><path d="M12 3.5 19 6v5c0 4.5-2.5 7.2-7 9Z" fill="#2680e8"/></svg><div class="statBody"><div class="label">Mana Shield</div><div class="val" id="shieldValue">0 / 0</div></div></div><div class="bar"><div id="shieldBar" style="width:0%;background:#67caff"></div></div></div>
@@ -704,6 +704,17 @@ function renderLevelDetails(){
  const lvl=Math.min(30,S.level), interval=waveSpawnInterval(lvl), expected=Math.round(30/interval);
  let html=levelRow('Expected Creeps','~'+expected);
  html+='<p class="levelHelp">Creep Types — armor and total HP at full health:</p>';
+ html+='<p class="levelHelp">Armor Matchups — damage received by each armor type (100% = normal damage):</p>';
+ const armorMatchups=[
+  ['Light','Piercing +35% · Spikes +20% · Chaos +10%','Siege −15%'],
+  ['Medium','Magic +25% · Chaos +10%','No damage-type penalties'],
+  ['Heavy','Siege +40% · Chaos +10%','Piercing −20% · Spikes −10%']
+ ];
+ armorMatchups.forEach(([armor,bonus,penalty])=>{
+  html+=levelRow(armor+' Armor','<span style="color:#85e3a9">'+bonus+'</span><br><span style="color:#f1aa9b">'+penalty+'</span>');
+ });
+ html+='<p class="levelHelp">Normal damage is 100% against every armor type. Unlisted matchups are also 100%. Percentages reflect the actual armor multipliers before other bonuses.</p>';
+
  if(S.roundTypeLevel===lvl&&S.roundTypes.length===3){
   S.roundTypes.forEach(type=>{html+=levelRow(type.name,type.armor+' armor · '+creepLevelHp(lvl,type).toLocaleString()+' HP')});
  }else{
