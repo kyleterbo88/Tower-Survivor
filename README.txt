@@ -1,3 +1,5 @@
+v127 — End-of-run battlefield banners and unlimited stackable Ankhs. Restart via Menu. No balance changes.
+
 v126 — Tower ability descriptions audited against combat logic. Iron Thorns now shows Block 10 damage; missing special mechanics and incorrect stun duration corrected. No combat changes.
 
 v126: Offline, expandable Patch Notes menu with available v31–v126 history. Verified Dread Knight announcement is DREAD KNIGHT APPROACHES. No balance changes.
