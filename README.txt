@@ -1,3 +1,5 @@
+v125: Offline, expandable Patch Notes menu with available v31–v125 history. Verified Dread Knight announcement is DREAD KNIGHT APPROACHES. No balance changes.
+
 v124: Owned Towers groups sort by combined effective damage (descending) within each damage type, refreshed on menu open. Floating castle bars are translucent, rounded and match HUD HP/Mana fill colors. No balance changes.
 
 v124 — How to Play now explains the clickable Central Castle, Owned Towers icon, Income HUD, and Menu, listing the information each opens. Detailed game rules remain in Game Mechanics. No balance changes.

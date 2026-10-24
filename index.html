@@ -134,7 +134,7 @@
 #guideOverlay{position:fixed;inset:0;z-index:15;background:#061019d9;display:flex;align-items:center;justify-content:center;padding:14px;padding-top:max(14px,env(safe-area-inset-top));padding-bottom:max(14px,env(safe-area-inset-bottom))}
 #guideOverlay[hidden]{display:none}
 .guideDialog{width:min(510px,100%);max-height:92dvh;overflow:auto;overscroll-behavior:contain;background:#172734;border:1px solid #597184;border-radius:14px;box-shadow:0 18px 55px #000b;padding:16px;color:#edf5f7}
-.guideDialog h2{font-size:19px;margin:0 0 7px}.guideDialog h3{font-size:13px;color:#f6d78b;margin:14px 0 5px}.guideDialog p,.guideDialog li{font-size:12px;line-height:1.48;color:#d3e0e8}.guideDialog p{margin:6px 0}.guideDialog ul{padding-left:18px;margin:6px 0}.guideDialog .guideTop{display:flex;justify-content:space-between;gap:10px;align-items:center}.guideDialog .guideClose{background:transparent;border:1px solid #657b89;padding:4px 9px}.guideActions{display:grid;gap:8px;margin-top:15px}.guideActions button{padding:11px 8px;font-size:12px}.guidePrimary{background:#426348;border-color:#8ab68a}.guideWarning{color:#f6d78b}.guidePill{display:inline-block;border:1px solid #567184;border-radius:12px;padding:2px 7px;font-size:10px;color:#a9d4e6}
+.guideDialog h2{font-size:19px;margin:0 0 7px}.guideDialog h3{font-size:13px;color:#f6d78b;margin:14px 0 5px}.guideDialog p,.guideDialog li{font-size:12px;line-height:1.48;color:#d3e0e8}.guideDialog p{margin:6px 0}.guideDialog ul{padding-left:18px;margin:6px 0}.guideDialog .guideTop{display:flex;justify-content:space-between;gap:10px;align-items:center}.guideDialog .guideClose{background:transparent;border:1px solid #657b89;padding:4px 9px}.guideActions{display:grid;gap:8px;margin-top:15px}.guideActions button{padding:11px 8px;font-size:12px}.patchEntry{margin:8px 0;border:1px solid #476071;border-radius:8px;background:#14232c}.patchEntry summary{cursor:pointer;padding:10px;font-size:12px;font-weight:750;color:#f2d88e}.patchText{padding:2px 11px 10px;overflow-wrap:anywhere}.patchText h1,.patchText h2,.patchText h3{font-size:13px;margin:12px 0 5px}.patchText p,.patchText li{font-size:11px;line-height:1.5}.patchText code{white-space:normal}.patchText table{font-size:10px;display:block;overflow-x:auto}.patchText th,.patchText td{border:1px solid #476071;padding:3px}.guidePrimary{background:#426348;border-color:#8ab68a}.guideWarning{color:#f6d78b}.guidePill{display:inline-block;border:1px solid #567184;border-radius:12px;padding:2px 7px;font-size:10px;color:#a9d4e6}
 #levelButton{cursor:pointer;touch-action:manipulation}#levelButton:focus-visible{outline:2px solid var(--gold)}
 #levelOverlay{display:none;position:fixed;inset:0;z-index:13;align-items:center;justify-content:center;background:#071018e8;padding:16px}
 #levelOverlay .levelDialog{width:min(420px,100%);max-height:85dvh;overflow:auto;background:#192631;border:1px solid #526b7a;border-radius:14px;padding:16px}
@@ -200,7 +200,7 @@
 #ownedPanel .ownedBuffStack{width:100%;flex-direction:row;justify-content:center;flex-wrap:wrap;margin:0}
 #ownedPanel .ownedBuffStack>span{flex:0 1 auto}
 
-/* v124: beginner navigation guide; v121: four readable lines in tower tile ability descriptions. */
+/* v125: beginner navigation guide; v121: four readable lines in tower tile ability descriptions. */
 #towers .towername{height:calc(2.6 * 1.02em);line-height:1.02;display:-webkit-box;-webkit-line-clamp:3;line-clamp:3}
 #towers .details{gap:0;grid-template-rows:repeat(4,minmax(0,auto)) minmax(0,1fr)}
 #towers .tower-primary,#towers .tower-secondary{height:13px;min-height:13px;line-height:1;padding-top:0;padding-bottom:0}
@@ -209,7 +209,7 @@
 @media(max-height:700px){#towers .tower-primary,#towers .tower-secondary{height:12px;min-height:12px}#towers .tower-ability{font-size:clamp(6.5px,1.65vw,8px)}}
 @media(min-width:650px){#towers .tower-primary,#towers .tower-secondary{height:18px;min-height:18px}#towers .tower-ability{font-size:11px}}
 </style></head><body><div id="app">
-<header><div><h1>🏰 Tower Survivor v124</h1></div></header>
+<header><div><h1>🏰 Tower Survivor v125</h1></div></header>
 <div class="stats">
   <div class="stat statIcon"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#ff405c" d="M12 21s-9-5.8-9-12a5.1 5.1 0 0 1 9-3.1A5.1 5.1 0 0 1 21 9c0 6.2-9 12-9 12Z"/><path fill="#ff8090" opacity=".65" d="M6 8c.5-2 2-2.6 3.4-1.6" stroke="#ffb4be" stroke-width="1.3" stroke-linecap="round"/></svg><div class="statBody"><div class="label">Tower HP</div><div class="val" id="hp">2,500 / 2,500</div></div></div><div class="bar"><div id="hpbar" style="width:100%"></div></div></div>
   <div class="stat statIcon" id="shieldStat" style="visibility:hidden"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 21 5v6c0 5.5-3.5 9-9 11-5.5-2-9-5.5-9-11V5Z" fill="#169bff"/><path d="M12 3.5 5 6v5c0 4.5 2.5 7.2 7 9Z" fill="#63d8ff"/><path d="M12 3.5 19 6v5c0 4.5-2.5 7.2-7 9Z" fill="#2680e8"/></svg><div class="statBody"><div class="label">Mana Shield</div><div class="val" id="shieldValue">0 / 0</div></div></div><div class="bar"><div id="shieldBar" style="width:0%;background:#67caff"></div></div></div>
@@ -1344,6 +1344,295 @@ $('levelButton').addEventListener('click',openLevelDetails);$('levelButton').add
 const guideOverlay=$('guideOverlay'),guideTitle=$('guideTitle'),guideBody=$('guideBody'),guideActions=$('guideActions');
 let guidePage='how',guideWelcome=true;
 const GUIDE_CONTENT={
+patch:`<p class="guidePill">OFFLINE UPDATE HISTORY · v125</p><p>Open a version below to read its changes. Latest updates appear first; this archive begins at v31.</p><details class="patchEntry"><summary>v125 — Offline patch notes menu and Dread Knight announcement verification</summary><div class="patchText"><h3>v125 — Offline patch notes menu and Dread Knight announcement verification</h3>
+<ul>
+<li>Added <strong>Patch Notes</strong> to the in-game Menu, opening a scrollable offline history with collapsible version sections and latest changes first.</li>
+<li>Updated How to Play to direct players to the Patch Notes menu.</li>
+<li>Verified the spawn announcement is <strong>DREAD KNIGHT APPROACHES</strong>, not “Dead Knight”; kept the correct wording and added a regression check.</li>
+<li>No combat or balance changes.</li>
+</ul>
+</div></details><details class="patchEntry"><summary>v124 — Owned Towers damage sorting and floating bar polish</summary><div class="patchText"><h3>v124 — Owned Towers damage sorting and floating bar polish</h3>
+<ul>
+<li>Within each damage-type section, grouped identical towers sort by their combined effective damage dealt this run, highest first. Ties sort by name then range; ranking refreshes when Owned Towers opens.</li>
+<li>Floating castle HP and Mana Shield bars now have rounded edges and greater translucency. Fill colors match the HUD exactly: HP <code>#62d99b</code>, Mana Shield <code>#67caff</code>.</li>
+<li>No combat or balance changes.</li>
+</ul>
+</div></details><details class="patchEntry"><summary>v123 — Castle Status layout cleanup</summary><div class="patchText"><h3>v123 — Castle Status layout cleanup</h3>
+<ul>
+<li>Moved the Floating HP &amp; Mana Shield bars toggle directly beneath the Castle Status title.</li>
+<li>Removed redundant Current HP and Mana Shield rows from the Castle Status panel; both remain visible in the main HUD.</li>
+<li>Merged Health &amp; Shield and Defensive Stats into a single <strong>DEFENSIVE STATS</strong> section containing regeneration, shield reduction, armor and evasion.</li>
+<li>Renamed <strong>Shield Damage Reduction</strong> to <strong>Mana Shield Damage Reduction</strong>.</li>
+<li>Updated How to Play guidance to reflect the new menu contents. No gameplay or balance changes.</li>
+</ul>
+</div></details><details class="patchEntry"><summary>v123 — How to Play navigation guide</summary><div class="patchText"><h3>v123 — How to Play navigation guide</h3>
+<ul>
+<li>Added beginner guidance for tapping the Central Castle (Castle Status and combat statistics), Owned Towers icon (tower roster and combat performance), Income HUD (income breakdown), and Menu (How to Play, Game Mechanics, Restart, Resume).</li>
+<li>Replaced detailed reroll rules in How to Play with a pointer to Game Mechanics. No gameplay or balance changes.</li>
+</ul>
+</div></details><details class="patchEntry"><summary>v121 — Rarity-based Single Target attack labels</summary><div class="patchText"><h3>v121 — Rarity-based Single Target attack labels</h3>
+<ul>
+<li>Common: <strong>Direct Hit</strong>; Uncommon: <strong>Focused Hit</strong>; Rare: <strong>Heavy Hit</strong>; Epic: <strong>Devastating Hit</strong>.</li>
+<li>Applied consistently to all Single Target towers, including Chaos, with dynamic damage displayed after the label.</li>
+<li>Removed the special-case wording for Chaos Single Target. No combat balance changes.</li>
+</ul>
+</div></details><details class="patchEntry"><summary>v120 — Clearer tower damage descriptions and elemental naming</summary><div class="patchText"><h3>v120 — Clearer tower damage descriptions and elemental naming</h3>
+<ul>
+<li>Clarified Area attacks: each enemy within 540 units takes <strong>25% of displayed tower damage per hit</strong>, not a 25% chance to be hit. Each affected enemy also receives an additional <strong>30% of the initial Area hit over 2 seconds</strong> (subject to armor).</li>
+<li>Added explicit per-target damage for Splash (70% of displayed damage within 300-unit radius), Barrage (62% to up to 3 enemies), and Bounce (up to 5 targets, first 100%, each later jump ×0.72).</li>
+<li>Frost descriptions now state +1.3 chill points per hit, -9% movement speed per point, maximum 40% slow; chill decays by 1 point/second.</li>
+<li>Descriptions consistently list primary damage, secondary effect (Fire/Frost/Poison/Stun), then special mechanic. Chaos Single Target now says “Heavy hit.”</li>
+<li>Added elemental naming cues to Magic Fire Barrage, Frost Veteran Marksman, Poison Ballista Battery, Poison Shrapnel Volley and Frost Abyssal Barrage.</li>
+<li>Compressed tower tile spacing and description typography for more multi-line ability text.</li>
+<li>No combat balance changes.</li>
+</ul>
+</div></details><details class="patchEntry"><summary>v120 — Tower ability description consistency</summary><div class="patchText"><h2>v120 — Tower ability description consistency</h2>
+<p>Standardized Spikes ability verbs to <strong>Reflect, Block, Heal, Apply</strong> and aligned other tower ability descriptions to short, active, imperative wording (e.g., Stun, Restore, Damage, Chain, Cast). Dynamic reflection values and existing ability mechanics remain unchanged. No gameplay balance changes.</p>
+<h1>Tower Survivor — Complete Patch Notes</h1>
+<p><strong>Current documented release:</strong> v123<br />
+<strong>Coverage:</strong> v31–v123<br />
+<strong>Prepared:</strong> October 24, 2026</p>
+<h2>Scope and reliability</h2>
+<p>Version-by-version development log compiled from locally archived game builds v31–v112 and the recorded release summaries. Versions 1–30 are not available as numbered source snapshots in this archive; their individual changes cannot be independently reconstructed. For earlier revisions (especially v31–v84), entries summarize identifiable changes rather than claiming a complete commit-by-commit history.</p>
+<h2>Latest release highlights</h2>
+<ul>
+<li><p><strong>v118:</strong> Centered text across HUD boxes and split score panels; centered Owned Towers title and tower count beneath; standardized Spikes ability text using actual base reflect damage after damage upgrades, including Thorn Ward block and other unique effects. No combat balance changes.</p>
+</li>
+<li><p><strong>v117 (hotfix):</strong> Fixed game simulation freeze caused by <code>refreshAll()</code> referencing undefined <code>dt</code> during automatic 30-second refresh. Removed unrelated announcement timer and castle-panel updates from refresh function (already run in <code>update(dt)</code>). No balance changes. Regression test confirmed refresh at 2:59.99 does not throw.</p>
+</li>
+<li><p><strong>v116:</strong> Ankh item and badge descriptions shortened; Game Mechanics explicitly states that Ankh triggers before automatic emergency Clear. No balance changes.</p>
+</li>
+<li><p><strong>v115:</strong> Magic shifted slightly more purple (#B59BFF); Ankh description shortened (max, 3X); Owned Towers tracking chips made smaller and title emphasized; Gold HUD text enlarged. Cosmetic/UI only. No balance changes.</p>
+</li>
+<li><p><strong>v114:</strong> Castle combat counters, per-source blocked/absorbed damage, attacks landed and evaded.</p>
+</li>
+<li><p><strong>v113:</strong> Spawn-triggered arrival text, clickable castle status popup, and optional floating HP/Mana Shield percentage meters.</p>
+</li>
+<li><p><strong>v112:</strong> Four new creeps introduced progressively from level 5; higher HP, weighted spawn shares, and accurate Level Details breakdown.</p>
+</li>
+<li><p><strong>v111:</strong> Five armor types, new damage matchup table, four-category spawn distribution and Hero minibosses at levels 5/10/15/20/25.</p>
+</li>
+<li><p><strong>v110:</strong> Magic changed to Celestial Purple (#A5B4FC), Piercing brightened to #FFE45C, Chaos lightened to #E87524; spell highlights coordinated. No rarity or combat changes.</p>
+</li>
+<li><p><strong>v109:</strong> Silver/gray Ankh icon inspired by Warcraft III.</p>
+</li>
+<li><p><strong>v108:</strong> Redesigned Level Details and added Critical Hit tracker.</p>
+</li>
+<li><p><strong>v107:</strong> Ankh possession icon and clickable description.</p>
+</li>
+<li><p><strong>v105:</strong> HUD information popups pause gameplay; Owned Towers and Challenges do not.</p>
+</li>
+<li><p><strong>v101:</strong> Spikes tower balance pass.</p>
+</li>
+<li><p><strong>v100:</strong> Normal and Chaos damage color changes.</p>
+</li>
+<li><p><strong>v96–97:</strong> Per-enemy stun diminishing returns with 10% floor.</p>
+</li>
+</ul>
+<h2>Complete version history</h2>
+</div></details><details class="patchEntry"><summary>v118</summary><div class="patchText"><h3>v118</h3>
+<p>Centered all HUD box labels and values, including split Damage/Income and HP/s/Armor cells. The Owned Towers count appears centered beneath the heading. Spikes tower descriptions consistently begin with their dynamically calculated reflection damage (including global and Spikes damage upgrades), followed by any blocking, healing, bonus, poison, or other ability. Iron Thorns now shows only “Reflect [actual damage] damage”; Thorn Ward shows “Reflect [actual damage] damage; blocks 40 damage per incoming attack.” Target-dependent and critical damage are not included in the static number. No damage or defense mechanics were changed.</p>
+</div></details><details class="patchEntry"><summary>v117</summary><div class="patchText"><h3>v117</h3>
+<p><strong>v117 (hotfix):</strong> Fixed game simulation freeze caused by <code>refreshAll()</code> referencing undefined <code>dt</code> during automatic 30-second refresh. Removed unrelated announcement timer and castle-panel updates from refresh function (already run in <code>update(dt)</code>). No balance changes. Regression test confirmed refresh at 2:59.99 does not throw.</p>
+</div></details><details class="patchEntry"><summary>v116</summary><div class="patchText"><h3>v116</h3>
+<p>Removed “Activates before emergency Clear” from the Ankh of Resurrection item and badge descriptions. Added an explicit activation-order statement to the Game Mechanics section: lethal hit → Ankh of Resurrection → automatic emergency Clear (if needed later). The existing Ankh-before-Clear behavior is unchanged.</p>
+</div></details><details class="patchEntry"><summary>v115</summary><div class="patchText"><h3>v115</h3>
+<p><strong>v115:</strong> Magic shifted slightly more purple (#B59BFF); Ankh description shortened (max, 3X); Owned Towers tracking chips made smaller and title emphasized; Gold HUD text enlarged. Cosmetic/UI only. No balance changes.</p>
+</div></details><details class="patchEntry"><summary>v114</summary><div class="patchText"><h3>v114</h3>
+<p><strong>Castle combat telemetry.</strong> Expanded the clickable central castle popup with attacks landed, attacks evaded, raw incoming damage, total damage blocked/absorbed, blocked by armor, blocked by evasion, blocked by flat thorn tower effects, blocked by Shield Barrier, absorbed by Mana Shield, and damage reaching castle HP. These counters reset for every run and update live while the menu is open.</p>
+<p><strong>Non-overlapping accounting.</strong> For each creep attack, mitigation is assigned once in the actual defense order: evasion → armor → thorn flat block → shield barrier → Mana Shield → castle HP. Shield absorption is included in the displayed defensive total, explicitly labeled as absorption rather than damage reduction. Reflected thorn damage remains offensive tower damage and is not counted as blocked. No damage or enemy balance values changed.</p>
+</div></details><details class="patchEntry"><summary>v113</summary><div class="patchText"><h3>v113</h3>
+<p><strong>Creep arrival notifications.</strong> On the first actual spawn of each new creep variant per run, a bold, slightly translucent white announcement appears beside the central castle on the side facing that creep's spawn location: “THE CULTISTS HAVE ARRIVED,” “BEWARE OF THE BERSERKER,” “NECROMANCERS HAVE BEEN UNLEASHED,” or “DREAD KNIGHT APPROACHES.” Every Hero miniboss announces “A POWERFUL FOE APPROACHES”; the final boss announces “THE FINAL BOSS HAS ARRIVED.” Announcements drift upward and fade over 2.2 seconds. They do not trigger at round start and do not pause combat.</p>
+<p><strong>Clickable castle status panel.</strong> Tapping the central castle opens a dismissible popup showing Armor, effective armor damage reduction, Evasion %, HP regeneration per second, current/max HP, current/max Mana Shield, and shield regeneration per second.</p>
+<p><strong>Optional on-castle percentage meters.</strong> Toggle additional floating green HP and blue Mana Shield percentage bars above the central castle. Existing HUD bars remain visible and unchanged. Default OFF; toggle selection is retained across new runs within the current page session. No balance changes.</p>
+</div></details><details class="patchEntry"><summary>v112</summary><div class="patchText"><h3>v112</h3>
+<p>Added four regular creep types: Cultist (Unarmored; level 5+; 100% of Footman base HP), Berserker (Medium; level 5+; 135%), Necromancer (Unarmored ranged; level 10+; 130%), and Dread Knight (Heavy; level 15+; 285%). New creeps have meaningful HP; armor, movement speed, attack behavior and relative frequency define their roles.</p>
+<p>Within eligible armor categories, new variants account for 6% of spawns at levels 5–9, 14% at 10–14, 25% at 15–19, 38% at 20–24, and 50% at 25–30. When two new variants are eligible within the same category, the share is split equally. The four-category armor spawn distribution remains 20% Unarmored / 40% Light / 30% Medium / 10% Heavy.</p>
+<p>Level Details now shows all eligible creep types, their calculated HP and their exact share of regular spawns. Hero miniboss HP uses the highest-HP eligible regular creep. No tower, damage-multiplier, shop, or economy changes.</p>
+</div></details><details class="patchEntry"><summary>v111</summary><div class="patchText"><h3>v111</h3>
+<p>Five armor types: Unarmored, Light, Medium, Heavy and Hero. Approved damage received percentages (Unarmored / Light / Medium / Heavy / Hero): Normal 75/85/125/100/100; Piercing 125/110/100/85/90; Magic 110/100/90/125/85; Chaos 85/100/100/100/125; Siege 125/90/85/110/100; Spikes 110/125/100/85/90. Every matchup stays within 75%–125%.</p>
+<p>Existing creeps reassigned: Warlock = Unarmored; Scout and Ranger = Light; Footman = Medium; Shieldbearer and Ogre Brute = Heavy. Four enemy categories spawn at 20%/40%/30%/10%, respectively. Hero armor is reserved for special enemies.</p>
+<p>One Hero-armored miniboss appears halfway through levels 5, 10, 15, 20 and 25, with HP 15% above the strongest regular creep selected for that level. Final boss uses Hero armor. Level Details now displays five armor columns, four creep types, updated spawn probabilities and miniboss details. No new regular creep types were added in this release.</p>
+</div></details><details class="patchEntry"><summary>v110</summary><div class="patchText"><h3>v110</h3>
+<p>Magic damage color changed from #9355DC to #A5B4FC (Celestial Purple) to distinguish it from Epic rarity. Piercing changed from #FFD84D to #FFE45C, and Chaos from #CC5500 to #E87524. Magic and Chaos effect highlights were coordinated. Rarity colors and combat balance remain unchanged.</p>
+</div></details><details class="patchEntry"><summary>v109</summary><div class="patchText"><h3>v109</h3>
+<p>Ankh possession icon restyled silver/gray, inspired by Warcraft III's Ankh of Reincarnation.</p>
+</div></details><details class="patchEntry"><summary>v108</summary><div class="patchText"><h3>v108</h3>
+<p>Level Details reorganized with level-number title, actual selected creeps, armor table and spawn distribution; Owned Towers gained critical-hit chance tracker.</p>
+</div></details><details class="patchEntry"><summary>v107</summary><div class="patchText"><h3>v107</h3>
+<p>Ankh possession icon added at bottom-right; tapping opens an Epic-style description card; icon disappears on use.</p>
+</div></details><details class="patchEntry"><summary>v106</summary><div class="patchText"><h3>v106</h3>
+<p>Owned Towers attack-speed bonus emphasized with a bold gold badge.</p>
+</div></details><details class="patchEntry"><summary>v105</summary><div class="patchText"><h3>v105</h3>
+<p>Income Details now pauses game simulation while open, matching Level Details; Owned Towers and Challenges remain non-pausing.</p>
+</div></details><details class="patchEntry"><summary>v104</summary><div class="patchText"><h3>v104</h3>
+<p>Level Details added Light/Medium/Heavy armor damage-type matchup information.</p>
+</div></details><details class="patchEntry"><summary>v103</summary><div class="patchText"><h3>v103</h3>
+<p>Owned Towers and Challenges popups moved up/left into centered battlefield space.</p>
+</div></details><details class="patchEntry"><summary>v102</summary><div class="patchText"><h3>v102</h3>
+<p>Owned Towers popup repositioned to avoid Challenges icon overlap.</p>
+</div></details><details class="patchEntry"><summary>v101</summary><div class="patchText"><h3>v101</h3>
+<p>Spikes rebalance: Crown of Thorns 450 damage plus poison on retaliation; Wrath of Roots 150; Thorn Ward Uncommon with 40 block; Bulwark 200 plus 10% enemy max HP and 40 block; Iron Bastion and Mending Thorns heal 25 per retaliation.</p>
+</div></details><details class="patchEntry"><summary>v100</summary><div class="patchText"><h3>v100</h3>
+<p>Normal damage recolored neutral gray (#A8ADB5); Chaos recolored burnt orange (#CC5500).</p>
+</div></details><details class="patchEntry"><summary>v99</summary><div class="patchText"><h3>v99</h3>
+<p>Owned Towers shows attack-speed buff; damage-type counts renamed from copies to Tower/Towers.</p>
+</div></details><details class="patchEntry"><summary>v98</summary><div class="patchText"><h3>v98</h3>
+<p>Reroll button now shows rerolls remaining in the current level.</p>
+</div></details><details class="patchEntry"><summary>v97</summary><div class="patchText"><h3>v97</h3>
+<p>Permanent stun immunity removed; diminishing returns bottom out at 10% effectiveness.</p>
+</div></details><details class="patchEntry"><summary>v96</summary><div class="patchText"><h3>v96</h3>
+<p>Per-enemy stun diminishing returns added: successive stuns 100%, 90%, 80%, and so on.</p>
+</div></details><details class="patchEntry"><summary>v95</summary><div class="patchText"><h3>v95</h3>
+<p>Level Details simplified to expected creeps, selected creep types with armor and full HP, spawn interval and distribution.</p>
+</div></details><details class="patchEntry"><summary>v94</summary><div class="patchText"><h3>v94</h3>
+<p>Ankh resurrection changed to restore 10% of maximum castle HP.</p>
+</div></details><details class="patchEntry"><summary>v93</summary><div class="patchText"><h3>v93</h3>
+<p>Epic Mythic Warcraft replaced with one-use Ankh of Resurrection (revive plus boosted regeneration).</p>
+</div></details><details class="patchEntry"><summary>v92</summary><div class="patchText"><h3>v92</h3>
+<p>Overkill damage and percentage removed from Owned Towers display.</p>
+</div></details><details class="patchEntry"><summary>v91</summary><div class="patchText"><h3>v91</h3>
+<p>Income HUD changed to show purchased-upgrade income only, excluding starting income and late-level economy factor.</p>
+</div></details><details class="patchEntry"><summary>v90</summary><div class="patchText"><h3>v90</h3>
+<p>Clickable Income Dashboard and Gold/sec breakdown added.</p>
+</div></details><details class="patchEntry"><summary>v89</summary><div class="patchText"><h3>v89</h3>
+<p>Boss HP increased another 10%.</p>
+</div></details><details class="patchEntry"><summary>v88</summary><div class="patchText"><h3>v88</h3>
+<p>Boss HP increased 10%, movement speed increased 10%, and visual size increased 50%.</p>
+</div></details><details class="patchEntry"><summary>v87</summary><div class="patchText"><h3>v87</h3>
+<p>Regular creep HP increased 10% at levels 27–30; boss HP increased 10%.</p>
+</div></details><details class="patchEntry"><summary>v86</summary><div class="patchText"><h3>v86</h3>
+<p>Mana Shield regeneration set to 50/sec base; Arcane Barrier damage reduction capped at 50%, only while shield is active; shield support effects revised.</p>
+</div></details><details class="patchEntry"><summary>v85</summary><div class="patchText"><h3>v85</h3>
+<p>Late-game creep damage increased progressively from level 20; boss HP, movement and attack damage strengthened.</p>
+</div></details><details class="patchEntry"><summary>v84</summary><div class="patchText"><h3>v84</h3>
+<p>Fire and Poison damage-over-time scaling revised.</p>
+</div></details><details class="patchEntry"><summary>v83</summary><div class="patchText"><h3>v83</h3>
+<p>Tower roster expanded to twelve towers per damage type, retaining siphon towers.</p>
+</div></details><details class="patchEntry"><summary>v82</summary><div class="patchText"><h3>v82</h3>
+<p>Common shop offer guaranteed through level 15; 60% chance thereafter.</p>
+</div></details><details class="patchEntry"><summary>v81</summary><div class="patchText"><h3>v81</h3>
+<p>One Common tower per primary damage type enforced.</p>
+</div></details><details class="patchEntry"><summary>v80</summary><div class="patchText"><h3>v80</h3>
+<p>Siege tower lineup/stat definitions revised.</p>
+</div></details><details class="patchEntry"><summary>v79</summary><div class="patchText"><h3>v79</h3>
+<p>Tower naming and Common-tower targeting conventions revised.</p>
+</div></details><details class="patchEntry"><summary>v78</summary><div class="patchText"><h3>v78</h3>
+<p>Stun descriptions clarified for single-target and Bounce towers.</p>
+</div></details><details class="patchEntry"><summary>v77</summary><div class="patchText"><h3>v77</h3>
+<p>HTML document/layout revision; specific player-facing change not confidently identifiable.</p>
+</div></details><details class="patchEntry"><summary>v76</summary><div class="patchText"><h3>v76</h3>
+<p>Minor archived revision; specific player-facing change not confidently identifiable.</p>
+</div></details><details class="patchEntry"><summary>v75</summary><div class="patchText"><h3>v75</h3>
+<p>Menu and gameplay guide overlay introduced or revised.</p>
+</div></details><details class="patchEntry"><summary>v74</summary><div class="patchText"><h3>v74</h3>
+<p>Aegis Barrier / mana-shield support behavior revised.</p>
+</div></details><details class="patchEntry"><summary>v73</summary><div class="patchText"><h3>v73</h3>
+<p>Armor mitigation revised to 1% per point, capped at 50%.</p>
+</div></details><details class="patchEntry"><summary>v72</summary><div class="patchText"><h3>v72</h3>
+<p>Ground spell-effect diagnostics added.</p>
+</div></details><details class="patchEntry"><summary>v71</summary><div class="patchText"><h3>v71</h3>
+<p>Damage-type visuals/effects revised.</p>
+</div></details><details class="patchEntry"><summary>v70</summary><div class="patchText"><h3>v70</h3>
+<p>Game state initialization and reset behavior revised.</p>
+</div></details><details class="patchEntry"><summary>v69</summary><div class="patchText"><h3>v69</h3>
+<p>World-to-canvas range conversion standardized.</p>
+</div></details><details class="patchEntry"><summary>v68</summary><div class="patchText"><h3>v68</h3>
+<p>Area attack radius reduced by 10%; Splash radius retained.</p>
+</div></details><details class="patchEntry"><summary>v67</summary><div class="patchText"><h3>v67</h3>
+<p>Stun tower damage and boss stun resistance tuned (boss stuns shortened by 90%).</p>
+</div></details><details class="patchEntry"><summary>v66</summary><div class="patchText"><h3>v66</h3>
+<p>Top HUD value/label typography unified.</p>
+</div></details><details class="patchEntry"><summary>v65</summary><div class="patchText"><h3>v65</h3>
+<p>Growing Treasury income-growth support revised.</p>
+</div></details><details class="patchEntry"><summary>v64</summary><div class="patchText"><h3>v64</h3>
+<p>Tower-card rows aligned and longer titles supported.</p>
+</div></details><details class="patchEntry"><summary>v63</summary><div class="patchText"><h3>v63</h3>
+<p>Minor release / interface revision; no distinct gameplay change verified from archive.</p>
+</div></details><details class="patchEntry"><summary>v62</summary><div class="patchText"><h3>v62</h3>
+<p>Support tile descriptions centered.</p>
+</div></details><details class="patchEntry"><summary>v61</summary><div class="patchText"><h3>v61</h3>
+<p>Damage, Income, HP regeneration and Armor typography harmonized with HUD.</p>
+</div></details><details class="patchEntry"><summary>v60</summary><div class="patchText"><h3>v60</h3>
+<p>Tower cards condensed to show type, attack and abilities clearly.</p>
+</div></details><details class="patchEntry"><summary>v59</summary><div class="patchText"><h3>v59</h3>
+<p>Tower cards redesigned for scanability; combat controls consolidated.</p>
+</div></details><details class="patchEntry"><summary>v58</summary><div class="patchText"><h3>v58</h3>
+<p>Targeted Epic damage-per-hit adjustments based on late-wave performance.</p>
+</div></details><details class="patchEntry"><summary>v57</summary><div class="patchText"><h3>v57</h3>
+<p>Selected Epic crowd-attack damage/cadence balance refined.</p>
+</div></details><details class="patchEntry"><summary>v56</summary><div class="patchText"><h3>v56</h3>
+<p>Selected Epic chain and volley attack cadences tuned.</p>
+</div></details><details class="patchEntry"><summary>v55</summary><div class="patchText"><h3>v55</h3>
+<p>Challenge prompt positioning refined.</p>
+</div></details><details class="patchEntry"><summary>v54</summary><div class="patchText"><h3>v54</h3>
+<p>Selected Rare and Epic tower attack cadences adjusted.</p>
+</div></details><details class="patchEntry"><summary>v53</summary><div class="patchText"><h3>v53</h3>
+<p>Rarity-value scaling adjusted; shop prices retained at 500/2,000/5,000/10,000 gold.</p>
+</div></details><details class="patchEntry"><summary>v52</summary><div class="patchText"><h3>v52</h3>
+<p>Additional early-wave tuning for Chaos Common and Frost Bounce towers.</p>
+</div></details><details class="patchEntry"><summary>v51</summary><div class="patchText"><h3>v51</h3>
+<p>Two-wave balance adjustments, preserving tower identities and upgrade economy.</p>
+</div></details><details class="patchEntry"><summary>v50</summary><div class="patchText"><h3>v50</h3>
+<p>Early-game balance pass for underperforming Common and Uncommon towers.</p>
+</div></details><details class="patchEntry"><summary>v49</summary><div class="patchText"><h3>v49</h3>
+<p>Targeted tower range, rate and damage adjustments.</p>
+</div></details><details class="patchEntry"><summary>v48</summary><div class="patchText"><h3>v48</h3>
+<p>Splash radius increased from 150 to 300 world units.</p>
+</div></details><details class="patchEntry"><summary>v47</summary><div class="patchText"><h3>v47</h3>
+<p>Creep attack-range behavior corrected.</p>
+</div></details><details class="patchEntry"><summary>v46</summary><div class="patchText"><h3>v46</h3>
+<p>HUD redesigned with vector iconography and two-line labels/values.</p>
+</div></details><details class="patchEntry"><summary>v45</summary><div class="patchText"><h3>v45</h3>
+<p>Compact HUD metrics and score presentation refined.</p>
+</div></details><details class="patchEntry"><summary>v44</summary><div class="patchText"><h3>v44</h3>
+<p>Tower HP HUD layout revised.</p>
+</div></details><details class="patchEntry"><summary>v43</summary><div class="patchText"><h3>v43</h3>
+<p>High-rarity damage supports and support-offer weighting adjusted.</p>
+</div></details><details class="patchEntry"><summary>v42</summary><div class="patchText"><h3>v42</h3>
+<p>Support upgrade pool expanded/rebalanced, including income, evasion and armor upgrades.</p>
+</div></details><details class="patchEntry"><summary>v41</summary><div class="patchText"><h3>v41</h3>
+<p>Battlefield layout and range scaling updated.</p>
+</div></details><details class="patchEntry"><summary>v40</summary><div class="patchText"><h3>v40</h3>
+<p>Cosmetic ground spell effects introduced, with effect-count limits.</p>
+</div></details><details class="patchEntry"><summary>v39</summary><div class="patchText"><h3>v39</h3>
+<p>Damage-type visual color definitions and effects adjusted.</p>
+</div></details><details class="patchEntry"><summary>v38</summary><div class="patchText"><h3>v38</h3>
+<p>Creep wall collision boundary and difficulty pressure revised.</p>
+</div></details><details class="patchEntry"><summary>v37</summary><div class="patchText"><h3>v37</h3>
+<p>Optional tower-range ring display control added.</p>
+</div></details><details class="patchEntry"><summary>v36</summary><div class="patchText"><h3>v36</h3>
+<p>Spikes tower roster expanded/reworked, including Bulwark of Thorns, Splinter Guard and Reprisal Coil.</p>
+</div></details><details class="patchEntry"><summary>v35</summary><div class="patchText"><h3>v35</h3>
+<p>Battlefield/Clear control and tower range or targeting calculations revised.</p>
+</div></details><details class="patchEntry"><summary>v34</summary><div class="patchText"><h3>v34</h3>
+<p>Challenge-oriented creep difficulty spikes introduced around levels 10, 20 and 25.</p>
+</div></details><details class="patchEntry"><summary>v33</summary><div class="patchText"><h3>v33</h3>
+<p>Pre-round Challenges invitation/prompt added beside the crown icon.</p>
+</div></details><details class="patchEntry"><summary>v32</summary><div class="patchText"><h3>v32</h3>
+<p>Owned Towers grouping and damage-type presentation adjusted.</p>
+</div></details><details class="patchEntry"><summary>v31</summary><div class="patchText"><h3>v31</h3>
+<p>Earliest available archived build; serves as the starting point for this changelog.</p>
+<h2>Current gameplay reference (selected mechanics)</h2>
+<ul>
+<li>Thirty-second levels; 30 levels and a final boss at approximately 15:00.</li>
+<li>Per-level enemy lineup: one Light, one Medium, one Heavy type; spawn weights 70% / 22% / 8%.</li>
+<li>Damage types: Normal, Piercing, Magic, Chaos, Siege and Spikes; elemental Fire, Frost and Poison effects.</li>
+<li>Rarity tiers: Common (500 gold), Uncommon (2,000), Rare (5,000), Epic (10,000).</li>
+<li>Stuns diminish per enemy from 100% in 10-percentage-point steps to a 10% minimum; boss resistance remains.</li>
+<li>Ankh of Resurrection: single-use lethal-damage rescue to 10% maximum HP, with triple HP regeneration for 5 seconds.</li>
+<li>Owned Towers includes attack-speed and critical-hit trackers; HUD Income and Level Details pause while open.</li>
+</ul>
+<h2>Maintaining this document</h2>
+<p>For each new release, add a new v-number section at the top with: gameplay changes, balance numbers, UI changes, bug fixes, and verification notes. Preserve superseded changes in earlier entries; the most recent entry governs current behavior.</p>
+<h2>Source and verification notes</h2>
+<ul>
+<li>Primary source: local archived index.html files for v31–v110.</li>
+<li>Supplemental source: release descriptions and README records for recent builds.</li>
+<li>No source snapshots for v1–v30 were available; those versions are not individually listed.</li>
+<li>This document is a historical change log, not a guarantee that all historical balance values remain current.</li>
+</ul>
+</div></details>`,
 how:`<p class="guidePill">WELCOME TO TOWER SURVIVOR - BETA VERSION</p>
 <p>Defend the central castle for 15 minutes, then defeat the boss. Build a strategy from random shop offers and keep your castle alive.</p>
 <h3>4 Tower Slots — Choose your damage dealers</h3>
@@ -1352,7 +1641,7 @@ how:`<p class="guidePill">WELCOME TO TOWER SURVIVOR - BETA VERSION</p>
 <p><b>🏰 Central Castle:</b> Tap the castle in the middle of the battlefield to open <b>Castle Status</b>. See regeneration, armor, evasion, Mana Shield damage reduction, and a breakdown of incoming attacks and damage blocked. Current HP and Mana Shield are displayed on the HUD. You can also switch the floating HP and shield bars on or off.</p>
 <p><b>♜ Tower Icon (Owned Towers):</b> Tap the tower icon at the top right to see your total number of towers, Attack Speed and Critical Hit bonuses, attacks fired, and effective damage. Browse owned towers grouped by damage type, with each tower's range, attack pattern, elemental effect, damage, ability, and combat contribution. Tap again to close; press and hold for a quick look.</p>
 <p><b>🪙 Income:</b> Tap the Income box in the HUD to open <b>Income Details</b>. Review purchased income, bounty bonus, gold per second, compounding income, average kill gold per second, and estimated total income per second.</p>
-<p><b>☰ Menu:</b> Tap Menu to find <b>How to Play</b> (this beginner guide), <b>Game Mechanics</b> (detailed rules for attacks, elements, defenses, economy and special abilities), <b>Restart Game</b>, and <b>Resume Game</b>.</p>
+<p><b>☰ Menu:</b> Tap Menu to find <b>How to Play</b> (this beginner guide), <b>Game Mechanics</b> (detailed rules for attacks, elements, defenses, economy and special abilities), <b>Patch Notes</b> (offline version history), <b>Restart Game</b>, and <b>Resume Game</b>.</p>
 <h3>Rerolls and refreshes</h3>
 <p>New shop offers appear as levels progress. Use <b>Reroll</b> to look for a different combination of towers and supports. For exact reroll costs, timing, and rarity rules, open <b>Menu → Game Mechanics</b>.</p>
 <h3>Damage types</h3>
@@ -1381,15 +1670,16 @@ mechanics:`<p class="guidePill">REFERENCE · GAME RULES</p>
 };
 function openGuide(page='how',welcome=false){
  guidePage=page;guideWelcome=welcome;guideOverlay.hidden=false;
- guideTitle.textContent=page==='menu'?'☰ Menu':page==='how'?'How to Play':'Game Mechanics';
+ guideTitle.textContent=page==='menu'?'☰ Menu':page==='how'?'How to Play':page==='patch'?'Patch Notes':'Game Mechanics';
  guideBody.innerHTML=page==='menu'?'<p>Choose an option below. Restart begins a fresh run.</p>':GUIDE_CONTENT[page];
  guideActions.innerHTML=page==='menu'
- ?'<button id="guideRestart" class="guideWarning">↻ Restart Game</button><button id="guideHow">📖 How to Play</button><button id="guideMechanics">⚙ Game Mechanics</button><button id="guideBack" class="guidePrimary">Resume Game</button>'
+ ?'<button id="guideRestart" class="guideWarning">↻ Restart Game</button><button id="guideHow">📖 How to Play</button><button id="guideMechanics">⚙ Game Mechanics</button><button id="guidePatch">📋 Patch Notes</button><button id="guideBack" class="guidePrimary">Resume Game</button>'
  :'<button id="guideBack" class="guidePrimary">'+(welcome?'▶ Start Playing':'← Back to Menu')+'</button>';
  if(page==='menu'){
  $('guideRestart').onclick=()=>{if(confirm('Restart this run? All progress in the current run will be lost.')){const keepBars=S.floatingCastleBars;S=fresh();S.floatingCastleBars=keepBars;showCastle(false);$('challengeNudge').hidden=false;$('overlay').style.display='none';$('pause').textContent='Ⅱ Pause';offers();renderOwnedTowers();closeGuide()}};
  $('guideHow').onclick=()=>openGuide('how');
  $('guideMechanics').onclick=()=>openGuide('mechanics');
+ $('guidePatch').onclick=()=>openGuide('patch');
  }
  $('guideBack').onclick=()=>{if(guideWelcome||page==='menu')closeGuide();else openGuide('menu')};
  $('menuToggle').setAttribute('aria-expanded','true');
