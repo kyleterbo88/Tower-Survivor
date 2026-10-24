@@ -1,3 +1,16 @@
+Tower Survivor v116 — Ankh description and mechanics documentation
+- Shortened Ankh item and badge description by removing emergency Clear sentence.
+- Game Mechanics explicitly documents Ankh activation before automatic emergency Clear.
+- No gameplay mechanics changed.
+
+Tower Survivor v115 — HUD and popup polish
+- Magic damage-type color adjusted to a more purple lavender (#B59BFF). Rarity colors unchanged.
+- Ankh of Resurrection descriptions shorten “maximum” to “max” and “triple” to “3X”.
+- Owned Towers attack-speed and critical-hit badges slightly smaller.
+- Owned Towers title enlarged and emphasized.
+- Gold HUD number enlarged and given more visual emphasis while keeping within its stat tile.
+- No gameplay balance changes.
+
 Tower Survivor v114: Castle combat telemetry — landed attacks, evaded attacks, total incoming damage, damage prevented by armor/evasion/thorn flat block/shield barrier, damage absorbed by Mana Shield, and damage reaching castle HP. Statistics reset each run. Shield absorption counted once; reflected damage remains tower damage.
 
 Tower Survivor v113
