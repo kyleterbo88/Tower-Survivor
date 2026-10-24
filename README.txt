@@ -1,3 +1,7 @@
+v124: Owned Towers groups sort by combined effective damage (descending) within each damage type, refreshed on menu open. Floating castle bars are translucent, rounded and match HUD HP/Mana fill colors. No balance changes.
+
+v124 — How to Play now explains the clickable Central Castle, Owned Towers icon, Income HUD, and Menu, listing the information each opens. Detailed game rules remain in Game Mechanics. No balance changes.
+
 v121 — Single Target ability labels now depend only on rarity: Common Direct Hit, Uncommon Focused Hit, Rare Heavy Hit, Epic Devastating Hit. Applies to every damage type, including Chaos. No combat balance changes.
 
 v120 — Tower description clarity: Area 25% is damage per target, not hit chance or a secondary effect. Area deals an additional 30% of that applied damage over 2 seconds. Splash 70%, Barrage 62%, Bounce 72% decay. Primary → secondary → special. Frost now lists exact slow mechanics; names identify elemental effects; compact tower tiles. No combat balance changes.
