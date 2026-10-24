@@ -1,3 +1,40 @@
+Tower Survivor v114: Castle combat telemetry — landed attacks, evaded attacks, total incoming damage, damage prevented by armor/evasion/thorn flat block/shield barrier, damage absorbed by Mana Shield, and damage reaching castle HP. Statistics reset each run. Shield absorption counted once; reflected damage remains tower damage.
+
+Tower Survivor v113
+
+- First-time-per-run new creep spawn announcements: Cultist, Berserker, Necromancer, Dread Knight.
+- White bold 86%-opacity text with dark shadow, floating toward the side the enemy spawned; 2.2 seconds. Triggered on actual spawn.
+- Every Hero miniboss and the final boss trigger their own announcement.
+- Tap the central castle to view Armor, damage reduction, Evasion, HP regeneration, current/max HP, Mana Shield and Shield regeneration.
+- Toggle extra green HP and blue Mana Shield percentage meters above the castle. Original UI meters remain unchanged.
+- Toggle state retained on a new run within the same page session. Default OFF.
+- No creep, tower, economy or armor balance changes.
+
+Tower Survivor v112 — Progressive creep roster expansion
+
+Four new creeps: Cultist (Unarmored, level 5+), Berserker (Medium, level 5+), Necromancer (Unarmored ranged, level 10+), Dread Knight (Heavy, level 15+).
+All new creeps have substantial HP rather than being glass cannons. Armor counters, movement, range and frequency distinguish them.
+New-variant share within its armor category: levels 1–4 0%, 5–9 6%, 10–14 14%, 15–19 25%, 20–24 38%, 25–30 50%.
+When an armor category has two unlocked new variants, its new-variant share is split evenly. Armor category distribution remains 20/40/30/10.
+Level Details lists every possible creep this level, actual scaled HP and exact spawn probability per creep.
+Miniboss HP is 115% of the highest-HP regular creep eligible in that level, including new variants.
+No tower damage, armor matchup, shop, or economy changes.
+
+Tower Survivor v111 — Five armor types and Hero minibosses
+
+Damage matchup multipliers updated to approved 75%–125% table. Chaos is 85% vs Unarmored and 125% vs Hero.
+Existing creep armor reassigned: Warlock Unarmored, Scout/Ranger Light, Footman Medium, Shieldbearer/Ogre Brute Heavy. No new regular creep models added yet.
+Regular spawn weights: 20% Unarmored / 40% Light / 30% Medium / 10% Heavy.
+One Hero-armored miniboss at midpoint of levels 5, 10, 15, 20 and 25; HP = 115% of the highest-HP regular creep selected for the level. Level 30 final boss uses Hero armor.
+Level Details shows all five armor columns, four selected creeps, distribution and miniboss HP.
+
+Tower Survivor v110 — Damage-type color update
+
+Magic: #9355DC → #A5B4FC (Celestial Purple).
+Piercing: #FFD84D → #FFE45C (brighter yellow).
+Chaos: #CC5500 → #E87524 (lighter orange).
+Magic and Chaos spell-effect highlight colors adjusted to match. No rarity-color or gameplay-balance changes.
+
 Tower Survivor v109 — Ankh of Resurrection
 
 Replaces Epic Mythic Warcraft with Epic Ankh of Resurrection (10,000 gold). One purchase per run. On lethal castle damage, Ankh triggers before emergency Clear, restores castle to 10% maximum HP (capped at maximum HP), and triples HP regeneration for 5 seconds. The regeneration boost includes HP-growth healing. Emergency Clear remains available afterward.

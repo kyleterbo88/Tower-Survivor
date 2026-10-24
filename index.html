@@ -4,6 +4,9 @@
 :root{color-scheme:dark;--bg:#101820;--panel:#192631;--line:#3a5060;--text:#f2f6f8;--muted:#a9bbc7;--gold:#f5c451}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font:12px system-ui,-apple-system,sans-serif}body{overscroll-behavior:none}#app{height:100dvh;max-width:1100px;margin:auto;padding:env(safe-area-inset-top) 7px env(safe-area-inset-bottom);display:flex;flex-direction:column;gap:4px;overflow:hidden}header,.head{display:flex;justify-content:space-between;align-items:center;gap:7px;flex-shrink:0}header{padding:3px 0}h1{font-size:16px;margin:0}.muted,.meta{color:var(--muted);font-size:9px}button{font:inherit;color:var(--text);background:#2b4150;border:1px solid #496171;border-radius:8px;padding:6px;font-weight:700}button:disabled{opacity:.35}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;flex-shrink:0}.stat,#drop{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:5px}.label{font-size:8px;color:var(--muted);text-transform:uppercase}.val{font-size:12px;font-weight:800}.combinedScores{display:flex;justify-content:space-around;align-items:center;gap:5px}.combinedScores>div{flex:1;min-width:0;text-align:center}.combinedScores .scoreIncome{border-left:1px solid var(--line);padding-left:8px}.combinedScores .val{font-size:clamp(9px,2.5vw,12px);white-space:nowrap}.combinedScores .label{font-size:clamp(7px,1.7vw,8px);white-space:nowrap}.combinedScores .val{overflow:hidden;text-overflow:clip;font-size:clamp(8px,2.15vw,12px)}.statnote{font-size:7px;color:var(--muted);line-height:1.05;margin-top:1px}.bar{height:4px;background:#293a44;border-radius:9px;overflow:hidden;margin-top:3px}.bar div{height:100%;background:#62d99b}canvas{width:100%;height:0;min-height:155px;flex:1 1 0;display:block;border:1px solid var(--line);border-radius:9px;background:#287f9b;touch-action:manipulation}#controls{display:grid;grid-template-columns:1fr 1fr;gap:4px;flex-shrink:0}#controls button{min-height:31px}#clear{background:#692c37;border-color:#b75060}#drop{flex:0 0 33dvh;max-height:33dvh;min-height:0;display:flex;flex-direction:column;gap:3px;margin:0;padding:3px}.head b{font-size:12px}.refreshbar{height:4px;background:#293a44;border-radius:8px;overflow:hidden;margin-top:3px}.refreshbar div{height:100%;background:var(--gold);width:100%}.shopgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}.section{display:none}.shopsection{flex:1;min-height:0;display:flex;flex-direction:column;gap:0}.shopsection .cards{flex:1;min-height:0}.shopsection .card{height:100%}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}.card{background:#20313c;border:3px solid #fff;cursor:pointer;touch-action:manipulation;border-radius:6px;padding:2px 2px;min-width:0;min-height:0;height:100%;display:flex;flex-direction:column;align-items:stretch;gap:1px;overflow:hidden}.card.common{border-color:#f4f5f7}.card.uncommon{border-color:#42d878}.card.rare{border-color:#4aa5ff}.card.epic{border-color:#bd72ff;box-shadow:inset 0 0 0 1px #bd72ff}.card.unaffordable{opacity:.55}.card:active:not(.unaffordable){filter:brightness(1.3)}.rarity{font-size:6px;font-weight:900;letter-spacing:.2px;text-transform:uppercase;text-align:center}.common .rarity{color:#f4f5f7}.uncommon .rarity{color:#42d878}.rare .rarity{color:#4aa5ff}.epic .rarity{color:#d09aff}.cost{font-size:8px;font-weight:900;color:var(--gold);text-align:center;margin-top:auto}.card b{font-size:8px;line-height:1.12;text-align:center;overflow-wrap:anywhere}.meta{font-size:7px;line-height:1.08;text-align:center}.desc{font-size:7px;line-height:1.08;flex:1;color:#c8d5dd}.card button{font-size:7px;padding:3px 1px;border-radius:4px;white-space:nowrap}.towericon{height:23px;display:flex;align-items:center;justify-content:center}.towericon svg{width:19px;height:19px;display:block}.details{font-size:7px;line-height:1.12;color:#c8d5dd;display:grid;gap:1px}.details strong{color:#fff}.rarityline{display:flex;justify-content:center;gap:3px;align-items:center}.rerow{display:flex;justify-content:space-between;align-items:center;gap:4px;flex-shrink:0}.rerow button{font-size:8px;padding:4px 5px}#log{display:none}footer{display:none}#overlay{display:none;position:fixed;inset:0;background:#071018df;align-items:center;justify-content:center;padding:18px;z-index:5}.modal{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:20px;text-align:center;max-width:400px}.modal p{color:var(--muted)}#toast{position:fixed;z-index:8;left:50%;top:50%;transform:translate(-50%,-40%);padding:0;border:0;background:transparent;color:#f7bc38;text-shadow:0 1px 0 #704309,0 2px 5px #1b1208a8;font-weight:950;font-size:13px;letter-spacing:.2px;white-space:nowrap;opacity:0;pointer-events:none;transition:none}#toast.show{animation:goldPop .85s ease-out forwards}@keyframes goldPop{0%{opacity:0;transform:translate(-50%,-15%) scale(.85)}18%{opacity:.82;transform:translate(-50%,-45%) scale(1.12)}65%{opacity:.72;transform:translate(-50%,-90%) scale(1)}100%{opacity:0;transform:translate(-50%,-135%) scale(.96)}}.shoptitle{display:flex;align-items:center;justify-content:space-between;gap:6px}.shoptitle b{font-size:11px}.armorytop{height:24px;min-height:24px;display:flex;align-items:center;justify-content:space-between;gap:5px;flex-shrink:0}.armorytop .timer{font-size:8px;white-space:nowrap;color:var(--muted);min-width:67px}.armorytop .refreshbar{width:50px;margin:0}.armorytop .rerollpair{flex:1;justify-content:flex-end}.armorytop .rerollpair button{padding:4px 7px;font-size:8px;white-space:nowrap}.shopsection:first-of-type{flex:4}.shopsection:last-of-type{flex:3}.shopsection .shoptitle,.rerow{display:none}.rerollpair{display:flex;gap:4px}.rerollpair button{font-size:8px;padding:4px 5px}.empty{border:1px dashed #41515b;border-radius:7px;min-height:100%;opacity:.2}@media(max-height:740px){#drop{flex-basis:33dvh;max-height:33dvh}.card{padding:3px 2px;gap:1px}.towericon{height:22px}.towericon svg{width:21px;height:21px}.details{font-size:7px}.desc{font-size:7px}.card b{font-size:8px}}@media(min-width:650px){#app{padding-left:12px;padding-right:12px}.card{padding:7px}.card b{font-size:12px}.details,.desc{font-size:10px}.towericon{height:35px}.towericon svg{width:32px;height:32px}}
 
 #menuToggle{position:absolute;left:8px;top:8px;z-index:3;background:#102a38d9;border:1px solid #b9dce8aa;color:#e6f5ff;font-size:10px;padding:7px 8px;min-height:30px}
+/* v113 castle stats and optional floating meters */
+#castlePanel{position:absolute;z-index:6;left:50%;top:50%;transform:translate(-50%,-50%);width:min(300px,calc(100% - 36px));max-height:80%;overflow:auto;padding:12px;border:1px solid #d3ac56;border-radius:11px;background:#111d2af2;box-shadow:0 8px 26px #000b;backdrop-filter:blur(6px)}
+#castlePanel .castleSection{font-size:10px;letter-spacing:.7px;font-weight:900;color:#e7d7ae;background:#263c4c;border-radius:5px;padding:7px 6px;margin:10px 0 3px}#castlePanel .castleTotal{font-weight:900;color:#f5d37d}#castlePanel .castleStat span{max-width:68%}#castlePanel .castleStat strong{text-align:right;font-variant-numeric:tabular-nums}#castlePanel[hidden]{display:none}.castleHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-weight:900;font-size:15px;color:#ffe1a2}.castleStat{display:flex;justify-content:space-between;border-bottom:1px solid #40515b;padding:6px 2px;font-size:12px}.castleStat strong{color:#fff}.castleToggle{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-top:11px;padding:9px 5px;background:#213543;border-radius:7px;font-weight:800;font-size:11px}.castleToggle input{width:19px;height:19px;accent-color:#5fcf9b}.castleHelp{color:#b9cad3;font-size:9px;line-height:1.4;margin-top:8px}
 /* Owned tower inventory: compact, non-layout-shifting battlefield overlay */
 #battlefield{position:relative;flex:1 1 0;min-height:155px;min-width:0;overflow:hidden;border-radius:9px}
 #battlefield canvas{width:100%;height:100%;min-height:0;display:block}
@@ -145,8 +148,8 @@
 .ownedCritBuff strong{font-size:14px;color:#e3f6ff;text-shadow:0 0 5px #68c7ff88}
 @media(max-width:390px){.ownedBuffStack{margin-left:auto}}
 #levelOverlay .levelSection{font-size:12px;color:#f5c451;font-weight:850;margin:14px 0 5px;letter-spacing:.04em}
-#levelOverlay .armorTable{width:100%;border-collapse:collapse;font-size:11px;text-align:center;font-variant-numeric:tabular-nums}
-#levelOverlay .armorTable th,#levelOverlay .armorTable td{padding:7px 3px;border-bottom:1px solid #334754}
+#levelOverlay .armorTable{width:100%;border-collapse:collapse;font-size:10px;text-align:center;font-variant-numeric:tabular-nums}
+#levelOverlay .armorTable th,#levelOverlay .armorTable td{padding:7px 1px;border-bottom:1px solid #334754}
 #levelOverlay .armorTable th:first-child,#levelOverlay .armorTable td:first-child{text-align:left}
 #levelOverlay .armorTable th{color:#f5c451}
 #levelOverlay .armorTable .adv{color:#85e3a9;font-weight:800}
@@ -167,7 +170,7 @@
 #ankhCard .ankhDescription{font-size:11px;line-height:1.4;color:#d6e2ea;margin-top:7px}
 #ankhCard .ankhStatus{margin-top:8px;font-size:10px;color:#ffe49a;text-align:center;font-weight:800}
 </style></head><body><div id="app">
-<header><div><h1>🏰 Tower Survivor v109</h1></div></header>
+<header><div><h1>🏰 Tower Survivor v114</h1></div></header>
 <div class="stats">
   <div class="stat statIcon"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#ff405c" d="M12 21s-9-5.8-9-12a5.1 5.1 0 0 1 9-3.1A5.1 5.1 0 0 1 21 9c0 6.2-9 12-9 12Z"/><path fill="#ff8090" opacity=".65" d="M6 8c.5-2 2-2.6 3.4-1.6" stroke="#ffb4be" stroke-width="1.3" stroke-linecap="round"/></svg><div class="statBody"><div class="label">Tower HP</div><div class="val" id="hp">2,500 / 2,500</div></div></div><div class="bar"><div id="hpbar" style="width:100%"></div></div></div>
   <div class="stat statIcon" id="shieldStat" style="visibility:hidden"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 21 5v6c0 5.5-3.5 9-9 11-5.5-2-9-5.5-9-11V5Z" fill="#169bff"/><path d="M12 3.5 5 6v5c0 4.5 2.5 7.2 7 9Z" fill="#63d8ff"/><path d="M12 3.5 19 6v5c0 4.5-2.5 7.2-7 9Z" fill="#2680e8"/></svg><div class="statBody"><div class="label">Mana Shield</div><div class="val" id="shieldValue">0 / 0</div></div></div><div class="bar"><div id="shieldBar" style="width:0%;background:#67caff"></div></div></div>
@@ -176,7 +179,7 @@
   <div class="stat combinedScores" title="Damage and Income scores"><div class="scoreDamage"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m4 3 7 7-2 2-7-7V3Zm16 0-7 7 2 2 7-7V3Z" fill="#d6e5f5"/><path d="m9 12 9 9 3-3-9-9m3 3-9 9-3-3 9-9" fill="none" stroke="#e66d72" stroke-width="2.7" stroke-linecap="round"/><path d="m5 19 3-3m8 0 3 3" stroke="#f4a449" stroke-width="2" stroke-linecap="round"/></svg><div class="statBody"><div class="label">Damage</div><div class="val" id="damageScore">0.0</div></div></div></div><div class="scoreIncome" id="incomeButton" role="button" tabindex="0" aria-label="View income details"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><ellipse cx="8" cy="17.8" rx="5.5" ry="2.4" fill="#e79b0a"/><path d="M2.5 11v6.8c0 3.2 11 3.2 11 0V11" fill="#f3ae19" stroke="#ffda58" stroke-width=".9"/><ellipse cx="8" cy="11" rx="5.5" ry="2.4" fill="#ffdf62"/><path d="M10 6v8c0 3.3 11 3.3 11 0V6" fill="#e8a31b" stroke="#ffda58" stroke-width=".9"/><ellipse cx="15.5" cy="6" rx="5.5" ry="2.4" fill="#ffdb55"/></svg><div class="statBody"><div class="label">Income</div><div class="val" id="incomeScore">0.5</div></div></div></div></div>
   <div class="stat combinedScores" title="HP regeneration and armor"><div class="scoreDamage"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7Z" fill="#42d878"/><path d="M10 3h2v17h-2M3 10h17v2H3" fill="#a0ffc1" opacity=".35"/></svg><div class="statBody"><div class="label">HP/s</div><div class="val" id="regenValue">0</div></div></div></div><div class="scoreIncome"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 21 5v6c0 5.5-3.5 9-9 11-5.5-2-9-5.5-9-11V5Z" fill="#829fb2"/><path d="M12 3.5 5 6v5c0 4.5 2.5 7.2 7 9Z" fill="#d5e5ed"/><path d="M12 3.5 19 6v5c0 4.5-2.5 7.2-7 9Z" fill="#90acbf"/></svg><div class="statBody"><div class="label">Armor</div><div class="val" id="armorValue">0 · 0%</div></div></div></div></div>
 </div>
-<div id="battlefield"><div id="refreshOverlay" aria-live="off"><span class="timer" id="rerollInfo">Refresh in 30s</span><div class="refreshbar"><div id="refreshFill"></div></div></div><button id="clear" type="button">⚡ CLEAR · READY</button><canvas id="game" width="700" height="793"></canvas><button id="menuToggle" type="button" aria-label="Open game menu" aria-expanded="false">☰ Menu</button><button id="ownedToggle" type="button" aria-label="Show owned towers" aria-controls="ownedPanel" aria-expanded="false" title="Hold to view towers; tap to pin">♜<span id="ownedCount">0</span></button><div id="ownedPanel" role="region" aria-label="Owned towers" hidden></div><button id="crownToggle" type="button" aria-label="Crown Challenges" aria-expanded="false" title="Crown Challenges">♛</button><div id="crownPanel" role="region" aria-label="Crown Challenges" hidden></div><div id="challengeNudge" role="status">Challenges</div><button id="ankhBadge" type="button" aria-label="View Ankh of Resurrection" aria-controls="ankhCard" aria-expanded="false" title="Ankh of Resurrection" hidden><svg class="silverAnkh" viewBox="0 0 64 76" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="ankhSilver" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2f4f5"/><stop offset=".28" stop-color="#c3cbd1"/><stop offset=".56" stop-color="#89939c"/><stop offset=".78" stop-color="#e0e5e8"/><stop offset="1" stop-color="#68737d"/></linearGradient></defs><path d="M32 5C19 5 14 15 16 25c1 8 6 14 11 20H9v12h17v14h12V57h17V45H37c5-6 10-12 11-20C50 15 45 5 32 5Zm0 10c5 0 8 4 7 10-1 5-4 10-7 14-3-4-6-9-7-14-1-6 2-10 7-10Z" fill="url(#ankhSilver)" stroke="#505c67" stroke-width="2" stroke-linejoin="round" fill-rule="evenodd"/><path d="M20 48h24M32 48v19" stroke="#f4f6f7" stroke-opacity=".55" stroke-width="2"/></svg></button><div id="ankhCard" role="region" aria-label="Ankh of Resurrection details" hidden><div class="ankhRarity">EPIC SUPPORT</div><div class="ankhIcon"><svg class="silverAnkh" viewBox="0 0 64 76" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="ankhSilver" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2f4f5"/><stop offset=".28" stop-color="#c3cbd1"/><stop offset=".56" stop-color="#89939c"/><stop offset=".78" stop-color="#e0e5e8"/><stop offset="1" stop-color="#68737d"/></linearGradient></defs><path d="M32 5C19 5 14 15 16 25c1 8 6 14 11 20H9v12h17v14h12V57h17V45H37c5-6 10-12 11-20C50 15 45 5 32 5Zm0 10c5 0 8 4 7 10-1 5-4 10-7 14-3-4-6-9-7-14-1-6 2-10 7-10Z" fill="url(#ankhSilver)" stroke="#505c67" stroke-width="2" stroke-linejoin="round" fill-rule="evenodd"/><path d="M20 48h24M32 48v19" stroke="#f4f6f7" stroke-opacity=".55" stroke-width="2"/></svg></div><div class="ankhName">Ankh of Resurrection</div><div class="ankhDescription">One use: on lethal damage, revive to 10% maximum HP and triple HP regeneration for 5 seconds. Activates before emergency Clear.</div><div class="ankhStatus">✓ READY · 1 USE</div></div></div>
+<div id="battlefield"><div id="refreshOverlay" aria-live="off"><span class="timer" id="rerollInfo">Refresh in 30s</span><div class="refreshbar"><div id="refreshFill"></div></div></div><button id="clear" type="button">⚡ CLEAR · READY</button><canvas id="game" width="700" height="793"></canvas><button id="menuToggle" type="button" aria-label="Open game menu" aria-expanded="false">☰ Menu</button><button id="ownedToggle" type="button" aria-label="Show owned towers" aria-controls="ownedPanel" aria-expanded="false" title="Hold to view towers; tap to pin">♜<span id="ownedCount">0</span></button><div id="ownedPanel" role="region" aria-label="Owned towers" hidden></div><div id="castlePanel" role="region" aria-label="Castle stats" hidden><div class="castleHead"><span>🏰 Castle Status</span><button id="castleClose" type="button" aria-label="Close castle status">✕</button></div><div id="castleStats"></div><label class="castleToggle"><span>Floating HP & Mana Shield bars</span><input id="castleBarToggle" type="checkbox"></label><div class="castleHelp">Tap the central castle to open this menu. The original status bars stay visible. This option affects only the extra bars above the castle.</div></div><button id="crownToggle" type="button" aria-label="Crown Challenges" aria-expanded="false" title="Crown Challenges">♛</button><div id="crownPanel" role="region" aria-label="Crown Challenges" hidden></div><div id="challengeNudge" role="status">Challenges</div><button id="ankhBadge" type="button" aria-label="View Ankh of Resurrection" aria-controls="ankhCard" aria-expanded="false" title="Ankh of Resurrection" hidden><svg class="silverAnkh" viewBox="0 0 64 76" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="ankhSilver" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2f4f5"/><stop offset=".28" stop-color="#c3cbd1"/><stop offset=".56" stop-color="#89939c"/><stop offset=".78" stop-color="#e0e5e8"/><stop offset="1" stop-color="#68737d"/></linearGradient></defs><path d="M32 5C19 5 14 15 16 25c1 8 6 14 11 20H9v12h17v14h12V57h17V45H37c5-6 10-12 11-20C50 15 45 5 32 5Zm0 10c5 0 8 4 7 10-1 5-4 10-7 14-3-4-6-9-7-14-1-6 2-10 7-10Z" fill="url(#ankhSilver)" stroke="#505c67" stroke-width="2" stroke-linejoin="round" fill-rule="evenodd"/><path d="M20 48h24M32 48v19" stroke="#f4f6f7" stroke-opacity=".55" stroke-width="2"/></svg></button><div id="ankhCard" role="region" aria-label="Ankh of Resurrection details" hidden><div class="ankhRarity">EPIC SUPPORT</div><div class="ankhIcon"><svg class="silverAnkh" viewBox="0 0 64 76" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="ankhSilver" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2f4f5"/><stop offset=".28" stop-color="#c3cbd1"/><stop offset=".56" stop-color="#89939c"/><stop offset=".78" stop-color="#e0e5e8"/><stop offset="1" stop-color="#68737d"/></linearGradient></defs><path d="M32 5C19 5 14 15 16 25c1 8 6 14 11 20H9v12h17v14h12V57h17V45H37c5-6 10-12 11-20C50 15 45 5 32 5Zm0 10c5 0 8 4 7 10-1 5-4 10-7 14-3-4-6-9-7-14-1-6 2-10 7-10Z" fill="url(#ankhSilver)" stroke="#505c67" stroke-width="2" stroke-linejoin="round" fill-rule="evenodd"/><path d="M20 48h24M32 48v19" stroke="#f4f6f7" stroke-opacity=".55" stroke-width="2"/></svg></div><div class="ankhName">Ankh of Resurrection</div><div class="ankhDescription">One use: on lethal damage, revive to 10% maximum HP and triple HP regeneration for 5 seconds. Activates before emergency Clear.</div><div class="ankhStatus">✓ READY · 1 USE</div></div></div>
 <div id="controls"><button id="reroll">↻ Reroll</button><button id="pause">Ⅱ Pause</button><button id="speed">▶▶ 1× Speed</button></div>
 <div id="drop"><section class="shopsection"><div class="cards" id="towers"></div></section><section class="shopsection"><div class="cards" id="supports"></div></section></div>
 <div id="log">Starting treasury: 5,000 gold · Income pays every 2 seconds at 50 gold/s. Buy towers and supports to begin.</div><footer>Rarity costs: Common 500 · Uncommon 2,000 · Rare 5,000 · Epic 10,000 gold</footer></div><div id="toast"></div>
@@ -561,7 +564,7 @@ supDefs.push({name:'Reinforced Plating',icon:'🛡️',kind:'armor',value:10,des
 supDefs.push({name:'Legendary Warcraft',icon:'🔥',kind:'damage',value:.40,desc:'+40% all tower damage.',rarity:'Epic'});
 supDefs.push({name:'Ankh of Resurrection',icon:'✨',kind:'ankh',value:1,desc:'One use: on lethal damage, revive to 10% maximum HP and triple HP regeneration for 5 seconds. Activates before emergency Clear.',rarity:'Epic'});
 let S;
-function fresh(){return {time:0,level:1,nextRefresh:30,started:false,paused:false,over:false,won:false,gold:5000,hp:2500,maxHp:2500,regen:0,hpGrowth:0,shieldGrowth:0,shieldRegen:0,shieldArmor:0,shieldBarrierActive:false,ankhReady:false,ankhUsed:false,ankhRegenUntil:0,incomeGrowth:0,incomeGrowthTimer:0,armor:0,evasion:0,shield:0,maxShield:0,bounty:0,bountyBonusGold:0,income:0,compound:0,damage:0,typedDamage:{},crit:0,attackSpeed:0,incomeTimer:0,towers:[],enemies:[],shots:[],fx:[],combatFx:[],groundFx:[],goldPops:[],kills:0,killGoldEarned:0,attacksFired:0,effectiveDamage:0,overkillDamage:0,frameTargets:new Set(),roundTypes:[],roundTypeLevel:0,roundSpawnCount:0,roundSpawnKinds:{},clearUsed:false,clearAuto:false,speed:1,free:6,paid:0,rerollsUsed:0,lastCompound:0,spawn:0,boss:false,nextId:1,tOffers:[],sOffers:[],challenge:null,challengeFailed:false,challengeAwarded:false,rarityPurchases:[],timeChallengeAwarded:false}}
+function fresh(){return {time:0,level:1,nextRefresh:30,started:false,paused:false,over:false,won:false,gold:5000,hp:2500,maxHp:2500,regen:0,hpGrowth:0,shieldGrowth:0,shieldRegen:0,shieldArmor:0,shieldBarrierActive:false,ankhReady:false,ankhUsed:false,ankhRegenUntil:0,incomeGrowth:0,incomeGrowthTimer:0,armor:0,evasion:0,shield:0,maxShield:0,bounty:0,bountyBonusGold:0,income:0,compound:0,damage:0,typedDamage:{},crit:0,attackSpeed:0,incomeTimer:0,towers:[],enemies:[],shots:[],fx:[],combatFx:[],groundFx:[],goldPops:[],kills:0,killGoldEarned:0,attacksFired:0,effectiveDamage:0,overkillDamage:0,frameTargets:new Set(),roundTypes:[],roundTypeLevel:0,roundSpawnCount:0,roundSpawnKinds:{},seenCreeps:{},spawnAnnouncements:[],floatingCastleBars:false,castleCombat:{attacksLanded:0,attacksAttempted:0,incoming:0,armor:0,evasion:0,thorns:0,barrier:0,shield:0,hpDamage:0},minibossSpawnedLevel:0,clearUsed:false,clearAuto:false,speed:1,free:6,paid:0,rerollsUsed:0,lastCompound:0,spawn:0,boss:false,nextId:1,tOffers:[],sOffers:[],challenge:null,challengeFailed:false,challengeAwarded:false,rarityPurchases:[],timeChallengeAwarded:false}}
 S=fresh();
 function shuffle(a){return a.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1])}function fmt(n){return Math.floor(n).toLocaleString('en-US')}function clock(n){return String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0')}function log(m){$('log').innerHTML=m+'<br>'+ $('log').innerHTML;if($('log').innerHTML.length>1300)$('log').innerHTML=$('log').innerHTML.slice(0,1300)}function toast(m){log('» '+m)}
 function cap(l){return l===1?6:l===2?1:l<=4?2:l<=10?3:5}function cost(){return Math.min(1000,100*(S.paid+1))}function left(){return Math.max(0,cap(S.level)-S.rerollsUsed)}
@@ -583,11 +586,11 @@ function makeTowerOffers(){
 }
 function weightedSupportOffers(){let pool=supDefs.slice(),out=[];while(pool.length&&out.length<4){let weights=pool.map(s=>{let w=s.rarity==='Common'?8:s.rarity==='Uncommon'?5:s.rarity==='Rare'?1.45:.7;return ['income','bounty','compound','incomeGrowth','bountyIncome'].includes(s.kind)?w*.72:w}),total=weights.reduce((a,b)=>a+b,0),r=Math.random()*total,idx=0;for(;idx<weights.length-1;idx++){r-=weights[idx];if(r<0)break}out.push(pool.splice(idx,1)[0])}return out}
 function offers(){S.tOffers=makeTowerOffers();S.sOffers=weightedSupportOffers();render()}
-function refreshAll(){S.level=Math.min(30,Math.floor(S.time/30)+1);offers();S.rerollsUsed=0;S.nextRefresh=(Math.floor(S.time/30)+1)*30;toast('ARMORY REFRESH');ui()}
+function refreshAll(){S.spawnAnnouncements=S.spawnAnnouncements.filter(a=>(a.life-=dt)>0);if(!$('castlePanel').hidden)$('castleStats').innerHTML=castleStatsMarkup();S.level=Math.min(30,Math.floor(S.time/30)+1);offers();S.rerollsUsed=0;S.nextRefresh=(Math.floor(S.time/30)+1)*30;toast('ARMORY REFRESH');ui()}
 function resetRefreshAfterReroll(){const scheduled=(Math.floor(S.time/30)+1)*30;S.nextRefresh=Math.max(scheduled,S.time+15)}
 function can(){return !S.over&&!S.paused&&left()>0&&((!S.started&&S.free>0)||S.gold>=Math.max(50,Math.floor(cost())))}
 function reroll(){if(!can()){toast('NOT ENOUGH GOLD / REROLLS');return}if(!S.started&&S.free>0)S.free--;else{let v=Math.max(50,Math.floor(cost()));S.gold-=v;S.paid++}S.rerollsUsed++;S.tOffers=makeTowerOffers();S.sOffers=weightedSupportOffers();resetRefreshAfterReroll();render();ui()}
-function rarityColor(type){return ({Normal:'#A8ADB5',Piercing:'#ffd84d',Magic:'#9355dc',Chaos:'#CC5500',Spikes:'#b82d3b',Siege:'#d4c5a0'})[type]||'#f3f5f7'}
+function rarityColor(type){return ({Normal:'#A8ADB5',Piercing:'#FFE45C',Magic:'#A5B4FC',Chaos:'#E87524',Spikes:'#b82d3b',Siege:'#d4c5a0'})[type]||'#f3f5f7'}
 function iconGlyph(t){const m={Normal:['✦','➶','☄','⌁','✺'],Piercing:['➤','➶','⟢','⌖','✧'],Magic:['✧','❄','☼','✺','✴'],Chaos:['✹','✸','⛧','✺','◈'],Spikes:['♠','✣','✥','✦','❋'],Siege:['▰','⬟','◉','✹','⬢']};let i=t.id%5;let glyph=m[t.type][i];if(t.mod==='Fire')glyph=['♨','✹','☄','✺','✴'][i];if(t.mod==='Frost')glyph=['❄','✧','❅','✥','✦'][i];if(t.mod==='Poison')glyph=['☠','♧','✤','❋','✥'][i];return glyph}
 function towerSvg(t){let col=rarityColor(t.type),g=iconGlyph(t);let secondary=t.mod==='Fire'?'#ff743d':t.mod==='Frost'?'#7ddcff':t.mod==='Poison'?'#8be66e':col;return `<svg viewBox="0 0 40 40" role="img" aria-label="${t.type} ${t.pattern} tower icon"><defs><linearGradient id="grad${t.id}" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${col}"/><stop offset="1" stop-color="${secondary}"/></linearGradient></defs><circle cx="20" cy="20" r="17" fill="#0b1720" stroke="${col}" stroke-width="1.5"/><path d="M20 4 L24 13 L35 15 L27 23 L29 34 L20 28 L11 34 L13 23 L5 15 L16 13 Z" fill="url(#grad${t.id})" opacity=".23"/><text x="20" y="26" font-size="20" text-anchor="middle" fill="url(#grad${t.id})" stroke="#09131a" stroke-width=".25" paint-order="stroke">${g}</text></svg>`}
 function ability(t){
@@ -661,9 +664,59 @@ function renderCrownPanel(){const panel=$('crownPanel');const eligible=eligibleC
  panel.querySelectorAll('[data-challenge]').forEach(b=>b.onclick=()=>{selectedChallengeDetail=b.dataset.challenge;renderCrownPanel()});
 }
 function hideChallengeNudge(){$('challengeNudge').hidden=true}
-function showCrowns(open){if(open)hideChallengeNudge();$('crownPanel').hidden=!open;$('crownToggle').setAttribute('aria-expanded',String(open));if(open){showOwned(false);renderCrownPanel()}}
+function showCrowns(open){if(open){hideChallengeNudge();$('castlePanel').hidden=true;}$('crownPanel').hidden=!open;$('crownToggle').setAttribute('aria-expanded',String(open));if(open){showOwned(false);renderCrownPanel()}}
 $('crownToggle').onclick=()=>showCrowns($('crownPanel').hidden);
-function showOwned(open){if(open){$('crownPanel').hidden=true;$('crownToggle').setAttribute('aria-expanded','false')} $('ownedPanel').hidden=!open;$('ownedToggle').setAttribute('aria-expanded',String(open));if(open)renderOwnedTowers()}
+function castleStatsMarkup(){
+ const regen=S.regen+S.hpGrowth*(S.time<S.ankhRegenUntil?3:1);
+ const shieldRate=S.maxShield>0?50+S.shieldRegen+S.shieldGrowth:0;
+ const c=S.castleCombat;
+ const blocked=c.armor+c.evasion+c.thorns+c.barrier+c.shield;
+ const pct=c.incoming?100*blocked/c.incoming:0;
+ const row=(label,value,cls='')=>'<div class="castleStat '+cls+'"><span>'+label+'</span><strong>'+value+'</strong></div>';
+ const heading=label=>'<div class="castleSection">'+label+'</div>';
+ return heading('HEALTH & SHIELD')+
+ row('❤️ Current HP',fmt(Math.max(0,S.hp))+' / '+fmt(S.maxHp)+' ('+Math.round(100*Math.max(0,S.hp)/Math.max(1,S.maxHp))+'%)')+
+ row('🛡️ Mana Shield',S.maxShield>0?fmt(S.shield)+' / '+fmt(S.maxShield)+' ('+Math.round(100*S.shield/S.maxShield)+'%)':'Not unlocked')+
+ row('✚ HP Regeneration',regen.toFixed(1)+' HP/s')+
+ row('✚ Mana Regeneration',shieldRate.toFixed(1)+' Shield/s')+
+ row('🛡️ Shield Damage Reduction',((S.shieldBarrierActive&&S.shield>0?S.shieldArmor:0)*100).toFixed(1)+'%')+
+ heading('DEFENSIVE STATS')+
+ row('Armor',fmt(S.armor))+row('Damage Reduction (Armor)',(armorReduction(S.armor)*100).toFixed(1)+'%')+
+ row('Evasion Chance',(S.evasion*100).toFixed(1)+'%')+
+ heading('COMBAT STATISTICS · THIS RUN')+
+ row('Attacks Landed on Castle',fmt(c.attacksLanded))+
+ row('Attacks Evaded',fmt(c.attacksAttempted-c.attacksLanded))+
+ row('Total Incoming Damage',fmt(c.incoming))+
+ row('Total Damage Blocked',fmt(blocked)+' ('+pct.toFixed(1)+'%)','castleTotal')+
+ row('↳ Blocked by Armor',fmt(c.armor))+
+ row('↳ Blocked by Evasion',fmt(c.evasion))+
+ row('↳ Blocked by Thorn Towers',fmt(c.thorns))+
+ row('↳ Blocked by Shield Barrier',fmt(c.barrier))+
+ row('↳ Absorbed by Mana Shield',fmt(c.shield))+
+ row('Damage Reaching HP',fmt(c.hpDamage));
+}
+function showCastle(open){
+ const panel=$('castlePanel');panel.hidden=!open;
+ if(open){showOwned(false);showCrowns(false);$('castleStats').innerHTML=castleStatsMarkup();$('castleBarToggle').checked=!!S.floatingCastleBars}
+}
+const SPAWN_MESSAGES={Cultist:'THE CULTISTS HAVE ARRIVED',Berserker:'BEWARE OF THE BERSERKER',Necromancer:'NECROMANCERS HAVE BEEN UNLEASHED','Dread Knight':'DREAD KNIGHT APPROACHES'};
+function announceSpawn(message,px,py){
+ // Anchor on the spawn-facing side of the keep, not at the map edge.
+ const angle=Math.atan2(py-CY,px-CX),radius=Math.min(115,W*.23,H*.19);
+ S.spawnAnnouncements.push({text:message,x:CX+Math.cos(angle)*radius,y:CY+Math.sin(angle)*radius,life:2.2,max:2.2});
+}
+function drawSpawnAnnouncements(){
+ for(const v of S.spawnAnnouncements){
+  const progress=1-v.life/v.max,fadeIn=Math.min(1,progress/.10),fadeOut=Math.min(1,v.life/.7),alpha=.86*fadeIn*fadeOut;
+  const words=v.text.split(' '),lines=[];let line='';
+  for(const word of words){if((line+' '+word).trim().length>18&&line){lines.push(line);line=word}else line=(line+' '+word).trim()}if(line)lines.push(line);
+  const fontSize=Math.min(17,Math.max(12,W/33)),lineHeight=fontSize*1.15;
+  const y=Math.max(38,Math.min(H-18,v.y-14*progress));
+  x.save();x.globalAlpha=alpha;x.textAlign='center';x.textBaseline='middle';x.font='900 '+fontSize+'px system-ui';x.lineWidth=3.6;x.lineJoin='round';x.strokeStyle='rgba(4,12,20,.85)';x.fillStyle='#ffffff';x.shadowColor='rgba(0,0,0,.65)';x.shadowBlur=7;
+  lines.forEach((text,i)=>{const yy=y+(i-(lines.length-1)/2)*lineHeight;x.strokeText(text,v.x,yy);x.fillText(text,v.x,yy)});x.restore();
+ }
+}
+function showOwned(open){if(open){$('castlePanel').hidden=true;$('crownPanel').hidden=true;$('crownToggle').setAttribute('aria-expanded','false')} $('ownedPanel').hidden=!open;$('ownedToggle').setAttribute('aria-expanded',String(open));if(open)renderOwnedTowers()}
 let ownedHoldTimer=null,ownedHoldActive=false,ownedHoldOpened=false,ownedPinned=false,ownedSuppressClick=false;
 const ownedButton=$('ownedToggle');
 ownedButton.addEventListener('pointerdown',e=>{if(e.button!==0)return;ownedHoldActive=true;ownedHoldOpened=false;clearTimeout(ownedHoldTimer);ownedHoldTimer=setTimeout(()=>{if(!ownedHoldActive)return;ownedHoldOpened=true;ownedPinned=false;showOwned(true)},350)});
@@ -687,14 +740,56 @@ $('ankhBadge').addEventListener('click',()=>{
 });
 function ui(){updateAnkhIndicator();document.querySelectorAll('.card').forEach(card=>{if(card.dataset.cost){const disabled=S.gold<Number(card.dataset.cost)||S.over;card.classList.toggle('unaffordable',disabled);card.setAttribute('aria-disabled',String(disabled))}}); $('shieldStat').style.visibility=S.maxShield>0?'visible':'hidden';if(S.maxShield>0){$('shieldValue').textContent=fmt(S.shield)+' / '+fmt(S.maxShield);$('shieldBar').style.width=Math.max(0,100*S.shield/S.maxShield)+'%'}$('hp').textContent=fmt(Math.max(0,S.hp))+' / '+fmt(S.maxHp);$('hpbar').style.width=Math.max(0,S.hp/S.maxHp*100)+'%';$('gold').textContent=fmt(S.gold);$('level').textContent=Math.min(30,S.level)+' / 30';$('time').textContent=clock(S.time);$('regenValue').textContent=fmt(S.regen+S.hpGrowth);$('armorValue').textContent=fmt(S.armor)+' · '+(armorReduction(S.armor)*100).toFixed(1)+'%';const rawTowerDamage=S.towers.reduce((sum,t)=>sum+t.dmg*(1+(S.typedDamage[t.type]||0)),0)*(1+S.damage)*(1+S.crit);$('damageScore').textContent=(rawTowerDamage/100).toFixed(1);const upgradeIncome=S.income+S.compound;$('incomeScore').textContent=fmt(upgradeIncome)+' g/s';if($('incomeOverlay').style.display==='flex')renderIncomeDetails();$('clear').textContent=S.clearUsed?'⚡ CLEAR · USED':'⚡ CLEAR · READY';$('clear').disabled=S.clearUsed||S.over;$('reroll').disabled=!can();const freeRerolls=!S.started&&S.free>0;$('reroll').textContent='↻ Reroll '+(freeRerolls?'FREE':fmt(cost())+'g')+' · '+left()+' left';let remain=Math.max(0,S.nextRefresh-S.time);$('rerollInfo').textContent=`Refresh in ${Math.ceil(remain)}s`; $('refreshFill').style.width=(Math.max(0,Math.min(1,remain/30))*100)+'%'}
 const creepDefs=[
- {name:'Footman',armor:'Light',role:'light',hp:1,speed:1,dmg:1,gold:1,color:'#c06c59',shape:'circle'},
+ {name:'Footman',armor:'Medium',role:'medium',hp:1,speed:1,dmg:1,gold:1,color:'#c06c59',shape:'circle'},
  {name:'Scout',armor:'Light',role:'light',hp:.62,speed:1.42,dmg:.72,gold:1.1,color:'#d6a15b',shape:'diamond'},
- {name:'Ranger',armor:'Medium',role:'medium',hp:.92,speed:1.05,dmg:1.08,gold:1.45,color:'#9a7cbd',shape:'triangle'},
- {name:'Warlock',armor:'Medium',role:'medium',hp:1.12,speed:.9,dmg:1.22,gold:1.65,color:'#b16cb4',shape:'hex'},
+ {name:'Ranger',armor:'Light',role:'light',hp:.92,speed:1.05,dmg:1.08,gold:1.45,color:'#9a7cbd',shape:'triangle'},
+ {name:'Warlock',armor:'Unarmored',role:'unarmored',hp:1.12,speed:.9,dmg:1.22,gold:1.65,color:'#b16cb4',shape:'hex'},
  {name:'Shieldbearer',armor:'Heavy',role:'heavy',hp:1.9,speed:.68,dmg:1.42,gold:2.25,color:'#738b9b',shape:'square'},
- {name:'Ogre Brute',armor:'Heavy',role:'heavy',hp:2.6,speed:.55,dmg:1.85,gold:2.8,color:'#a64f4f',shape:'square'}
+ {name:'Ogre Brute',armor:'Heavy',role:'heavy',hp:2.6,speed:.55,dmg:1.85,gold:2.8,color:'#a64f4f',shape:'square'},
+ // v112: New creeps use substantial HP; armor and spawn volume distinguish them.
+ {name:'Cultist',armor:'Unarmored',role:'unarmored',hp:1.00,speed:1.24,dmg:1.05,gold:1.1,color:'#bd886d',shape:'diamond',unlock:5},
+ {name:'Necromancer',armor:'Unarmored',role:'unarmored',hp:1.30,speed:.82,dmg:1.30,gold:1.7,color:'#7965aa',shape:'hex',unlock:10},
+ {name:'Berserker',armor:'Medium',role:'medium',hp:1.35,speed:1.20,dmg:1.25,gold:1.5,color:'#d65d55',shape:'triangle',unlock:5},
+ {name:'Dread Knight',armor:'Heavy',role:'heavy',hp:2.85,speed:.61,dmg:1.65,gold:2.9,color:'#666d87',shape:'square',unlock:15}
 ];
-function setRoundCreeps(level){const light=shuffle(creepDefs.filter(c=>c.role==='light'))[0],medium=shuffle(creepDefs.filter(c=>c.role==='medium'))[0],heavy=shuffle(creepDefs.filter(c=>c.role==='heavy'))[0];S.roundTypes=[light,medium,heavy];S.roundTypeLevel=level;S.roundSpawnCount=0;S.roundSpawnKinds={}}
+const ARMOR_SPAWN_WEIGHTS=[.20,.40,.30,.10];
+const ARMOR_ORDER=['Unarmored','Light','Medium','Heavy','Hero'];
+function setRoundCreeps(level){
+ // Base enemies remain available all game; new variants are a small minority at first.
+ S.roundTypes=ARMOR_ORDER.slice(0,4).map(armor=>shuffle(creepDefs.filter(c=>c.armor===armor&&!c.unlock))[0]);
+ S.roundTypeLevel=level;S.roundSpawnCount=0;S.roundSpawnKinds={};S.minibossSpawnedLevel=0;
+}
+function newCreepShare(level){
+ if(level<5)return 0;
+ if(level<10)return .06;
+ if(level<15)return .14;
+ if(level<20)return .25;
+ if(level<25)return .38;
+ return .50;
+}
+function newCreepVariants(level,armor){return creepDefs.filter(c=>c.armor===armor&&c.unlock&&level>=c.unlock)}
+function roundCreepOptions(level,armorIndex){
+ const base=S.roundTypes[armorIndex],variants=newCreepVariants(level,base.armor);
+ const share=variants.length?newCreepShare(level):0;
+ return [{type:base,share:1-share},...variants.map(type=>({type,share:share/variants.length}))];
+}
+function selectRoundCreep(level,armorIndex){
+ const options=roundCreepOptions(level,armorIndex);
+ let roll=Math.random();
+ for(const option of options){roll-=option.share;if(roll<=0)return option.type}
+ return options[options.length-1].type;
+}
+function strongestCreepHp(level){return Math.max(...ARMOR_ORDER.slice(0,4).flatMap((armor,i)=>roundCreepOptions(level,i).map(o=>creepLevelHp(level,o.type))))}
+function spawnMiniboss(level){
+ if(level%5!==0||level>=30||S.minibossSpawnedLevel===level)return;
+ S.minibossSpawnedLevel=level;
+ const template=S.roundTypes.find(t=>t.armor==='Heavy')||S.roundTypes[3];
+ const hp=Math.round(strongestCreepHp(level)*1.15);
+ const side=Math.floor(Math.random()*4),pos=side===0?{x:Math.random()*W,y:-12}:side===1?{x:W+12,y:Math.random()*H}:side===2?{x:Math.random()*W,y:H+12}:{x:-12,y:Math.random()*H};
+ S.enemies.push({id:S.nextId++,...pos,hp,maxHp:hp,speed:(30+level*1.1)*template.speed,dmg:.8625*(80+level*5)*template.dmg*lateWaveAttackMultiplier(level),r:17,attack:0,attackFlash:0,ranged:false,reach:0,boss:false,miniboss:true,kind:'Hero Champion',armor:'Hero',role:'hero',goldMult:template.gold,color:'#b08bbf',shape:'hex',visualVariant:0,visualTint:0,fire:0,poison:0,poisonStacks:0,fireSources:{},poisonSources:{},frost:0});
+ announceSpawn('A POWERFUL FOE APPROACHES',pos.x,pos.y);
+ log('HERO MINIBOSS SPAWNED · Level '+level);
+}
 // Level 1: ~219 HP for a light creep, level 2: ~313, level 3: ~369.
 // Thereafter HP rises 12% per level while the spawn interval also shortens.
 function waveBaseHp(lvl){return lvl===1?175:lvl===2?250:lvl===3?295:295*Math.pow(1.12,lvl-3)}
@@ -717,7 +812,7 @@ function waveSpawnInterval(lvl){
 }
 // v85: attack damage is unchanged through level 19; +10% at 20, +25% at 25, +40% at 30.
 function lateWaveAttackMultiplier(level){return level<20?1:1.10+0.03*(Math.min(30,level)-20)}
-function spawn(boss=false){let side=Math.floor(Math.random()*4),x,y;if(side===0){x=Math.random()*W;y=-10}else if(side===1){x=W+10;y=Math.random()*H}else if(side===2){x=Math.random()*W;y=H+10}else{x=-10;y=Math.random()*H}let lvl=Math.min(30,Math.floor(S.time/30)+1);if(!boss&&S.roundTypeLevel!==lvl)setRoundCreeps(lvl);let type=null;if(!boss){let roll=Math.random();type=S.roundTypes[roll<.70?0:roll<.92?1:2];S.roundSpawnCount++;S.roundSpawnKinds[type.name]=(S.roundSpawnKinds[type.name]||0)+1}let hp=1.25*1.15*.90*(boss?18000*1.18*1.75*2.25*1.10*1.10*1.10:waveBaseHp(lvl)*type.hp*creepHealthFactor(lvl)*wavePressure(lvl)*(lvl>=27?1.10:1)),speed=boss?38.5:(30+lvl*1.1)*type.speed,dmg=0.8625*(boss?1400:(80+lvl*5)*type.dmg*lateWaveAttackMultiplier(lvl));S.enemies.push({id:S.nextId++,x,y,hp,maxHp:hp,speed,dmg,r:boss?23:(type.role==='heavy'?13:type.role==='medium'?10:8)*(0.80+Math.random()*.44),attack:0,attackFlash:0,ranged:!boss&&(type.name==='Ranger'||type.name==='Warlock'),reach:!boss&&type.name==='Ranger'?100+Math.random()*100:!boss&&type.name==='Warlock'?200+Math.random()*100:0,boss,kind:type?.name||'Boss',armor:type?.armor||'Heavy',role:type?.role||'boss',goldMult:type?.gold||4,color:type?.color||'#a92c4e',shape:type?.shape||'square',visualVariant:Math.floor(Math.random()*4),visualTint:Math.random()*.22,fire:0,poison:0,poisonStacks:0,fireSources:{},poisonSources:{},frost:0});if(boss){S.boss=true;log('BOSS SPAWNED!')}}
+function spawn(boss=false){let side=Math.floor(Math.random()*4),x,y;if(side===0){x=Math.random()*W;y=-10}else if(side===1){x=W+10;y=Math.random()*H}else if(side===2){x=Math.random()*W;y=H+10}else{x=-10;y=Math.random()*H}let lvl=Math.min(30,Math.floor(S.time/30)+1);if(!boss&&S.roundTypeLevel!==lvl)setRoundCreeps(lvl);let type=null;if(!boss){let roll=Math.random();type=selectRoundCreep(lvl,roll<.20?0:roll<.60?1:roll<.90?2:3);S.roundSpawnCount++;S.roundSpawnKinds[type.name]=(S.roundSpawnKinds[type.name]||0)+1}let hp=1.25*1.15*.90*(boss?18000*1.18*1.75*2.25*1.10*1.10*1.10:waveBaseHp(lvl)*type.hp*creepHealthFactor(lvl)*wavePressure(lvl)*(lvl>=27?1.10:1)),speed=boss?38.5:(30+lvl*1.1)*type.speed,dmg=0.8625*(boss?1400:(80+lvl*5)*type.dmg*lateWaveAttackMultiplier(lvl));S.enemies.push({id:S.nextId++,x,y,hp,maxHp:hp,speed,dmg,r:boss?23:(type.role==='heavy'?13:type.role==='medium'?10:8)*(0.80+Math.random()*.44),attack:0,attackFlash:0,ranged:!boss&&['Ranger','Warlock','Necromancer'].includes(type.name),reach:!boss&&type.name==='Ranger'?100+Math.random()*100:!boss&&type.name==='Warlock'?200+Math.random()*100:!boss&&type.name==='Necromancer'?220+Math.random()*60:0,boss,kind:type?.name||'Boss',armor:type?.armor||'Hero',role:type?.role||'boss',goldMult:type?.gold||4,color:type?.color||'#a92c4e',shape:type?.shape||'square',visualVariant:Math.floor(Math.random()*4),visualTint:Math.random()*.22,fire:0,poison:0,poisonStacks:0,fireSources:{},poisonSources:{},frost:0});if(!boss&&SPAWN_MESSAGES[type.name]&&!S.seenCreeps[type.name]){S.seenCreeps[type.name]=true;announceSpawn(SPAWN_MESSAGES[type.name],x,y)}if(boss){S.boss=true;announceSpawn('THE FINAL BOSS HAS ARRIVED',x,y);log('BOSS SPAWNED!')}}
 // Keep levels 1–4 unchanged. Reduce later wealth generation to curb huge boss-run surpluses.
 function economyFactor(){const level=S.level; if(level<=4)return 1;if(level<=20)return 1-.60*(level-4)/16;return Math.max(.30,.40-.01*(level-20))}
 function economyFactorAt(level){if(level<=4)return 1;if(level<=20)return 1-.60*(level-4)/16;return Math.max(.30,.40-.01*(level-20))}
@@ -742,19 +837,21 @@ function creepLevelHp(level,type){
 }
 function renderLevelDetails(){
  const lvl=Math.min(30,S.level);
- if(S.roundTypeLevel!==lvl||S.roundTypes.length!==3)setRoundCreeps(lvl);
+ if(S.roundTypeLevel!==lvl||S.roundTypes.length!==4)setRoundCreeps(lvl);
  const interval=waveSpawnInterval(lvl),expected=Math.round(30/interval);
  $('levelTitle').textContent='⚔️ Level Details - '+lvl;
  let html=levelRow('Expected Creeps','~'+expected);
  html+='<div class="levelSection">CREEPS THIS LEVEL</div>';
- S.roundTypes.forEach(type=>{html+=levelRow(type.name+' · '+type.armor+' Armor',creepLevelHp(lvl,type).toLocaleString()+' HP')});
+ ARMOR_ORDER.slice(0,4).forEach((armor,i)=>roundCreepOptions(lvl,i).forEach(({type,share})=>{
+  html+=levelRow(type.name+' · '+armor+' Armor',creepLevelHp(lvl,type).toLocaleString()+' HP');
+ }));
  html+='<div class="levelSection">ARMOR / DAMAGE MATCHUPS</div>';
  html+='<p class="levelHelp">Damage received by each armor type. Green = bonus damage; red = reduced damage.</p>';
  const types=['Normal','Piercing','Magic','Chaos','Siege','Spikes'];
- html+='<table class="armorTable"><thead><tr><th>Damage</th><th>Light</th><th>Medium</th><th>Heavy</th></tr></thead><tbody>';
+ html+='<table class="armorTable"><thead><tr><th>Damage</th><th>Unarm.</th><th>Light</th><th>Medium</th><th>Heavy</th><th>Hero</th></tr></thead><tbody>';
  for(const type of types){
   html+='<tr><td style="color:'+rarityColor(type)+'">'+type+'</td>';
-  for(const armor of ['Light','Medium','Heavy']){
+  for(const armor of ARMOR_ORDER){
    const mult=armorDamageMultiplier(armor,type),pct=Math.round(mult*100);
    html+='<td class="'+(mult>1?'adv':mult<1?'weak':'neutral')+'">'+pct+'%</td>';
   }
@@ -762,10 +859,13 @@ function renderLevelDetails(){
  }
  html+='</tbody></table>';
  html+='<div class="levelSection">SPAWN DISTRIBUTION</div>';
- S.roundTypes.forEach((type,i)=>{html+=levelRow(type.name+' · '+type.armor+' Armor',['70%','22%','8%'][i])});
+ S.roundTypes.forEach((type,i)=>roundCreepOptions(lvl,i).forEach(option=>{
+  html+=levelRow(option.type.name+' · '+type.armor+' Armor',(ARMOR_SPAWN_WEIGHTS[i]*option.share*100).toFixed(1)+'%');
+ }));
  html+=levelRow('Spawn Interval',interval.toFixed(2)+' seconds');
- if(lvl===30)html+=levelRow('Final Boss','Spawns at 15:00 (one)');
- html+='<p class="levelHelp">Expected creep count is approximate because the spawn timer carries between levels. Creep types are selected once per level.</p>';
+ if(lvl%5===0&&lvl<30)html+=levelRow('Hero Miniboss','1 · '+Math.round(strongestCreepHp(lvl)*1.15).toLocaleString()+' HP · spawns halfway through level');
+ if(lvl===30)html+=levelRow('Final Boss','Hero Armor · spawns at 15:00 (one)');
+ html+='<p class="levelHelp">Expected creep count is approximate because the spawn timer carries between levels. Base creep types are selected once per level; new variants are introduced gradually from level 5 and become more common later.</p>';
  $('levelDetails').innerHTML=html;
 }
 function openLevelDetails(){renderLevelDetails();$('levelOverlay').style.display='flex';$('levelOverlay').setAttribute('aria-hidden','false')}
@@ -780,7 +880,15 @@ function creepHealthFactor(level){return 1.10+Math.max(0,Math.min(1,(level-4)/16
 // Round 10: 80% of v32 bounty; round 25+: 55% of v32 bounty.
 function bountyFactor(){const level=Math.min(30,S.level);if(level<=4)return 1;if(level<=10)return 1-.20*(level-4)/6;if(level<=25)return .80-.25*(level-10)/15;return .55}
 function creepGold(e){const level=Math.min(30,S.level),base=Math.max(100,100+(level-1)*10);return Math.floor(base*(e.goldMult||1)*(1+S.bounty)*.375*.75*economyFactor()*bountyFactor())}
-function armorDamageMultiplier(armor,type){let mult=1;if(type==='Piercing')mult=armor==='Light'?1.35:armor==='Heavy'?.8:1;if(type==='Siege')mult=armor==='Heavy'?1.4:armor==='Light'?.85:1;if(type==='Magic')mult=armor==='Medium'?1.25:1;if(type==='Spikes')mult=armor==='Light'?1.2:armor==='Heavy'?.9:1;if(type==='Chaos')mult=1.1;return mult}
+const ARMOR_DAMAGE={
+ Normal:[.75,.85,1.25,1,1],
+ Piercing:[1.25,1.10,1,.85,.90],
+ Magic:[1.10,1,.90,1.25,.85],
+ Chaos:[.85,1,1,1,1.25],
+ Siege:[1.25,.90,.85,1.10,1],
+ Spikes:[1.10,1.25,1,.85,.90]
+};
+function armorDamageMultiplier(armor,type){const i=ARMOR_ORDER.indexOf(armor);return ARMOR_DAMAGE[type]?.[i]??1}
 function applyArmorDamage(e,d,type){return d*armorDamageMultiplier(e.armor||'Medium',type)}
 
 function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}function fx(x,y,color,r=8){S.fx.push({x,y,color,r,life:.25});if(S.fx.length>90)S.fx.splice(0,S.fx.length-90)}
@@ -807,7 +915,7 @@ function tickElementalZones(dt){
 }
 const FX_CAP=48;
 const GROUND_FX_CAP=110; // Ground decals have their own budget; chains/blasts cannot evict them.
-function spellPalette(t){return t.mod==='Fire'?['#ff8a35','#ffc66b']:t.mod==='Frost'?['#65cfff','#c6f4ff']:t.mod==='Poison'?['#8fe45a','#d1ff8b']:[rarityColor(t.type),t.type==='Magic'?'#d7b5ff':t.type==='Chaos'?'#F5A15A':'#fff1cb']}
+function spellPalette(t){return t.mod==='Fire'?['#ff8a35','#ffc66b']:t.mod==='Frost'?['#65cfff','#c6f4ff']:t.mod==='Poison'?['#8fe45a','#d1ff8b']:[rarityColor(t.type),t.type==='Magic'?'#DCE3FF':t.type==='Chaos'?'#FFB575':'#fff1cb']}
 const groundFxDiagnostics={emitted:0,drawn:0,byTower:{}};window.groundFxDiagnostics=groundFxDiagnostics;
 function groundSpell(t,point,r){groundFxDiagnostics.emitted++;const key=t.name||t.type+' '+t.mod+' '+t.pattern;groundFxDiagnostics.byTower[key]=(groundFxDiagnostics.byTower[key]||0)+1;const area=t.pattern==='Area';const palette=spellPalette(t);S.groundFx.push({kind:area?'areaSpell':'splashSpell',points:[{x:point.x,y:point.y}],color:palette[0],accent:palette[1],element:t.mod,r,life:['Fire','Frost','Poison'].includes(t.mod)?1.5:(area?1.25:1.05),max:['Fire','Frost','Poison'].includes(t.mod)?1.5:(area?1.25:1.05),source:t,applyTimer:.5,seed:Math.random()*6.28});if(S.groundFx.length>GROUND_FX_CAP)S.groundFx.splice(0,S.groundFx.length-GROUND_FX_CAP)}
 function combatEffect(kind,points,color,r=40){S.combatFx.push({kind,points,color,r,life:.38,max:.38});if(S.combatFx.length>FX_CAP)S.combatFx.splice(0,S.combatFx.length-FX_CAP)}
@@ -931,7 +1039,7 @@ function shoot(t,dt){
  S.shots.push({x:e.x,y:e.y,life:.12,color:t.mod==='Fire'?'#ff8738':t.mod==='Frost'?'#70d8ff':t.mod==='Poison'?'#86e86e':'#f5e4a5'});
 }
 function modal(t,p,b){S.paused=true;$('mt').textContent=t;$('mp').textContent=p;$('mb').textContent=b;$('overlay').style.display='flex'}
-function update(dt){if(!guideOverlay.hidden||$('levelOverlay').style.display==='flex'||$('incomeOverlay').style.display==='flex'||S.paused||S.over||!S.started)return;dt*=S.speed;S.time+=dt;if(S.time>=600&&!S.timeChallengeAwarded)awardTimeChallenges();if(!S.ownedStatsAt||S.time-S.ownedStatsAt>=1){S.ownedStatsAt=S.time;if(!$('ownedPanel').hidden)renderOwnedTowers()}S.level=Math.min(30,Math.floor(S.time/30)+1);if(S.roundTypeLevel!==S.level)setRoundCreeps(S.level);if(S.time>=S.nextRefresh){refreshAll();S.nextRefresh=(Math.floor(S.time/30)+1)*30}if(S.time>=900&&!S.boss)spawn(true);if(!S.boss){S.spawn-=dt;let catchup=0;while(S.spawn<=0&&catchup++<8){spawn();S.spawn+=waveSpawnInterval(S.level)}}S.incomeTimer+=dt;if(S.incomeTimer>=2){let ticks=Math.floor(S.incomeTimer/2);S.gold+=Math.floor((50+S.income)*2*ticks*economyFactor());S.incomeTimer-=2*ticks}let n=Math.floor(S.time/30);if(n>S.lastCompound){S.gold+=Math.floor(S.compound*30*(n-S.lastCompound)*economyFactor());S.lastCompound=n}S.incomeGrowthTimer+=dt;if(S.incomeGrowthTimer>=15){const ticks=Math.floor(S.incomeGrowthTimer/15);S.income+=ticks*S.incomeGrowth;S.incomeGrowthTimer-=ticks*15}S.maxHp+=S.hpGrowth*dt;S.hp=Math.min(S.maxHp,S.hp+S.hpGrowth*dt*(S.time<S.ankhRegenUntil?3:1));S.maxShield+=S.shieldGrowth*dt;S.shield=Math.min(S.maxShield,S.shield+S.shieldGrowth*dt);S.hp=Math.min(S.maxHp,S.hp+S.regen*dt*(S.time<S.ankhRegenUntil?3:1));S.shield=Math.min(S.maxShield,S.shield+(50+S.shieldRegen)*dt);if(!S.shieldBarrierActive&&S.shield>150)S.shieldBarrierActive=true;S.frameTargets.clear();S.towers.forEach(t=>shoot(t,dt));tickElementalZones(dt);S.enemies.forEach(e=>{if(e.dead)return;e.fire=Math.max(0,e.fire-dt);e.poison=Math.max(0,e.poison-dt);e.frost=Math.max(0,e.frost-dt);if(e.vengeanceTime>0){e.vengeanceTime-=dt;if(e.vengeanceTime<=0)e.vengeanceStacks=0;}let fireDps=e.fire>0?30:0,poisonDps=e.poison>0?5*(e.poisonStacks||1):0,poisonSlow=e.poison>0?Math.min(.4,(e.poisonStacks||1)*.08):0;
+function update(dt){if(!guideOverlay.hidden||$('levelOverlay').style.display==='flex'||$('incomeOverlay').style.display==='flex'||S.paused||S.over||!S.started)return;dt*=S.speed;S.time+=dt;if(S.time>=600&&!S.timeChallengeAwarded)awardTimeChallenges();if(!S.ownedStatsAt||S.time-S.ownedStatsAt>=1){S.ownedStatsAt=S.time;if(!$('ownedPanel').hidden)renderOwnedTowers()}S.spawnAnnouncements=S.spawnAnnouncements.filter(a=>(a.life-=dt)>0);if(!$('castlePanel').hidden)$('castleStats').innerHTML=castleStatsMarkup();S.level=Math.min(30,Math.floor(S.time/30)+1);if(S.roundTypeLevel!==S.level)setRoundCreeps(S.level);if(S.time>=S.nextRefresh){refreshAll();S.nextRefresh=(Math.floor(S.time/30)+1)*30}if(S.level%5===0&&S.level<30&&S.time>=(S.level-1)*30+15)spawnMiniboss(S.level);if(S.time>=900&&!S.boss)spawn(true);if(!S.boss){S.spawn-=dt;let catchup=0;while(S.spawn<=0&&catchup++<8){spawn();S.spawn+=waveSpawnInterval(S.level)}}S.incomeTimer+=dt;if(S.incomeTimer>=2){let ticks=Math.floor(S.incomeTimer/2);S.gold+=Math.floor((50+S.income)*2*ticks*economyFactor());S.incomeTimer-=2*ticks}let n=Math.floor(S.time/30);if(n>S.lastCompound){S.gold+=Math.floor(S.compound*30*(n-S.lastCompound)*economyFactor());S.lastCompound=n}S.incomeGrowthTimer+=dt;if(S.incomeGrowthTimer>=15){const ticks=Math.floor(S.incomeGrowthTimer/15);S.income+=ticks*S.incomeGrowth;S.incomeGrowthTimer-=ticks*15}S.maxHp+=S.hpGrowth*dt;S.hp=Math.min(S.maxHp,S.hp+S.hpGrowth*dt*(S.time<S.ankhRegenUntil?3:1));S.maxShield+=S.shieldGrowth*dt;S.shield=Math.min(S.maxShield,S.shield+S.shieldGrowth*dt);S.hp=Math.min(S.maxHp,S.hp+S.regen*dt*(S.time<S.ankhRegenUntil?3:1));S.shield=Math.min(S.maxShield,S.shield+(50+S.shieldRegen)*dt);if(!S.shieldBarrierActive&&S.shield>150)S.shieldBarrierActive=true;S.frameTargets.clear();S.towers.forEach(t=>shoot(t,dt));tickElementalZones(dt);S.enemies.forEach(e=>{if(e.dead)return;e.fire=Math.max(0,e.fire-dt);e.poison=Math.max(0,e.poison-dt);e.frost=Math.max(0,e.frost-dt);if(e.vengeanceTime>0){e.vengeanceTime-=dt;if(e.vengeanceTime<=0)e.vengeanceStacks=0;}let fireDps=e.fire>0?30:0,poisonDps=e.poison>0?5*(e.poisonStacks||1):0,poisonSlow=e.poison>0?Math.min(.4,(e.poisonStacks||1)*.08):0;
  if(e.poison<=0)e.poisonStacks=0;
  const bossScale=e.boss?.5:1;
  for(const [key,v] of Object.entries(e.fireSources||{})){
@@ -945,7 +1053,13 @@ function update(dt){if(!guideOverlay.hidden||$('levelOverlay').style.display==='
  }
  e.hp-=(fireDps+poisonDps)*dt;
  e.fire=Object.keys(e.fireSources||{}).length?Math.max(e.fire,.01):e.fire;
- e.poison=Object.keys(e.poisonSources||{}).length?Math.max(e.poison,.01):e.poison;if(e.areaLinger&&e.areaLinger.time>0){const tick=Math.min(dt,e.areaLinger.time);e.hp-=e.areaLinger.dps*tick;e.areaLinger.time-=tick;}if(e.bleedTime>0){e.hp-=(e.bleedDps||0)*Math.min(dt,e.bleedTime);e.bleedTime=Math.max(0,e.bleedTime-dt);if(e.bleedTime===0)e.bleedDps=0;}let dx=CX-e.x,dy=CY-e.y,d=Math.hypot(dx,dy)||1;const stunned=(e.stun||0)>0;e.stun=Math.max(0,(e.stun||0)-dt);const stoppingDistance=e.ranged?Math.max(KEEP_WALL+e.r,e.reach*RANGE_WORLD_SCALE):KEEP_WALL+e.r;if(d>stoppingDistance&&!stunned){const step=Math.min(d-stoppingDistance,e.speed*(1-Math.min(.40,e.frost*.09))*dt);e.x+=dx/d*step;e.y+=dy/d*step;}e.attackFlash=Math.max(0,(e.attackFlash||0)-dt);if(!stunned)e.attack+=dt*(1-poisonSlow);if(!stunned&&d<=stoppingDistance+2&&e.attack>=(e.boss?1:e.ranged?1.2:.7)){e.attack=0;e.attackFlash=.23;if(Math.random()>=S.evasion){let dmg=e.dmg*(1-armorReduction(S.armor));const block=S.towers.reduce((sum,t)=>sum+(t.type==='Spikes'?(t.flatBlock||0):0),0);dmg=Math.max(0,dmg-block);if(S.shield>0&&S.shieldBarrierActive)dmg*=1-S.shieldArmor;let a=Math.min(S.shield,dmg);S.shield-=a;if(S.shield<=0)S.shieldBarrierActive=false;S.hp-=dmg-a;if(S.hp<=0&&S.ankhReady){S.ankhReady=false;S.ankhUsed=true;S.hp=S.maxHp*.10;S.ankhRegenUntil=S.time+5;log('ANKH OF RESURRECTION! Restored to 10% max HP; HP regeneration tripled for 5 seconds.');toast('✨ ANKH OF RESURRECTION!');fx(CX,CY,'#ffe88b',36)}if(dmg>a||block>0&&S.shield<=0){for(const t of S.towers){if(t.type!=='Spikes')continue;const woundMultiplier=(1+(e.spikeWounds||0)*.25)*(1+(e.vengeanceStacks||0)*.05);
+ e.poison=Object.keys(e.poisonSources||{}).length?Math.max(e.poison,.01):e.poison;if(e.areaLinger&&e.areaLinger.time>0){const tick=Math.min(dt,e.areaLinger.time);e.hp-=e.areaLinger.dps*tick;e.areaLinger.time-=tick;}if(e.bleedTime>0){e.hp-=(e.bleedDps||0)*Math.min(dt,e.bleedTime);e.bleedTime=Math.max(0,e.bleedTime-dt);if(e.bleedTime===0)e.bleedDps=0;}let dx=CX-e.x,dy=CY-e.y,d=Math.hypot(dx,dy)||1;const stunned=(e.stun||0)>0;e.stun=Math.max(0,(e.stun||0)-dt);const stoppingDistance=e.ranged?Math.max(KEEP_WALL+e.r,e.reach*RANGE_WORLD_SCALE):KEEP_WALL+e.r;if(d>stoppingDistance&&!stunned){const step=Math.min(d-stoppingDistance,e.speed*(1-Math.min(.40,e.frost*.09))*dt);e.x+=dx/d*step;e.y+=dy/d*step;}e.attackFlash=Math.max(0,(e.attackFlash||0)-dt);if(!stunned)e.attack+=dt*(1-poisonSlow);if(!stunned&&d<=stoppingDistance+2&&e.attack>=(e.boss?1:e.ranged?1.2:.7)){e.attack=0;e.attackFlash=.23;const cc=S.castleCombat;cc.attacksAttempted++;cc.incoming+=e.dmg;
+ if(Math.random()>=S.evasion){cc.attacksLanded++;
+ let dmg=e.dmg*(1-armorReduction(S.armor));cc.armor+=e.dmg-dmg;
+ const block=S.towers.reduce((sum,t)=>sum+(t.type==='Spikes'?(t.flatBlock||0):0),0);
+ const afterBlock=Math.max(0,dmg-block);cc.thorns+=dmg-afterBlock;dmg=afterBlock;
+ if(S.shield>0&&S.shieldBarrierActive){const afterBarrier=dmg*(1-S.shieldArmor);cc.barrier+=dmg-afterBarrier;dmg=afterBarrier}
+ let a=Math.min(S.shield,dmg);cc.shield+=a;cc.hpDamage+=dmg-a;S.shield-=a;if(S.shield<=0)S.shieldBarrierActive=false;S.hp-=dmg-a;if(S.hp<=0&&S.ankhReady){S.ankhReady=false;S.ankhUsed=true;S.hp=S.maxHp*.10;S.ankhRegenUntil=S.time+5;log('ANKH OF RESURRECTION! Restored to 10% max HP; HP regeneration tripled for 5 seconds.');toast('✨ ANKH OF RESURRECTION!');fx(CX,CY,'#ffe88b',36)}if(dmg>a||block>0&&S.shield<=0){for(const t of S.towers){if(t.type!=='Spikes')continue;const woundMultiplier=(1+(e.spikeWounds||0)*.25)*(1+(e.vengeanceStacks||0)*.05);
  const rawReflect=(t.dmg+(t.creepHpReflect||0)*e.maxHp+(t.hpReflect||0)*S.maxHp)*(e.armor==='Light'?1+(t.lightBonus||0):1)*(e.ranged?1+(t.rangedBonus||0):1);
  const retaliation=rawReflect*woundMultiplier*(1+S.damage)*(1+(S.typedDamage.Spikes||0))*(Math.random()<S.crit?2:1);
  const hpBeforeReflect=Math.max(0,e.hp);hit(e,retaliation,'None','Spikes');trackDamage(t,hpBeforeReflect,e.hp);S.attacksFired++;t.attacksFired++;
@@ -954,11 +1068,11 @@ function update(dt){if(!guideOverlay.hidden||$('levelOverlay').style.display==='
  if(t.bleed&&!e.dead){e.bleedDps=(e.bleedDps||0)+t.bleed;e.bleedTime=3}
  if(t.woundStack&&!e.dead)e.spikeWounds=(e.spikeWounds||0)+t.woundStack/.25;
  if(t.vengeance&&!e.dead){e.vengeanceStacks=Math.min(5,(e.vengeanceStacks||0)+1);e.vengeanceTime=8;}
-combatEffect('blast',[{x:e.x,y:e.y}],'#ffb35c',14);if(e.dead)break}}}else fx(CX,CY,'#d6f4ff',15);fx(CX+(e.x-CX)/Math.max(1,d)*KEEP_WALL,CY+(e.y-CY)/Math.max(1,d)*KEEP_WALL,'#ff5c68',14)}if(e.hp<=0)kill(e)});S.enemies=S.enemies.filter(e=>!e.dead);S.shots.forEach(v=>v.life-=dt);S.shots=S.shots.filter(v=>v.life>0);S.fx.forEach(v=>v.life-=dt);S.fx=S.fx.filter(v=>v.life>0);S.combatFx.forEach(v=>v.life-=dt);S.combatFx=S.combatFx.filter(v=>v.life>0);S.groundFx.forEach(v=>v.life-=dt);S.groundFx=S.groundFx.filter(v=>v.life>0);S.goldPops.forEach(v=>{v.life-=dt;v.y-=19*dt});S.goldPops=S.goldPops.filter(v=>v.life>0);if(!S.clearUsed&&!S.ankhReady&&S.hp<=S.maxHp*.01){S.hp=S.maxHp*.01;S.clearUsed=true;S.clearAuto=true;S.enemies=[];log('Emergency Clear auto-cast at 1% HP: enemies removed, no kill gold and no healing.')}if(S.hp<=0){S.hp=0;S.over=true;modal('Tower Destroyed','Survived '+clock(S.time)+'. Kills: '+S.kills+'.','New Run')}ui()}
+combatEffect('blast',[{x:e.x,y:e.y}],'#ffb35c',14);if(e.dead)break}}}else{cc.evasion+=e.dmg;fx(CX,CY,'#d6f4ff',15)}fx(CX+(e.x-CX)/Math.max(1,d)*KEEP_WALL,CY+(e.y-CY)/Math.max(1,d)*KEEP_WALL,'#ff5c68',14)}if(e.hp<=0)kill(e)});S.enemies=S.enemies.filter(e=>!e.dead);S.shots.forEach(v=>v.life-=dt);S.shots=S.shots.filter(v=>v.life>0);S.fx.forEach(v=>v.life-=dt);S.fx=S.fx.filter(v=>v.life>0);S.combatFx.forEach(v=>v.life-=dt);S.combatFx=S.combatFx.filter(v=>v.life>0);S.groundFx.forEach(v=>v.life-=dt);S.groundFx=S.groundFx.filter(v=>v.life>0);S.goldPops.forEach(v=>{v.life-=dt;v.y-=19*dt});S.goldPops=S.goldPops.filter(v=>v.life>0);if(!S.clearUsed&&!S.ankhReady&&S.hp<=S.maxHp*.01){S.hp=S.maxHp*.01;S.clearUsed=true;S.clearAuto=true;S.enemies=[];log('Emergency Clear auto-cast at 1% HP: enemies removed, no kill gold and no healing.')}if(S.hp<=0){S.hp=0;S.over=true;modal('Tower Destroyed','Survived '+clock(S.time)+'. Kills: '+S.kills+'.','New Run')}ui()}
 function drawCreep(e){
  const r=e.r, body=e.boss?'#a92c4e':e.poison?'#72b64e':e.fire?'#e86a36':e.frost?'#5ab5d5':e.color||'#c06c59';
- const outline=e.armor==='Heavy'?'#d4d9df':e.armor==='Medium'?'#e0c17a':'#f0b09a';
- x.save();x.translate(e.x,e.y);if(e.boss)x.scale(1.5,1.5);x.lineJoin='round';x.lineCap='round';
+ const outline=({Hero:'#e3b8ff',Heavy:'#d4d9df',Medium:'#e0c17a',Light:'#f0b09a',Unarmored:'#8be6d6'})[e.armor]||'#f0b09a';
+ x.save();x.translate(e.x,e.y);if(e.boss)x.scale(1.5,1.5);else if(e.miniboss)x.scale(1.25,1.25);x.lineJoin='round';x.lineCap='round';
  // soft ground shadow
  x.fillStyle='rgba(15,25,24,.34)';x.beginPath();x.ellipse(1,r*.78,r*1.15,r*.48,0,0,Math.PI*2);x.fill();
  if(e.boss){
@@ -1123,6 +1237,15 @@ function draw(){
   x.restore();
   
  });
+ if(S.floatingCastleBars){
+  const bw=96,bh=9,barX=CX-bw/2,barY=CY-85;
+  const meters=[{pct:S.maxHp>0?S.hp/S.maxHp:0,color:'#55d77e'},{pct:S.maxShield>0?S.shield/S.maxShield:0,color:'#4d9dff'}];
+  meters.forEach((meter,i)=>{const yy=barY+i*15,pct=Math.max(0,Math.min(1,meter.pct));
+   x.fillStyle='rgba(9,22,28,.85)';x.fillRect(barX-2,yy-2,bw+4,bh+4);x.fillStyle='#263d46';x.fillRect(barX,yy,bw,bh);x.fillStyle=meter.color;x.fillRect(barX,yy,bw*pct,bh);
+   x.fillStyle='#fff';x.strokeStyle='#0c1821';x.lineWidth=2;x.textAlign='center';x.textBaseline='middle';x.font='900 9px system-ui';const label=Math.round(pct*100)+'%';x.strokeText(label,CX,yy+bh/2);x.fillText(label,CX,yy+bh/2);
+  });
+ }
+ drawSpawnAnnouncements();
  S.combatFx.forEach(v=>{const progress=1-v.life/v.max;x.save();x.globalAlpha=Math.max(0,v.life/v.max)*.85;x.strokeStyle=v.color;x.shadowColor=v.color;x.shadowBlur=9;
   if(v.kind==='blast'){const q=v.points[0];x.lineWidth=3.5;x.beginPath();x.arc(q.x,q.y,Math.max(3,v.r*(.2+.8*progress)),0,Math.PI*2);x.stroke();x.lineWidth=1;x.beginPath();x.arc(q.x,q.y,Math.max(3,v.r*(.05+.45*progress)),0,Math.PI*2);x.stroke()}
   else {x.lineWidth=3.5; x.beginPath();v.points.forEach((q,i)=>{if(i===0)x.moveTo(q.x,q.y);else x.lineTo(q.x,q.y)});x.stroke();v.points.forEach(q=>{x.beginPath();x.arc(q.x,q.y,5+progress*5,0,Math.PI*2);x.stroke()})}x.restore()});
@@ -1131,7 +1254,10 @@ function draw(){
  if(S.paused||!S.started){x.fillStyle='#071018aa';x.fillRect(0,0,W,H);x.fillStyle='#fff';x.font='bold 21px system-ui';x.textAlign='center';x.fillText(S.paused?'PAUSED':'DEFEND THE ISLAND',CX,CY-112);x.font='13px system-ui';x.fillStyle='#b9ccd5';x.fillText(S.paused?'Tap Resume to continue':'Buy a tower and an upgrade below',CX,CY-88)}
 }
 let last=performance.now();function loop(now){let dt=Math.min(.06,(now-last)/1000);last=now;update(dt);draw();requestAnimationFrame(loop)}
-$('levelButton').addEventListener('click',openLevelDetails);$('levelButton').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openLevelDetails()}});$('levelClose').addEventListener('click',closeLevelDetails);$('levelOverlay').addEventListener('click',e=>{if(e.target===$('levelOverlay'))closeLevelDetails()});$('incomeButton').addEventListener('click',openIncomeDetails);$('incomeButton').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openIncomeDetails()}});$('incomeClose').addEventListener('click',closeIncomeDetails);$('incomeOverlay').addEventListener('click',e=>{if(e.target===$('incomeOverlay'))closeIncomeDetails()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeIncomeDetails();closeLevelDetails()}});$('reroll').onclick=()=>reroll();$('clear').onclick=()=>{if(S.clearUsed||S.over)return;S.clearUsed=true;S.enemies.forEach(e=>{if(e.dead)return;const baseGold=Math.floor(Math.max(100,100+(S.level-1)*10)*(e.goldMult||1)),earnedGold=creepGold(e);S.gold+=earnedGold;S.killGoldEarned+=earnedGold;S.bountyBonusGold+=Math.max(0,earnedGold-baseGold);S.kills++;S.goldPops.push({x:e.x,y:e.y-14,text:'+'+fmt(earnedGold)+'g',life:1.1,max:1.1});fx(e.x,e.y,'#ffe078',15)});const clearedBoss=S.enemies.some(e=>e.boss&&!e.dead);S.enemies=[];S.hp=Math.min(S.maxHp,S.hp+Math.max(1000,S.maxHp*.25));log('CLEAR! Enemies wiped, kill gold awarded, tower healed.');if(clearedBoss){S.over=true;S.won=true;awardChallenge();modal('Victory!','You defeated the 15-minute boss using Clear.','New Run')}ui()};$('pause').onclick=()=>{if(S.over)return;S.paused=!S.paused;$('pause').textContent=S.paused?'▶ Resume':'Ⅱ Pause'};$('speed').onclick=()=>{S.speed=S.speed===1?2:S.speed===2?3:1;$('speed').textContent='▶▶ '+S.speed+'× Speed'};$('mb').onclick=()=>{if(S.over){S=fresh();$('challengeNudge').hidden=false;$('overlay').style.display='none';$('log').innerHTML='New run: 5,000 gold; income pays every 2 seconds at 50 gold/s.';offers()}else{S.paused=false;$('overlay').style.display='none';$('pause').textContent='Ⅱ Pause'}};
+$('game').addEventListener('click',e=>{const bounds=$('game').getBoundingClientRect();const mx=(e.clientX-bounds.left)*W/bounds.width,my=(e.clientY-bounds.top)*H/bounds.height;if(Math.hypot(mx-CX,my-CY)<52)showCastle($('castlePanel').hidden);else if(!$('castlePanel').hidden)showCastle(false)});
+$('castleClose').onclick=()=>showCastle(false);
+$('castleBarToggle').addEventListener('change',e=>{S.floatingCastleBars=e.target.checked});
+$('levelButton').addEventListener('click',openLevelDetails);$('levelButton').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openLevelDetails()}});$('levelClose').addEventListener('click',closeLevelDetails);$('levelOverlay').addEventListener('click',e=>{if(e.target===$('levelOverlay'))closeLevelDetails()});$('incomeButton').addEventListener('click',openIncomeDetails);$('incomeButton').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openIncomeDetails()}});$('incomeClose').addEventListener('click',closeIncomeDetails);$('incomeOverlay').addEventListener('click',e=>{if(e.target===$('incomeOverlay'))closeIncomeDetails()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeIncomeDetails();closeLevelDetails();showCastle(false)}});$('reroll').onclick=()=>reroll();$('clear').onclick=()=>{if(S.clearUsed||S.over)return;S.clearUsed=true;S.enemies.forEach(e=>{if(e.dead)return;const baseGold=Math.floor(Math.max(100,100+(S.level-1)*10)*(e.goldMult||1)),earnedGold=creepGold(e);S.gold+=earnedGold;S.killGoldEarned+=earnedGold;S.bountyBonusGold+=Math.max(0,earnedGold-baseGold);S.kills++;S.goldPops.push({x:e.x,y:e.y-14,text:'+'+fmt(earnedGold)+'g',life:1.1,max:1.1});fx(e.x,e.y,'#ffe078',15)});const clearedBoss=S.enemies.some(e=>e.boss&&!e.dead);S.enemies=[];S.hp=Math.min(S.maxHp,S.hp+Math.max(1000,S.maxHp*.25));log('CLEAR! Enemies wiped, kill gold awarded, tower healed.');if(clearedBoss){S.over=true;S.won=true;awardChallenge();modal('Victory!','You defeated the 15-minute boss using Clear.','New Run')}ui()};$('pause').onclick=()=>{if(S.over)return;S.paused=!S.paused;$('pause').textContent=S.paused?'▶ Resume':'Ⅱ Pause'};$('speed').onclick=()=>{S.speed=S.speed===1?2:S.speed===2?3:1;$('speed').textContent='▶▶ '+S.speed+'× Speed'};$('mb').onclick=()=>{if(S.over){const keepBars=S.floatingCastleBars;S=fresh();S.floatingCastleBars=keepBars;showCastle(false);$('challengeNudge').hidden=false;$('overlay').style.display='none';$('log').innerHTML='New run: 5,000 gold; income pays every 2 seconds at 50 gold/s.';offers()}else{S.paused=false;$('overlay').style.display='none';$('pause').textContent='Ⅱ Pause'}};
 const guideOverlay=$('guideOverlay'),guideTitle=$('guideTitle'),guideBody=$('guideBody'),guideActions=$('guideActions');
 let guidePage='how',guideWelcome=true;
 const GUIDE_CONTENT={
@@ -1173,7 +1299,7 @@ function openGuide(page='how',welcome=false){
  ?'<button id="guideRestart" class="guideWarning">↻ Restart Game</button><button id="guideHow">📖 How to Play</button><button id="guideMechanics">⚙ Game Mechanics</button><button id="guideBack" class="guidePrimary">Resume Game</button>'
  :'<button id="guideBack" class="guidePrimary">'+(welcome?'▶ Start Playing':'← Back to Menu')+'</button>';
  if(page==='menu'){
- $('guideRestart').onclick=()=>{if(confirm('Restart this run? All progress in the current run will be lost.')){S=fresh();$('challengeNudge').hidden=false;$('overlay').style.display='none';$('pause').textContent='Ⅱ Pause';offers();renderOwnedTowers();closeGuide()}};
+ $('guideRestart').onclick=()=>{if(confirm('Restart this run? All progress in the current run will be lost.')){const keepBars=S.floatingCastleBars;S=fresh();S.floatingCastleBars=keepBars;showCastle(false);$('challengeNudge').hidden=false;$('overlay').style.display='none';$('pause').textContent='Ⅱ Pause';offers();renderOwnedTowers();closeGuide()}};
  $('guideHow').onclick=()=>openGuide('how');
  $('guideMechanics').onclick=()=>openGuide('mechanics');
  }
