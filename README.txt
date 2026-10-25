@@ -1,4 +1,9 @@
-v127 — End-of-run battlefield banners and unlimited stackable Ankhs. Restart via Menu. No balance changes.
+Tower Survivor v129
+Deploy index.html, sw.js, manifest.json, and README.txt to GitHub Pages repository root.
+
+v129: Critical Hit Chance purchased/effective display in Owned Towers; Mana Shield Damage Reduction purchased/effective display in Castle Status. No combat changes.
+
+v128 — End-of-run battlefield banners and unlimited stackable Ankhs. Restart via Menu. No balance changes.
 
 v126 — Tower ability descriptions audited against combat logic. Iron Thorns now shows Block 10 damage; missing special mechanics and incorrect stun duration corrected. No combat changes.
 
