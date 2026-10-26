@@ -135,3 +135,7 @@ v109: Level Details title shows current level, creep types and accurate HP befor
 
 
 v109: Ankh inventory icon uses a silver/gray metallic ankh silhouette inspired by the classic Warcraft III Ankh of Reincarnation. Inventory badge and detail card icon updated; functionality unchanged.
+
+
+v133 AUDIO UPDATE
+Reroll, Clear (manual and emergency), Ankh, Victory and Defeat cues embedded for offline playback. Event priority: result > Ankh > Clear > boss > castle damage > enemy death > attacks > elemental. Reserved future combat limits: castle 2 simultaneous/0.15s; deaths 3/0.10s per family; attacks 4/0.15s per damage type; elements 2/0.25s per element. Only the approved event sounds are live; combat audio remains unimplemented. Menu/purchase/reroll audio is independent and unlimited. No gameplay balance changes.
