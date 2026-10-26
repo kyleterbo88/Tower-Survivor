@@ -1,3 +1,17 @@
+Tower Survivor v132 — GitHub Pages deployment
+Upload index.html, sw.js, manifest.json, README.txt to your published branch.
+Approved sounds are embedded directly into index.html and work offline.
+Menu Open: Menu_Select_00; Menu Close: Inventory_Open_00; Purchase: Pickup_Gold_00.
+Master and Interface volume settings in Menu; quick mute near Menu button.
+Original source WAVs are not redistributed in this update ZIP.
+Source license and rights should be verified before public commercial release.
+
+Tower Survivor v131 — result panel controls and critical tracker display
+
+Extract index.html, sw.js, manifest.json and README.txt to the root of the GitHub Pages repository.
+
+v131: small top-right × dismiss on VICTORY/DEFEATED, direct Restart button, and a note about inspecting the battlefield before restarting through Menu. Critical Hit bonus is displayed as a simple percentage like Attack Speed. No combat or economy changes.
+
 Tower Survivor v130
 Deploy index.html, sw.js, manifest.json, and README.txt to GitHub Pages repository root.
 
