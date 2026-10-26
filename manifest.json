@@ -1,1 +1,32 @@
-{"name":"Tower Survivor","short_name":"Tower Survivor","start_url":"./index.html","display":"standalone","background_color":"#101820","theme_color":"#101820"}
+[
+  {
+    "label": "Soft solenoid \u2014 short, warm clunk",
+    "file": "01_soft_solenoid.wav",
+    "source": "User-provided JC Sounds sample, 05_purchase_coins_a.wav",
+    "status": "Preview candidate"
+  },
+  {
+    "label": "Polished button \u2014 tighter electromechanical click",
+    "file": "02_polished_button.wav",
+    "source": "User-provided JC Sounds sample, 05_purchase_coins_a.wav",
+    "status": "Preview candidate"
+  },
+  {
+    "label": "Deep thud \u2014 fuller, muted button press",
+    "file": "03_deep_thud.wav",
+    "source": "User-provided JC Sounds sample, 05_purchase_coins_a.wav",
+    "status": "Preview candidate"
+  },
+  {
+    "label": "Digital-mechanical \u2014 crisp, compact feedback",
+    "file": "04_digital_mechanical.wav",
+    "source": "User-provided JC Sounds sample, 05_purchase_coins_a.wav",
+    "status": "Preview candidate"
+  },
+  {
+    "label": "Soft close \u2014 quieter companion sound",
+    "file": "05_soft_close.wav",
+    "source": "User-provided JC Sounds sample, 05_purchase_coins_a.wav",
+    "status": "Preview candidate"
+  }
+]
