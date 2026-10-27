@@ -1,1 +1,1 @@
-Tower Survivor v157: creep HP and attack damage from level 5 onward are +5% relative to v154, reduced from +10% in v155/v156. Includes v156 audio restart fix. Deploy index.html, sw.js, manifest.json, README.txt.
+Tower Survivor v158. Level 5 onward: creep HP and attack damage +2.5% relative to v154 (down from +5% in v157). Existing level scaling, tower balance, and v156 audio restart fix unchanged. Upload index.html, sw.js, manifest.json.
