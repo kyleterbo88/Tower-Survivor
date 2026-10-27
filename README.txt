@@ -1,1 +1,1 @@
-Tower Survivor v142 compact HUD update. Publish index.html, sw.js, manifest.json and README.txt to GitHub Pages. Exact pre-redesign v141 ZIP retained separately for rollback. No gameplay/balance changes. Verify UI on iPhone.
+Tower Survivor v143 — Emergency HUD initialization repair. Fixes a JavaScript syntax error introduced in v142. Upload index.html, sw.js, manifest.json, README.txt to published GitHub Pages branch. Header reads v143. Full pre-redesign v141 ZIP backup provided separately.
