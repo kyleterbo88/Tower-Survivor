@@ -224,7 +224,7 @@
 .tsAudioSettings input[type=range]{display:block;width:100%;margin:6px 0 10px;accent-color:#d8b46b}
 .tsAudioSettings button{padding:8px 12px;background:#294658;border:1px solid #668596;color:white;border-radius:7px}
 </style></head><body><div id="app">
-<header><div><h1>🏰 Tower Survivor v136</h1></div></header>
+<header><div><h1>🏰 Tower Survivor v138</h1></div></header>
 <div class="stats">
   <div class="stat statIcon"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#ff405c" d="M12 21s-9-5.8-9-12a5.1 5.1 0 0 1 9-3.1A5.1 5.1 0 0 1 21 9c0 6.2-9 12-9 12Z"/><path fill="#ff8090" opacity=".65" d="M6 8c.5-2 2-2.6 3.4-1.6" stroke="#ffb4be" stroke-width="1.3" stroke-linecap="round"/></svg><div class="statBody"><div class="label">Tower HP</div><div class="val" id="hp">2,500 / 2,500</div></div></div><div class="bar"><div id="hpbar" style="width:100%"></div></div></div>
   <div class="stat statIcon" id="shieldStat" style="visibility:hidden"><div class="statIconRow"><svg class="hudIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 21 5v6c0 5.5-3.5 9-9 11-5.5-2-9-5.5-9-11V5Z" fill="#169bff"/><path d="M12 3.5 5 6v5c0 4.5 2.5 7.2 7 9Z" fill="#63d8ff"/><path d="M12 3.5 19 6v5c0 4.5-2.5 7.2-7 9Z" fill="#2680e8"/></svg><div class="statBody"><div class="label">Mana Shield</div><div class="val" id="shieldValue">0 / 0</div></div></div><div class="bar"><div id="shieldBar" style="width:0%;background:#67caff"></div></div></div>
@@ -279,72 +279,133 @@ function tsPlayAudio(type){
    Castle damage, creature deaths and attacks active; boss announcements and elemental sounds reserved. */
 const TS_SOUND_PRIORITY={victory:100,defeat:100,clear:90,ankh:80,boss:70,castle:60,death:50,attack:40,elemental:30};
 const TS_SOUND_LIMITS={castle:{max:2,cooldown:.15},death:{max:3,cooldown:.10},attack:{max:4,cooldown:.15},elemental:{max:2,cooldown:.25}};
-// v135: fixed-size reusable audio players. No per-shot Audio allocations or repeated base64 decoding.
+// v137: one shared Web Audio mixer; no HTMLMediaElement players in combat.
+// Decode each unique clip once. Reuse immutable AudioBuffers; sources are lightweight and bounded.
 const tsActiveEvents=[];
-const tsLastEvent={};
-const tsAudioPools=new Map();
-const tsBlobSources=new Map();
-function tsCachedSource(source){
-  if(!source.startsWith('data:'))return source;
-  if(tsBlobSources.has(source))return tsBlobSources.get(source);
+const tsLastEvent=Object.create(null);
+const tsDecodedSounds=new Map();
+const tsDecodingSounds=new Map();
+let tsCombatContext=null;
+let tsCombatBus=null;
+let tsPrewarmStarted=false;
+function tsAudioContext(){
+  if(tsCombatContext)return tsCombatContext;
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return null;
   try{
-    const comma=source.indexOf(','),header=source.slice(0,comma);
-    const binary=atob(source.slice(comma+1)),bytes=new Uint8Array(binary.length);
-    for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
-    const mime=(header.match(/^data:([^;,]+)/)||[])[1]||'audio/mp4';
-    const url=URL.createObjectURL(new Blob([bytes],{type:mime}));
-    tsBlobSources.set(source,url);return url;
-  }catch(e){return source}
+    tsCombatContext=new AC({latencyHint:'interactive'});
+    tsCombatBus=tsCombatContext.createGain();
+    tsCombatBus.connect(tsCombatContext.destination);
+    return tsCombatContext;
+  }catch(e){return null}
 }
-function tsGetAudioPool(type,family,source){
-  const key=type+':'+family;
-  if(tsAudioPools.has(key))return tsAudioPools.get(key);
-  const max=(TS_SOUND_LIMITS[type]||{}).max||1;
-  const url=tsCachedSource(source),pool=[];
-  for(let i=0;i<max;i++){
-    const audio=new Audio();audio.preload='auto';audio.src=url;
-    const record={audio,type,priority:TS_SOUND_PRIORITY[type]||0,busy:false};audio.addEventListener('ended',()=>tsReleaseSound(record));audio.addEventListener('error',()=>tsReleaseSound(record));pool.push(record);
+function tsCombatGain(){
+  return tsAudioSettings.muted?0:Math.max(0,Math.min(1,tsAudioSettings.master/100*tsAudioSettings.combat/100));
+}
+function tsRefreshCombatGain(){
+  if(tsCombatBus)tsCombatBus.gain.value=tsCombatGain();
+}
+function tsResumeCombatAudio(){
+  const ctx=tsAudioContext();
+  if(!ctx)return;
+  tsRefreshCombatGain();
+  if(ctx.state==='suspended')ctx.resume().catch(()=>{});
+  if(!tsPrewarmStarted){
+    tsPrewarmStarted=true;
+    // Schedule decoding outside the frame loop. Never decode inside a combat event.
+    const entries=[
+      ['attack:default',TS_AUDIO_SOURCES.attack],
+      ['castle:default',TS_AUDIO_SOURCES.castle],
+      ...Object.entries(TS_CREEP_DEATH_AUDIO).map(([family,src])=>['death:'+family,src]),
+      ...['victory','defeat','clear','ankh'].filter(k=>TS_AUDIO_SOURCES[k]).map(k=>[k+':default',TS_AUDIO_SOURCES[k]])
+    ];
+    let n=0;
+    const next=()=>{
+      if(n>=entries.length)return;
+      const [key,src]=entries[n++];
+      tsDecodeSound(key,src).finally(()=>setTimeout(next,30));
+    };
+    setTimeout(next,150);
   }
-  tsAudioPools.set(key,pool);return pool;
+}
+function tsDecodeSound(key,source){
+  if(tsDecodedSounds.has(key))return Promise.resolve(tsDecodedSounds.get(key));
+  if(tsDecodingSounds.has(key))return tsDecodingSounds.get(key);
+  const ctx=tsAudioContext();
+  if(!ctx||!source)return Promise.resolve(null);
+  const task=(async()=>{
+    try{
+      const comma=source.indexOf(',');
+      if(comma<0)return null;
+      const raw=atob(source.slice(comma+1));
+      const bytes=new Uint8Array(raw.length);
+      for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);
+      const buffer=await ctx.decodeAudioData(bytes.buffer);
+      tsDecodedSounds.set(key,buffer);
+      return buffer;
+    }catch(e){return null}
+    finally{tsDecodingSounds.delete(key)}
+  })();
+  tsDecodingSounds.set(key,task);
+  return task;
 }
 function tsReleaseSound(record){
-  record.busy=false;
-  const i=tsActiveEvents.indexOf(record);if(i>=0)tsActiveEvents.splice(i,1);
+  if(!record.active)return;
+  record.active=false;
+  const i=tsActiveEvents.indexOf(record);
+  if(i>=0)tsActiveEvents.splice(i,1);
 }
 function tsStopSound(record){
-  try{record.audio.pause();record.audio.currentTime=0}catch(e){}
+  if(!record.active)return;
   tsReleaseSound(record);
+  try{record.node.stop()}catch(e){}
+  try{record.node.disconnect()}catch(e){}
+  try{record.gain.disconnect()}catch(e){}
 }
 function tsPlayEvent(type,family='default'){
+  if(tsAudioSettings.muted||tsAudioSettings.master<=0||tsAudioSettings.combat<=0)return false;
+  const key=type+':'+family;
   const source=type==='death'?(TS_CREEP_DEATH_AUDIO[family]||TS_CREEP_DEATH_AUDIO.Footman):TS_AUDIO_SOURCES[type];
-  if(!source||tsAudioSettings.muted||tsAudioSettings.master<=0)return false;
+  if(!source)return false;
+  const ctx=tsCombatContext;
+  // No decoding or audio context initialization in the high-frequency combat loop.
+  if(!ctx||ctx.state!=='running')return false;
+  const buffer=tsDecodedSounds.get(key);
+  if(!buffer){if(!tsDecodingSounds.has(key))tsDecodeSound(key,source);return false}
   const now=performance.now()/1000,priority=TS_SOUND_PRIORITY[type]||0;
-  // Reap completed players without creating any new audio objects.
-  for(let i=tsActiveEvents.length-1;i>=0;i--){const r=tsActiveEvents[i];if(r.audio.ended||r.audio.paused)tsReleaseSound(r)}
-  const rule=TS_SOUND_LIMITS[type],key=type+':'+family;
+  const rule=TS_SOUND_LIMITS[type];
   if(rule){
     if(now-(tsLastEvent[key]??-Infinity)<rule.cooldown)return false;
-    if(tsActiveEvents.filter(a=>a.type===type).length>=rule.max)return false;
+    let count=0;
+    for(const r of tsActiveEvents)if(r.type===type&&r.active)count++;
+    if(count>=rule.max)return false;
   }
   if(type==='victory'||type==='defeat'){
     for(const r of [...tsActiveEvents])tsStopSound(r);
   }else if(type==='ankh'||type==='clear'){
     for(const r of [...tsActiveEvents])if(r.priority<priority)tsStopSound(r);
-  }else if(tsActiveEvents.some(a=>a.priority>=80&&a.priority>priority))return false;
-  if(type==='ankh'&&tsActiveEvents.some(a=>a.priority>priority))return false;
-  if(['castle','death','attack','elemental'].includes(type)&&tsActiveEvents.some(a=>a.priority>=70))return false;
+  }else if(tsActiveEvents.some(a=>a.active&&a.priority>=80&&a.priority>priority))return false;
+  if(type==='ankh'&&tsActiveEvents.some(a=>a.active&&a.priority>priority))return false;
+  if(['castle','death','attack','elemental'].includes(type)&&tsActiveEvents.some(a=>a.active&&a.priority>=70))return false;
   try{
-    const record=tsGetAudioPool(type,family,source).find(r=>!r.busy);
-    if(!record)return false;
-    const audio=record.audio;
-    const level=type==='castle'?.85:type==='death'?.43:type==='attack'?.50:1;
-    audio.volume=Math.min(1,Math.max(0,tsAudioSettings.master/100*tsAudioSettings.combat/100*level));
-    record.busy=true;tsActiveEvents.push(record);tsLastEvent[key]=now;
-    audio.currentTime=0;
-    const play=audio.play();if(play&&play.catch)play.catch(()=>tsReleaseSound(record));
+    const node=ctx.createBufferSource();
+    const gain=ctx.createGain();
+    node.buffer=buffer;
+    gain.gain.value=type==='castle'?.85:type==='death'?.43:type==='attack'?.50:1;
+    node.connect(gain);gain.connect(tsCombatBus);
+    const record={node,gain,type,priority,active:true};
+    node.onended=()=>{tsReleaseSound(record);try{node.disconnect();gain.disconnect()}catch(e){}};
+    tsActiveEvents.push(record);
+    tsLastEvent[key]=now;
+    node.start();
     return true;
   }catch(e){return false}
 }
+// Unlock Web Audio only after a user gesture, as required by iOS Safari.
+document.addEventListener('pointerdown',tsResumeCombatAudio,{once:true,passive:true});
+document.addEventListener('touchstart',tsResumeCombatAudio,{once:true,passive:true});
+document.addEventListener('keydown',tsResumeCombatAudio,{once:true});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&tsCombatContext&&tsCombatContext.state==='suspended')tsCombatContext.resume().catch(()=>{})});
 function tsUpdateAudioControls(){
   const master=$('tsMasterVolume'),ui=$('tsInterfaceVolume'),combat=$('tsCombatVolume'),mute=$('tsAudioMute');
   if(master){master.value=tsAudioSettings.master;$('tsMasterValue').textContent=tsAudioSettings.master+'%'}
@@ -352,14 +413,50 @@ function tsUpdateAudioControls(){
   if(combat){combat.value=tsAudioSettings.combat;$('tsCombatValue').textContent=tsAudioSettings.combat+'%'}
   if(mute)mute.textContent=tsAudioSettings.muted?'🔇 Unmute':'🔊 Mute';
   const quick=$('tsQuickMute');if(quick){quick.textContent=tsAudioSettings.muted?'🔇':'🔊';quick.setAttribute('aria-label',tsAudioSettings.muted?'Unmute audio':'Mute audio');quick.title=tsAudioSettings.muted?'Unmute audio':'Mute audio'}
-  // Apply combat volume changes to active sounds immediately.
-  for(const r of tsActiveEvents){const level=r.type==='castle'?.85:r.type==='death'?.43:r.type==='attack'?.50:1;r.audio.volume=Math.min(1,Math.max(0,tsAudioSettings.master/100*tsAudioSettings.combat/100*level))}
+  // One gain node updates every active and future combat sound.
+  tsRefreshCombatGain();
+}
+// v138: lightweight, generated slider previews using the shared Web Audio context.
+// No samples, decoding, or new Audio elements. Short debounce avoids slider-drag spam.
+let tsPreviewTimer=0,tsPreviewLast=0,tsPreviewVoice=null;
+function tsPlayVolumePreview(group){
+  if(tsAudioSettings.muted)return;
+  const master=Math.max(0,Math.min(1,Number(tsAudioSettings.master)/100));
+  const groupGain=group==='interface'?Number(tsAudioSettings.interface)/100:group==='combat'?Number(tsAudioSettings.combat)/100:1;
+  const level=master*Math.max(0,Math.min(1,groupGain));
+  if(level<=0)return;
+  const ctx=tsAudioContext();if(!ctx)return;
+  if(ctx.state!=='running'){ctx.resume().catch(()=>{});return}
+  if(tsPreviewVoice){try{tsPreviewVoice.stop()}catch(e){}tsPreviewVoice=null}
+  try{
+    const osc=ctx.createOscillator(),gain=ctx.createGain();
+    const now=ctx.currentTime;
+    // Subtle, warm confirmation tones: not harsh, shrill or overly musical.
+    const freq=group==='combat'?210:group==='interface'?390:300;
+    osc.type=group==='combat'?'triangle':'sine';
+    osc.frequency.setValueAtTime(freq,now);
+    osc.frequency.exponentialRampToValueAtTime(freq*.92,now+.10);
+    gain.gain.setValueAtTime(.0001,now);
+    gain.gain.exponentialRampToValueAtTime(Math.max(.0002,.20*level),now+.012);
+    gain.gain.exponentialRampToValueAtTime(.0001,now+.14);
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.onended=()=>{if(tsPreviewVoice===osc)tsPreviewVoice=null;osc.disconnect();gain.disconnect()};
+    tsPreviewVoice=osc;osc.start(now);osc.stop(now+.15);
+  }catch(e){}
+}
+function tsScheduleVolumePreview(group,immediate=false){
+  clearTimeout(tsPreviewTimer);
+  if(immediate){tsPreviewLast=performance.now();tsPlayVolumePreview(group);return}
+  const now=performance.now();
+  // While dragging: at most one brief preview every 180 ms.
+  if(now-tsPreviewLast>=180){tsPreviewLast=now;tsPlayVolumePreview(group)}
+  else tsPreviewTimer=setTimeout(()=>{tsPreviewLast=performance.now();tsPlayVolumePreview(group)},180-(now-tsPreviewLast));
 }
 function tsBindAudioControls(){
   const master=$('tsMasterVolume'),ui=$('tsInterfaceVolume'),combat=$('tsCombatVolume'),mute=$('tsAudioMute'),advanced=$('tsAudioAdvancedToggle'),panel=$('tsAudioAdvanced');
-  if(master)master.oninput=()=>{tsAudioSettings.master=Number(master.value);tsSaveAudio();tsUpdateAudioControls()};
-  if(ui)ui.oninput=()=>{tsAudioSettings.interface=Number(ui.value);tsSaveAudio();tsUpdateAudioControls()};
-  if(combat)combat.oninput=()=>{tsAudioSettings.combat=Number(combat.value);tsSaveAudio();tsUpdateAudioControls()};
+  if(master){master.oninput=()=>{tsAudioSettings.master=Number(master.value);tsSaveAudio();tsUpdateAudioControls();tsScheduleVolumePreview('master')};master.addEventListener('change',()=>tsScheduleVolumePreview('master',true))};
+  if(ui){ui.oninput=()=>{tsAudioSettings.interface=Number(ui.value);tsSaveAudio();tsUpdateAudioControls();tsScheduleVolumePreview('interface')};ui.addEventListener('change',()=>tsScheduleVolumePreview('interface',true))};
+  if(combat){combat.oninput=()=>{tsAudioSettings.combat=Number(combat.value);tsSaveAudio();tsUpdateAudioControls();tsScheduleVolumePreview('combat')};combat.addEventListener('change',()=>tsScheduleVolumePreview('combat',true))};
   if(mute)mute.onclick=()=>{tsAudioSettings.muted=!tsAudioSettings.muted;tsSaveAudio();tsUpdateAudioControls()};
   if(advanced&&panel)advanced.onclick=()=>{panel.hidden=!panel.hidden;advanced.setAttribute('aria-expanded',String(!panel.hidden));advanced.textContent=panel.hidden?'⚙ Audio Settings ▾':'⚙ Audio Settings ▴'};
   tsUpdateAudioControls();
@@ -1482,7 +1579,7 @@ $('levelButton').addEventListener('click',openLevelDetails);$('levelButton').add
 const guideOverlay=$('guideOverlay'),guideTitle=$('guideTitle'),guideBody=$('guideBody'),guideActions=$('guideActions');
 let guidePage='how',guideWelcome=true;
 const GUIDE_CONTENT={
-patch:`<p class="guidePill">OFFLINE UPDATE HISTORY · v136</p><p>Open a version below to read its changes. Latest updates appear first; this archive begins at v31.</p><details class="patchEntry"><summary>v136 — Compact audio controls</summary><div class="patchText"><p>Menu now shows a quick Master Volume slider and a collapsible Audio Settings button with independent Interface and Combat volume sliders plus Mute. Settings persist between sessions. Existing combat priorities, audio recordings and gameplay unchanged.</p></div></details><details class="patchEntry"><summary>v135 — Combat audio performance fix</summary><div class="patchText"><p>Reused a bounded pool of audio players and cached decoded data-URL assets as Blob URLs, preventing repeated audio object creation during combat. Preserved all v134 sounds, volume levels, priority and playback limits. No gameplay changes.</p></div></details><details class="patchEntry"><summary>v133 — Reroll, Clear, Ankh, Victory and Defeat audio</summary><div class="patchText"><p>Added the approved Reroll (Slide_Sharp_00), Clear (Teleport_In), Ankh (Gentle Revival), Victory (Victory Warm) and Defeat (Defeat Dark) cues. Clear plays on manual and automatic activation; Ankh plays only when consumed; result audio plays once when the run ends. Added an event priority engine and reserved concurrency/cooldown rules for future castle, death, attack and elemental sounds. Interface audio remains independent with no purchase/reroll cooldowns. All sound files remain embedded for offline play. No balance changes.</p></div></details><details class="patchEntry"><summary>v132 — Offline interface audio</summary><div class="patchText"><p>Added approved Menu Open (Menu_Select_00), Menu Close (Inventory_Open_00), and universal Purchase (Pickup_Gold_00) sounds. Every successful tower or support purchase plays its sound without cooldown or limits. Added persistent Master and Interface volume sliders in Menu plus quick mute on the battlefield. Audio is bundled for offline iPhone play. Combat and creature sounds remain disabled. No gameplay or balance changes.</p></div></details><details class="patchEntry"><summary>v131 — Result panel controls and critical hit display</summary><div class="patchText"><p>Result panel now has a small top-right × dismiss control and a direct Restart button. Players can restart immediately or dismiss the result to inspect the frozen battlefield and restart later through Menu. Critical Hit bonus in Owned Towers once again uses the same simple percentage format as Attack Speed, without the cap annotation. No gameplay balance changes.</p></div></details><details class="patchEntry"><summary>v130 — Compact caps and dismissible results</summary><div class="patchText"><p>Armor, Evasion, Critical Hit Chance and Mana Shield Damage Reduction show compact cap labels instead of purchased-versus-effective breakdowns. The Ankh icon shows a count only when two or more are owned. DEFEATED and VICTORY result messages include a Close button, leaving the frozen battlefield and menus accessible. No balance changes.</p></div></details><details class="patchEntry"><summary>v129 — Critical hit and shield reduction cap transparency</summary><div class="patchText"><p>Owned Towers now shows purchased versus effective Critical Hit Chance, with a 100% effective cap. Castle Status now shows purchased versus effective Mana Shield Damage Reduction, with its 50% cap and active/inactive state. Arcane Barrier purchases remain available beyond the cap; combat formulas are unchanged.</p></div></details><details class="patchEntry"><summary>v128 — Defensive cap transparency</summary><div class="patchText"><p>Castle Status now displays purchased and effective Armor and Evasion, including their hard caps. Capped upgrades remain purchasable by design.</p></div></details><details class="patchEntry"><summary>v127 — End-of-run display and unlimited Ankhs</summary><div class="patchText"><p>Defeat and victory now display nonblocking battlefield banners. The finished run remains visible, including menus and statistics, until Menu → Restart Game. Ankhs can be purchased and stacked without limit, show a compact inventory count, and consume one per lethal event. Revival, regeneration and emergency Clear priority are unchanged. No balance changes.</p></div></details><details class="patchEntry"><summary>v126 — Tower ability description audit</summary><div class="patchText"><p>Iron Thorns now explicitly displays Block 10 damage. Audited all tower descriptions against combat abilities: added missing Vengeful Thorns stacking debuff, armor-type vulnerability from special Splash towers, accurate 0.3s Thunderclap stun, Mana Shield unlocks, and 80% damage on periodic distant spells. Standardized Spikes Block wording. No balance changes.</p></div></details><details class="patchEntry"><summary>v125 — Offline patch notes menu and Dread Knight announcement verification</summary><div class="patchText"><h3>v125 — Offline patch notes menu and Dread Knight announcement verification</h3>
+patch:`<p class="guidePill">OFFLINE UPDATE HISTORY · v138</p><p>Open a version below to read its changes. Latest updates appear first; this archive begins at v31.</p><details class="patchEntry"><summary>v138 — Volume Slider Preview Chimes</summary><div class="patchText"><p>Master, Interface and Combat sliders now play short, distinct preview chimes at the adjusted effective loudness. The preview is generated through the shared Web Audio engine, without audio file decoding. Drag previews are throttled and a final cue plays on release; mute and zero-volume settings are respected. Gameplay and balance unchanged.</p></div></details><details class="patchEntry"><summary>v137 — Shared Web Audio Performance Fix</summary><div class="patchText"><p>Replaced combat HTML audio players with one shared Web Audio mixer and decoded sound buffers. Audio decoding happens asynchronously outside combat frames; high-frequency events never allocate media players or decode files. Combat limits, sound choices, and volume controls remain unchanged.</p></div></details><details class="patchEntry"><summary>v136 — Compact audio controls</summary><div class="patchText"><p>Menu now shows a quick Master Volume slider and a collapsible Audio Settings button with independent Interface and Combat volume sliders plus Mute. Settings persist between sessions. Existing combat priorities, audio recordings and gameplay unchanged.</p></div></details><details class="patchEntry"><summary>v135 — Combat audio performance fix</summary><div class="patchText"><p>Reused a bounded pool of audio players and cached decoded data-URL assets as Blob URLs, preventing repeated audio object creation during combat. Preserved all v134 sounds, volume levels, priority and playback limits. No gameplay changes.</p></div></details><details class="patchEntry"><summary>v133 — Reroll, Clear, Ankh, Victory and Defeat audio</summary><div class="patchText"><p>Added the approved Reroll (Slide_Sharp_00), Clear (Teleport_In), Ankh (Gentle Revival), Victory (Victory Warm) and Defeat (Defeat Dark) cues. Clear plays on manual and automatic activation; Ankh plays only when consumed; result audio plays once when the run ends. Added an event priority engine and reserved concurrency/cooldown rules for future castle, death, attack and elemental sounds. Interface audio remains independent with no purchase/reroll cooldowns. All sound files remain embedded for offline play. No balance changes.</p></div></details><details class="patchEntry"><summary>v132 — Offline interface audio</summary><div class="patchText"><p>Added approved Menu Open (Menu_Select_00), Menu Close (Inventory_Open_00), and universal Purchase (Pickup_Gold_00) sounds. Every successful tower or support purchase plays its sound without cooldown or limits. Added persistent Master and Interface volume sliders in Menu plus quick mute on the battlefield. Audio is bundled for offline iPhone play. Combat and creature sounds remain disabled. No gameplay or balance changes.</p></div></details><details class="patchEntry"><summary>v131 — Result panel controls and critical hit display</summary><div class="patchText"><p>Result panel now has a small top-right × dismiss control and a direct Restart button. Players can restart immediately or dismiss the result to inspect the frozen battlefield and restart later through Menu. Critical Hit bonus in Owned Towers once again uses the same simple percentage format as Attack Speed, without the cap annotation. No gameplay balance changes.</p></div></details><details class="patchEntry"><summary>v130 — Compact caps and dismissible results</summary><div class="patchText"><p>Armor, Evasion, Critical Hit Chance and Mana Shield Damage Reduction show compact cap labels instead of purchased-versus-effective breakdowns. The Ankh icon shows a count only when two or more are owned. DEFEATED and VICTORY result messages include a Close button, leaving the frozen battlefield and menus accessible. No balance changes.</p></div></details><details class="patchEntry"><summary>v129 — Critical hit and shield reduction cap transparency</summary><div class="patchText"><p>Owned Towers now shows purchased versus effective Critical Hit Chance, with a 100% effective cap. Castle Status now shows purchased versus effective Mana Shield Damage Reduction, with its 50% cap and active/inactive state. Arcane Barrier purchases remain available beyond the cap; combat formulas are unchanged.</p></div></details><details class="patchEntry"><summary>v128 — Defensive cap transparency</summary><div class="patchText"><p>Castle Status now displays purchased and effective Armor and Evasion, including their hard caps. Capped upgrades remain purchasable by design.</p></div></details><details class="patchEntry"><summary>v127 — End-of-run display and unlimited Ankhs</summary><div class="patchText"><p>Defeat and victory now display nonblocking battlefield banners. The finished run remains visible, including menus and statistics, until Menu → Restart Game. Ankhs can be purchased and stacked without limit, show a compact inventory count, and consume one per lethal event. Revival, regeneration and emergency Clear priority are unchanged. No balance changes.</p></div></details><details class="patchEntry"><summary>v126 — Tower ability description audit</summary><div class="patchText"><p>Iron Thorns now explicitly displays Block 10 damage. Audited all tower descriptions against combat abilities: added missing Vengeful Thorns stacking debuff, armor-type vulnerability from special Splash towers, accurate 0.3s Thunderclap stun, Mana Shield unlocks, and 80% damage on periodic distant spells. Standardized Spikes Block wording. No balance changes.</p></div></details><details class="patchEntry"><summary>v125 — Offline patch notes menu and Dread Knight announcement verification</summary><div class="patchText"><h3>v125 — Offline patch notes menu and Dread Knight announcement verification</h3>
 <ul>
 <li>Added <strong>Patch Notes</strong> to the in-game Menu, opening a scrollable offline history with collapsible version sections and latest changes first.</li>
 <li>Updated How to Play to direct players to the Patch Notes menu.</li>
