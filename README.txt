@@ -1,1 +1,1 @@
-Tower Survivor v144: 26 Crown Challenges (13 types x 10/15 minute versions). Existing completion IDs and points preserved. New Arcane Abstinence and Low Life tracked automatically. Upload index.html, sw.js, manifest.json, README.txt to GitHub Pages. Header v144. No combat balance changes.\n
+Tower Survivor v145. Range toggle draws 300, 600, 900, 1200 world-range circles. Support tiles have smaller icons, tower tiles remain without icons. Upload all four files to published GitHub Pages branch. Header v145. No gameplay changes.
