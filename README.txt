@@ -1,1 +1,1 @@
-Tower Survivor v158. Level 5 onward: creep HP and attack damage +2.5% relative to v154 (down from +5% in v157). Existing level scaling, tower balance, and v156 audio restart fix unchanged. Upload index.html, sw.js, manifest.json.
+Tower Survivor v160: manual Web Audio engine rebuild under Audio Settings; v158 2.5% creep buff retained.\n
