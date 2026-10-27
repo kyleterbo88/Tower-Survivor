@@ -1,1 +1,1 @@
-Tower Survivor v153: Central tower click now opens only Castle Status, not the main Menu. Publish index.html, sw.js, manifest.json and README.txt. No balance or audio changes.\n
+Tower Survivor v155. Extract all ZIP files together and open index.html, or host on GitHub Pages. +10% creep HP and attack damage at level 5 onward. v154 rollback ZIP provided separately.
