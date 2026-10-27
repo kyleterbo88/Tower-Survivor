@@ -1,1 +1,1 @@
-Tower Survivor v143 — Emergency HUD initialization repair. Fixes a JavaScript syntax error introduced in v142. Upload index.html, sw.js, manifest.json, README.txt to published GitHub Pages branch. Header reads v143. Full pre-redesign v141 ZIP backup provided separately.
+Tower Survivor v144: 26 Crown Challenges (13 types x 10/15 minute versions). Existing completion IDs and points preserved. New Arcane Abstinence and Low Life tracked automatically. Upload index.html, sw.js, manifest.json, README.txt to GitHub Pages. Header v144. No combat balance changes.\n
