@@ -1,1 +1,1 @@
-Tower Survivor v149: Crown Challenges menu viewport and scrolling fix, sticky close X; refreshed How to Play instructions. No balance or audio changes. Upload index.html, sw.js, manifest.json and README.txt to published branch. In-game header v149. Test on iPhone.
+Tower Survivor v150: fixes startup crash from stale rangeToggle event handler; restores distinct Level / Time heading with thin divider over HP/s, Armor, Evasion. Publish index.html, sw.js, manifest.json and README.txt to GitHub Pages. Header v150. No gameplay or audio changes.
