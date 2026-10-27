@@ -1,1 +1,1 @@
-Tower Survivor v148. Crown Challenges moved to Menu, grouped and detail popups; restart above resume; removed Range; Level/Time compact regen/armor/evasion; income rows reordered. No balance changes. Publish four files from ZIP to GitHub Pages. Verify header v148.\n
+Tower Survivor v149: Crown Challenges menu viewport and scrolling fix, sticky close X; refreshed How to Play instructions. No balance or audio changes. Upload index.html, sw.js, manifest.json and README.txt to published branch. In-game header v149. Test on iPhone.
