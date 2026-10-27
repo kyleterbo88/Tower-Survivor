@@ -1,1 +1,1 @@
-Tower Survivor v150: fixes startup crash from stale rangeToggle event handler; restores distinct Level / Time heading with thin divider over HP/s, Armor, Evasion. Publish index.html, sw.js, manifest.json and README.txt to GitHub Pages. Header v150. No gameplay or audio changes.
+Tower Survivor v153: Central tower click now opens only Castle Status, not the main Menu. Publish index.html, sw.js, manifest.json and README.txt. No balance or audio changes.\n
