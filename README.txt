@@ -1,1 +1,1 @@
-Tower Survivor v162: levels 10–30 creep HP and attack damage +1.5% vs v154; levels 5–9 +2.5%; levels 1–4 unchanged. Retains v161 audio recovery. Deploy index.html, sw.js and manifest.json together.
+Tower Survivor v163: relative to v154, creep HP/damage +2.5% at levels 5–9, +1.5% at levels 10–14, +3% at levels 15–30 (including final boss and Hero Champions). Preserves v161 automatic combat audio recovery. Deploy index.html, sw.js and manifest.json together.
