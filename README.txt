@@ -1,1 +1,1 @@
-Tower Survivor v161. Automatic one-time combat audio engine rebuild on first foreground user gesture after background/lock. Manual Repair Combat Audio remains. v158 2.5% difficulty modifier retained.
+Tower Survivor v162: levels 10–30 creep HP and attack damage +1.5% vs v154; levels 5–9 +2.5%; levels 1–4 unchanged. Retains v161 audio recovery. Deploy index.html, sw.js and manifest.json together.
