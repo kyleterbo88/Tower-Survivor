@@ -1,1 +1,1 @@
-Tower Survivor v163: relative to v154, creep HP/damage +2.5% at levels 5–9, +1.5% at levels 10–14, +3% at levels 15–30 (including final boss and Hero Champions). Preserves v161 automatic combat audio recovery. Deploy index.html, sw.js and manifest.json together.
+Tower Survivor v165 — Hero Champions: 150% strongest eligible creep HP, 125% selected Heavy creep damage. No other balance changes.
