@@ -1,1 +1,1 @@
-Tower Survivor v166: Rare Survivor 10- and 15-minute Crown Challenges. Upload index.html, sw.js and manifest.json together. No balance changes.
+Tower Survivor v176. Spikes effects, including flat block, retaliation, healing, Poison, Bleed, wound and vengeance, activate only when Mana Shield is empty at attack start. No balance value changes.
