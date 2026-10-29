@@ -1,1 +1,1 @@
-Tower Survivor v175: compact Splash/Area ability descriptions, expanded Game Mechanics, Siege Bombardment shorter name, shorter support copy and protected gold-price area. No balance changes.
+Tower Survivor v176. Spikes effects, including flat block, retaliation, healing, Poison, Bleed, wound and vengeance, activate only when Mana Shield is empty at attack start. No balance value changes.
