@@ -1,3 +1,6 @@
-Tower Survivor v178 - Ankh Description Fix
-Replaces Ankh description in both shop and inventory card with: Revive to 10% HP and 3X HP regen for 5sec
-Includes previous Challenge popup and Gold/Income popup fixes. Upload index.html, sw.js and manifest.json to beta/.
+Tower Survivor v179 — Hero Champion HP buff
+
+Hero Champions: 175% of strongest eligible regular creep HP; damage unchanged.
+Includes all previous v178 fixes (mini-boss audio layering, shield impact, Ankh description, challenge popup and Gold & Income popup).
+
+Upload index.html, sw.js, and manifest.json into your beta/ folder.
