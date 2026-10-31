@@ -1,1 +1,1 @@
-Tower Survivor v176. Spikes effects, including flat block, retaliation, healing, Poison, Bleed, wound and vengeance, activate only when Mana Shield is empty at attack start. No balance value changes.
+Tower Survivor v178 beta. Upload index.html, sw.js, manifest.json to /beta/ on GitHub Pages. Keep stable root unchanged.
