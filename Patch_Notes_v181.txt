@@ -1,0 +1,2 @@
+v181 — Gold & Income subtitle styling
+Gold & Income popup now groups statistics under blue-backed beige section headings matching Castle Status. No economy or gameplay changes. Non-pausing live popup preserved.
