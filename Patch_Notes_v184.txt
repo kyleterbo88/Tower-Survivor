@@ -1,0 +1,5 @@
+Tower Survivor v184 — Common Tower Damage Adjustment
+
+Common non-Spikes base attack damage bonus reduced from +10% to +5% relative to pre-v183.
+Uncommon, Rare, Epic, and Spikes damage unchanged. Attack speed, range, costs, and upgrades unchanged.
+Includes all previous v183 changes.
