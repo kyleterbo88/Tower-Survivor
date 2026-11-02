@@ -1,0 +1,5 @@
+Tower Survivor v183 — Common Tower Damage Buff
+
+All Common non-Spikes towers: +10% base attack damage (applied before purchased damage bonuses).
+Attack speed, ranges, costs, other rarities and all Spikes retaliation are unchanged.
+Includes all prior v182 changes.
